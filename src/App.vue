@@ -1,28 +1,47 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+	<div id="app">
+		<a-locale-provider :locale="LAN">
+			<a-spin :spinning="spinning">
+				<a-back-top />
+				<router-view></router-view>
+			</a-spin>
+		</a-locale-provider>
+	</div>
 </template>
-
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+	import { createNamespacedHelpers } from 'vuex'
+	const { mapState } = createNamespacedHelpers('locale')
 
-export default {
-  name: 'app',
-  components: {
-    HelloWorld
-  }
-}
+	// import moment from 'moment';
+	// import zh_CN from 'ant-design-vue/lib/locale-provider/zh_CN';
+	// import 'moment/locale/zh-cn';
+	// moment.locale('zh-cn');
+
+	export default {
+		name: 'App',
+		data() {
+			return {
+				// zh_CN,
+				spinning: true,
+			};
+		},
+		computed: {
+			...mapState(['LAN'])
+		},
+		created() {
+			// console.log('store', this.$store)
+		},
+		mounted() {
+			this.spinning = false;
+		}
+	};
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style scoped>
+	#app {
+		font-family: "-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol";
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		font-size: 14px;
+		color: #2c3e50;
+	}
 </style>
