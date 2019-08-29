@@ -1,97 +1,87 @@
 <template>
-	<div>
-		<BreadCrumbComponent />
-		<div class="container">
-            <!-- 内容区域 -->
-            <div class="option-bar">
-                <!-- 内容操作区域 -->
-                <a-button style="margin-right:10px;" type="primary" @click="showModal('add')">新增</a-button>
-                <template v-if="selectedRowKeys.length">
-                    <a-button style="margin-right:10px;" type="default" @click="delMultiItems">批量删除</a-button>
-                    <div>
-                        当前共选择
-                        <strong style="color:#1890ff;">{{selectedRowKeys.length}}</strong> 条信息
-                    </div>
-                </template>
-            </div>
-            <!-- 内容展示区域 -->
+    <PageSkeleton
+        :selectedRowKeys="selectedRowKeys"
+        :filters="filters"
+        :visible="visible"
+        :modalTitle="modalTitle"
+        :okBtnDisabled="okBtnDisabled"
+        @delItem="delItem"
+        @delMultiItems="delMultiItems"
+        @handleFilter="handleFilter"
+        @handleFilterReset="handleFilterReset"
+        @showModal="showModal"
+        @handleCancel="handleCancel"
+        @handleSubmit="handleSubmit"
+    >
+        <!-- 渲染筛选条件 -->
+        <template v-slot:filterAfterSlot="{ filterForm }">
+        </template>
+        <!-- 渲染数据 -->
+        <template slot="tableSlot">
             <a-table rowKey="id" :loading="loading" :columns="columns" :dataSource="bannerClassList" :pagination="pagination" :rowSelection="rowSelection" bordered >
-                <span slot="actionx" slot-scope="action, record, index">
+                <span slot="stateSlot" slot-scope="action">
+                    <a-badge :status="BADGE_STATUS(action)" :text="BANNER_CLASS_STATUS[action]" />
+                </span>
+                <span slot="actionSlot" slot-scope="action, record">
                     <a @click="showModal('edit', record.id)">编辑</a>
                     <a-divider type="vertical" />
                     <router-link :to="{name: 'bannerList', params: {classid: record.id}}">管理</router-link>
                     <a-divider type="vertical" />
-                    <a-popconfirm title='确认删除当前信息吗?' @confirm="() => delItem(index)">
+                    <a-popconfirm title='确认删除当前信息吗?' @confirm="() => delItem(record.id)">
                         <a href="javascript:;">删除</a>
                     </a-popconfirm>
                 </span>
             </a-table>
-            <!-- banner分类新增/修改弹窗 -->
-            <Modal :visible="visible" :modalTitle="modalTitle" @cancel="handleCancel" @ok="handleSubmit">
-                <a-form layout="vertical" :form="form">
-                    <a-form-item v-if="action == 'edit'" label="分类ID">
-                        <a-input v-decorator="['id', {initialValue: initialBannerClass.id}]" disabled />
-                    </a-form-item>
-                    <a-form-item label="分类名称">
-                        <a-input v-decorator="['name', {rules: [{required: true,}], initialValue: initialBannerClass.name}]" />
-                    </a-form-item>
-                    <a-form-item label="分类描述">
-                        <a-input v-decorator="['content', {initialValue: initialBannerClass.content}]" />
-                    </a-form-item>
-                </a-form>
-            </Modal>
-		</div>
-	</div>
+        </template>
+        <!-- 渲染编辑框 -->
+        <template slot="formSlot">
+            <a-form layout="vertical" :form="form">
+                <a-form-item v-if="action == 'edit'" label="分类ID">
+                    <a-input v-decorator="['id', {initialValue: initialBannerClass.id}]" disabled />
+                </a-form-item>
+                <a-form-item label="分类名称">
+                    <a-input v-decorator="['name', {rules: [{required: true,}], initialValue: initialBannerClass.name}]" />
+                </a-form-item>
+                <a-form-item label="分类描述">
+                    <a-input v-decorator="['content', {initialValue: initialBannerClass.content}]" />
+                </a-form-item>
+            </a-form>
+        </template>
+    </PageSkeleton>
 </template>
 
 <script>
-    import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue';
-    import Modal from '@/components/modal/index.vue';
 
-    import { getBannerClassList, addBannerClass, getBannerClassDetail, updateBannerClass } from '@/api/banner';
+    import PageSkeleton from '@/components/skeleton/index.vue';
 
-    const columns = [
-        {
-			title: '分类ID',
-            dataIndex: 'id',
-            width: '200px'
-        },
-		{
-			title: '分类名称',
-			dataIndex: 'title',
-        },
-        {
-			title: '分类描述',
-			dataIndex: 'content',
-        },
-        {
-			title: '发布时间',
-			dataIndex: 'createTime',
-            width: '200px'
-		},
-		{
-			title: '操作',
-			dataIndex: 'action',
-			scopedSlots: { customRender: 'actionx' },
-			width: '180px'
-		}
-	];
+    import { getBannerClassList, addBannerClass, getBannerClassDetail, updateBannerClass, deleteBannerClass } from '@/api/banner';
+    import config from './config'
+
+    import Tools from '@/utils/Tools'
 
     export default {
         name: 'Banner',
         components: {
-            BreadCrumbComponent,
-            Modal,
+            PageSkeleton,
         },
         data () {
             return {
+                BANNER_CLASS_STATUS: config.BANNER_CLASS_STATUS,
+                BADGE_STATUS: config.BADGE_STATUS,
+                withModal: config.withModal,
+                allowAdd: config.allowAdd,
+                allowEdit: config.allowEdit,
                 bannerClassList: [],
-                columns,
+                columns: config.columns,
                 pagination: false,
                 loading: true,
+                // 传递给PageSkeleton组件的props
                 selectedRowKeys: [],
                 visible: false,
                 modalTitle: '',
+                okBtnDisabled: false,
+                filters: config.filters,
+                // ***************************
                 action: '',
                 initialBannerClass: {},
             }
@@ -116,27 +106,23 @@
 				console.log('selectedRowKeys', selectedRowKeys);
 				this.selectedRowKeys = selectedRowKeys;
 			},
-			delItem(index) {
-				console.log(`删除第 ${index} 项`);
-				this.bannerClassList.splice(index, 1);
+			delItem(id) {
+                this.deleteBannerClassFn([id]);
 			},
 			delMultiItems() {
-				const that = this;
-				this.$confirm({
-					title: '删除提醒',
-					content: '确认删除当前选中的信息吗?',
-					okType: 'danger',
-					onOk() {
-						that.bannerClassList = that.bannerClassList.filter(
-							item => !that.selectedRowKeys.includes(item.id)
-						);
-						that.selectedRowKeys = [];
-					},
-					onCancel() {
-						console.log('Cancel');
-					}
-                });
-			},
+				const deleteList = this.bannerClassList.filter(
+                    item => this.selectedRowKeys.includes(item.id)
+                );
+                const deleteIds = Tools.pluck(deleteList, 'id');
+                this.deleteBannerClassFn(deleteIds);
+            },
+            handleFilter (values) {
+                console.log('handleFilter', values);
+                this.getBannerClassListFn(values);
+            },
+            handleFilterReset () {
+                this.getBannerClassListFn();
+            },
             showModal (action, editId) {
                 if (action == 'add') {
                     this.action = action;
@@ -177,8 +163,9 @@
                 this.form.resetFields();
             },
             // api
-            async getBannerClassListFn () {
-                const data = await getBannerClassList();
+            async getBannerClassListFn (filters={}) {
+                const params = { page: config.pagination.page, pageSize: config.pagination.pageSize, ...filters };
+                const data = await getBannerClassList(params);
 				this.loading = false;
                 this.bannerClassList = data.data;
 
@@ -192,10 +179,12 @@
                 }
             },
             async addBannerClassFn (params) {
+                this.okBtnDisabled = true;
                 const data = await addBannerClass(params);
                 if (data.code == '200') {
                     this.$message.success(data.msg, 1, () => {
                         this.getBannerClassListFn();
+                        this.okBtnDisabled = false;
                         this.visible = false;
                     });
                 } else {
@@ -203,11 +192,25 @@
                 }
             },
             async updateBannerClassFn (params) {
+                this.okBtnDisabled = true;
                 const data = await updateBannerClass(params);
                 if (data.code == '200') {
                     this.$message.success(data.msg, 1, () => {
                         this.getBannerClassListFn();
+                        this.okBtnDisabled = false;
                         this.visible = false;
+                    });
+                } else {
+                    this.$message.error(data.msg, 1);
+                }
+            },
+            async deleteBannerClassFn (ids) {
+                const params = { ids: ids };
+                const data = await deleteBannerClass(params);
+                if (data.code == '200') {
+                    this.$message.success(data.msg, 1, () => {
+                        this.selectedRowKeys = [];
+                        this.getBannerClassListFn();
                     });
                 } else {
                     this.$message.error(data.msg, 1);

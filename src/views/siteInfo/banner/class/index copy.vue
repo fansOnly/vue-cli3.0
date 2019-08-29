@@ -1,17 +1,20 @@
 <template>
-    <PageSkeleton
-        :selectedRowKeys="selectedRowKeys"
-        :visible="visible"
-        :modalTitle="modalTitle"
-        :okBtnDisabled="okBtnDisabled"
-        @delItem="delItem"
-        @delMultiItems="delMultiItems"
-        @showModal="showModal"
-        @handleCancel="handleCancel"
-        @handleSubmit="handleSubmit"
-    >
-        <!-- 渲染数据 -->
-        <template slot="tableSlot">
+	<div>
+		<BreadCrumbComponent />
+		<div class="container">
+            <!-- 内容区域 -->
+            <div class="option-bar">
+                <!-- 内容操作区域 -->
+                <a-button style="margin-right:10px;" type="primary" @click="showModal('add')">新增</a-button>
+                <template v-if="selectedRowKeys.length">
+                    <a-button style="margin-right:10px;" type="default" @click="delMultiItems">批量删除</a-button>
+                    <div>
+                        当前共选择
+                        <strong style="color:#1890ff;">{{selectedRowKeys.length}}</strong> 条信息
+                    </div>
+                </template>
+            </div>
+            <!-- 内容展示区域 -->
             <a-table rowKey="id" :loading="loading" :columns="columns" :dataSource="bannerClassList" :pagination="pagination" :rowSelection="rowSelection" bordered >
                 <span slot="actionx" slot-scope="action, record, index">
                     <a @click="showModal('edit', record.id)">编辑</a>
@@ -23,27 +26,27 @@
                     </a-popconfirm>
                 </span>
             </a-table>
-        </template>
-        <!-- 渲染编辑框 -->
-        <template slot="formSlot">
-            <a-form layout="vertical" :form="form">
-                <a-form-item v-if="action == 'edit'" label="分类ID">
-                    <a-input v-decorator="['id', {initialValue: initialBannerClass.id}]" disabled />
-                </a-form-item>
-                <a-form-item label="分类名称">
-                    <a-input v-decorator="['name', {rules: [{required: true,}], initialValue: initialBannerClass.name}]" />
-                </a-form-item>
-                <a-form-item label="分类描述">
-                    <a-input v-decorator="['content', {initialValue: initialBannerClass.content}]" />
-                </a-form-item>
-            </a-form>
-        </template>
-    </PageSkeleton>
+            <!-- banner分类新增/修改弹窗 -->
+            <Modal :visible="visible" :modalTitle="modalTitle" @cancel="handleCancel" @ok="handleSubmit">
+                <a-form layout="vertical" :form="form">
+                    <a-form-item v-if="action == 'edit'" label="分类ID">
+                        <a-input v-decorator="['id', {initialValue: initialBannerClass.id}]" disabled />
+                    </a-form-item>
+                    <a-form-item label="分类名称">
+                        <a-input v-decorator="['name', {rules: [{required: true,}], initialValue: initialBannerClass.name}]" />
+                    </a-form-item>
+                    <a-form-item label="分类描述">
+                        <a-input v-decorator="['content', {initialValue: initialBannerClass.content}]" />
+                    </a-form-item>
+                </a-form>
+            </Modal>
+		</div>
+	</div>
 </template>
 
 <script>
-
-    import PageSkeleton from '@/components/skeleton/index.vue';
+    import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue';
+    import Modal from '@/components/modal/index.vue';
 
     import { getBannerClassList, addBannerClass, getBannerClassDetail, updateBannerClass } from '@/api/banner';
 
@@ -63,7 +66,7 @@
         },
         {
 			title: '发布时间',
-			dataIndex: 'createTime',
+			dataIndex: 'create_time',
             width: '200px'
 		},
 		{
@@ -77,7 +80,8 @@
     export default {
         name: 'Banner',
         components: {
-            PageSkeleton,
+            BreadCrumbComponent,
+            Modal,
         },
         data () {
             return {
@@ -85,12 +89,9 @@
                 columns,
                 pagination: false,
                 loading: true,
-                // 传递给PageSkeleton组件的props
                 selectedRowKeys: [],
                 visible: false,
                 modalTitle: '',
-                okBtnDisabled: false,
-                // ***************************
                 action: '',
                 initialBannerClass: {},
             }
@@ -120,11 +121,21 @@
 				this.bannerClassList.splice(index, 1);
 			},
 			delMultiItems() {
-				this.bannerClassList = this.bannerClassList.filter(
-                    item => !this.selectedRowKeys.includes(item.id)
-                );
-                this.selectedRowKeys = [];
-                this.getBannerClassListFn();
+				const that = this;
+				this.$confirm({
+					title: '删除提醒',
+					content: '确认删除当前选中的信息吗?',
+					okType: 'danger',
+					onOk() {
+						that.bannerClassList = that.bannerClassList.filter(
+							item => !that.selectedRowKeys.includes(item.id)
+						);
+						that.selectedRowKeys = [];
+					},
+					onCancel() {
+						console.log('Cancel');
+					}
+                });
 			},
             showModal (action, editId) {
                 if (action == 'add') {
@@ -181,12 +192,10 @@
                 }
             },
             async addBannerClassFn (params) {
-                this.okBtnDisabled = true;
                 const data = await addBannerClass(params);
                 if (data.code == '200') {
                     this.$message.success(data.msg, 1, () => {
                         this.getBannerClassListFn();
-                        this.okBtnDisabled = false;
                         this.visible = false;
                     });
                 } else {
@@ -194,12 +203,10 @@
                 }
             },
             async updateBannerClassFn (params) {
-                this.okBtnDisabled = true;
                 const data = await updateBannerClass(params);
                 if (data.code == '200') {
                     this.$message.success(data.msg, 1, () => {
                         this.getBannerClassListFn();
-                        this.okBtnDisabled = false;
                         this.visible = false;
                     });
                 } else {

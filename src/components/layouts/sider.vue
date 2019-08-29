@@ -117,16 +117,10 @@
 			]
 		},
 		{
-			key: 'list',
-			name: '表格列表',
-			icon: 'pie-chart',
-			path: '/admin/list/1'
-		},
-		{
-			key: 'piclist',
-			name: 'PicList',
-			icon: 'desktop',
-			path: '/admin/piclist/2'
+			key: 'infolist',
+			name: '文章列表',
+			icon: 'table',
+			path: '/admin/info/index'
 		},
 		{
 			key: 'first1',

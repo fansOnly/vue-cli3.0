@@ -44,6 +44,7 @@
 /* 筛选栏目样式重置 */
 .ant-advanced-search-form .ant-form-item {
     display: flex;
+    margin-bottom: 12px;
 }
 
 .ant-advanced-search-form .ant-form-item-label {

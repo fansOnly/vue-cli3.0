@@ -11,8 +11,8 @@ const ChangePass = () => import('@/views/user/changePass.vue');
 
 const SiteSetting = () => import('@/views/siteInfo/site.vue');
 const UploadSetting = () => import('@/views/siteInfo/upload.vue');
-const BannerClass = () => import('@/views/siteInfo/banner/class.vue');
-const BannerList = () => import('@/views/siteInfo/banner/list.vue');
+const BannerClass = () => import('@/views/siteInfo/banner/class/index.vue');
+const BannerList = () => import('@/views/siteInfo/banner/index.vue');
 
 const Member = () => import('@/views/member/index.vue');
 
@@ -22,10 +22,8 @@ const Permission = () => import('@/views/account/permission/index.vue');
 
 const Assets = () => import('@/views/assets/index.vue');
 
-// pages页面加载
-const ListPage = () => import('@/views/pages/listPage/index.vue');
-const ListEditPage = () => import('@/views/pages/listPage/edit.vue');
-const PicListPage = () => import('@/views/pages/picListPage/index.vue');
+const InfoList = () => import('@/views/info/index.vue');
+const InfoEdit = () => import('@/views/info/edit/index.vue');
 
 const routes = [
 	{
@@ -38,7 +36,7 @@ const routes = [
 				})
 			} else {
 				next({
-					path: '/admin'
+					path: '/admin/index'
 				})
 			}
 		}
@@ -64,6 +62,7 @@ const routes = [
 				path: '/admin/index',
 				name: 'welcome',
 				component: Welcome,
+				alias: '/admin',
 				meta: {
 					requireAuth: true,
 					depth: 2,
@@ -180,32 +179,22 @@ const routes = [
 				},
 			},
 			{
-				path: '/admin/list/:classid',
-				name: 'listPage',
-				component: ListPage,
+				path: '/admin/info/index',
+				name: 'infoList',
+				component: InfoList,
 				meta: {
 					requireAuth: true,
-					breadcrumbName: '列表页面',
+					breadcrumbName: '文章列表',
 					depth: 2,
 				},
 			},
 			{
-				path: '/admin/piclist/:classid',
-				name: 'PicListPage',
-				component: PicListPage,
+				path: '/admin/info/edit/:id',
+				name: 'infoEdit',
+				component: InfoEdit,
 				meta: {
 					requireAuth: true,
-					breadcrumbName: '图片列表',
-					depth: 2,
-				},
-			},
-			{
-				path: '/admin/list/:classid/edit/:id',
-				name: 'listEditPage',
-				component: ListEditPage,
-				meta: {
-					requireAuth: true,
-					breadcrumbName: '列表详情页',
+					breadcrumbName: '文章详情',
 					depth: 3,
 				},
 			},
@@ -214,7 +203,7 @@ const routes = [
 			requireAuth: true,
 			breadcrumbName: '后台管理',
 			depth: 1,
-		}
+		},
 	},
 	{
 		path: '*',

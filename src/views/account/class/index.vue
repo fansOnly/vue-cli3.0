@@ -1,6 +1,7 @@
 <template>
 	<PageSkeleton
         :selectedRowKeys="selectedRowKeys"
+        :filters="filters"
         :withModal="withModal"
         :allowAdd="allowAdd"
         :visible="visible"
@@ -8,10 +9,15 @@
         :modalTitle="modalTitle"
         @delItem="delItem"
         @delMultiItems="delMultiItems"
+        @handleFilter="handleFilter"
+        @handleFilterReset="handleFilterReset"
         @showModal="showModal"
         @handleCancel="handleCancel"
         @handleSubmit="handleSubmit"
     >
+        <!-- 渲染筛选条件 -->
+        <template v-slot:filterAfterSlot="{ filterForm }">
+        </template>
         <!-- 渲染数据 -->
         <template slot="tableSlot">
             <a-table rowKey="id" :loading="loading" :columns="columns" :dataSource="accountClassList" :pagination="pagination" :rowSelection="rowSelection" bordered @change="handleChange" >
@@ -20,10 +26,13 @@
                         <a-tag :key="index" color="blue">{{item}}</a-tag>
                     </template>
                 </span>
-                <span slot="actionSlot" slot-scope="action, record, index">
+                <span slot="stateSlot" slot-scope="action">
+                    <a-badge :status="BADGE_STATUS(action)" :text="ACCOUNT_CLASS_STATUS[action]" />
+                </span>
+                <span slot="actionSlot" slot-scope="action, record">
                     <a @click="showModal('edit', record.id)">编辑</a>
                     <a-divider type="vertical" />
-                    <a-popconfirm title='确认删除当前信息吗?' @confirm="() => delItem(index)">
+                    <a-popconfirm title='确认删除当前信息吗?' @confirm="() => delItem(record.id)">
                         <a href="javascript:;">删除</a>
                     </a-popconfirm>
                 </span>
@@ -64,8 +73,9 @@
 <script>
     import PageSkeleton from '@/components/skeleton/index.vue';
 
-    import { getAccountClassList, addAccountClass, getAccountClassDetail, updateAccountClass, getPermissionList } from '@/api/account';
+    import { getAccountClassList, addAccountClass, getAccountClassDetail, updateAccountClass, getPermissionList, deleteAccountClass } from '@/api/account';
     import config from './config'
+    import Tools from '@/utils/Tools';
 
     import { TreeSelect } from 'ant-design-vue'
     const SHOW_PARENT = TreeSelect.SHOW_PARENT;
@@ -77,6 +87,8 @@
         },
         data () {
             return {
+                ACCOUNT_CLASS_STATUS: config.ACCOUNT_CLASS_STATUS,
+                BADGE_STATUS: config.BADGE_STATUS,
                 withModal: config.withModal,
                 allowAdd: config.allowAdd,
                 allowEdit: config.allowEdit,
@@ -89,6 +101,7 @@
                 visible: false,
                 modalTitle: '',
                 okBtnDisabled: false,
+                filters: config.filters,
                 // ***************************
                 action: '',
                 initialAccountClass: {},
@@ -123,15 +136,21 @@
 				console.log('selectedRowKeys', selectedRowKeys);
 				this.selectedRowKeys = selectedRowKeys;
 			},
-			delItem(index) {
-				console.log(`删除第 ${index} 项`);
-				this.accountClassList.splice(index, 1);
+			delItem(id) {
+                this.deleteAccountClassFn([id]);
 			},
 			delMultiItems() {
-				this.accountClassList = this.accountClassList.filter(
-                    item => !this.selectedRowKeys.includes(item.id)
+				const deleteList = this.accountClassList.filter(
+                    item => this.selectedRowKeys.includes(item.id)
                 );
-                this.selectedRowKeys = [];
+                const deleteIds = Tools.pluck(deleteList, 'id');
+                this.deleteAccountClassFn(deleteIds);
+            },
+            handleFilter (values) {
+                console.log('handleFilter', values);
+                this.getAccountClassListFn(values);
+            },
+            handleFilterReset () {
                 this.getAccountClassListFn();
             },
             handleChange (pagination) {
@@ -185,9 +204,9 @@
                 this.form.resetFields();
             },
             // api
-            async getAccountClassListFn () {
+            async getAccountClassListFn (filters={}) {
                 // console.log('config.pagination', config.pagination);
-                const params = { page: config.pagination.page, pageSize: config.pagination.pageSize };
+                const params = { page: config.pagination.page, pageSize: config.pagination.pageSize, ...filters };
                 const data = await getAccountClassList(params);
                 this.loading = false;
 				this.accountClassList = data.data;
@@ -236,7 +255,19 @@
                 if (data.code == '200') {
                     this.treeData = data.data;
                 }
-            }
+            },
+            async deleteAccountClassFn (ids) {
+                const params = { ids: ids };
+                const data = await deleteAccountClass(params);
+                if (data.code == '200') {
+                    this.$message.success(data.msg, 1, () => {
+                        this.selectedRowKeys = [];
+                        this.getAccountClassListFn();
+                    });
+                } else {
+                    this.$message.error(data.msg, 1);
+                }
+            },
         }
     }
 </script>

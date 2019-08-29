@@ -1,7 +1,6 @@
 <template>
 	<div class="notfound">
-		<img src="https://gw.alipayobjects.com/zos/antfincdn/wsE2Pw%243%26L/noFound.svg" alt="404" />
-		<br />
+		<img src="https://gw.alipayobjects.com/zos/antfincdn/wsE2Pw%243%26L/noFound.svg" style="width:200px;height:auto;" alt="404" />
 		<br />
 		<h1>404</h1>
 		<p>Sorry, the page you visited does not exist.</p>
@@ -16,11 +15,10 @@ export default {
 </script>
 <style scoped>
 .notfound {
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 50%;
-	transform: translateY(-50%);
-	text-align: center;
+	min-height: 800px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 </style>

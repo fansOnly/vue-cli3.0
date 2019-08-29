@@ -1,4 +1,4 @@
-import { pagination } from '@/utils/configSetting'
+import { pagination, filters, ACCOUNT_CLASS_STATUS, BADGE_STATUS } from '@/utils/configSetting'
 
 export default {
     columns: [
@@ -32,6 +32,14 @@ export default {
 	pagination: {
 		...pagination
 	},
+	filters: {
+		...filters,
+		STATUS: ACCOUNT_CLASS_STATUS,
+		hasTitle: false,
+		hasName: true,
+	},
+	ACCOUNT_CLASS_STATUS,
+	BADGE_STATUS,
 	actionList: ['编辑','删除'],
 	allowAdd: true,
 	withModal: true,

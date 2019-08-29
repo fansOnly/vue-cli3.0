@@ -1,5 +1,5 @@
 import Tools from '@/utils/Tools'
-import { pagination } from '@/utils/configSetting'
+import { pagination, filters, ASSETS_STATUS, BADGE_STATUS } from '@/utils/configSetting'
 
 export default {
     columns: [
@@ -33,15 +33,15 @@ export default {
         },
         {
 			title: '创建时间',
-			dataIndex: 'createTime',
-            sorter: (a, b) => Tools.date2Timestamp(a.createTime) - Tools.date2Timestamp(b.createTime),
+			dataIndex: 'create_time',
+            sorter: (a, b) => Tools.date2Timestamp(a.create_time) - Tools.date2Timestamp(b.create_time),
             width: '200px',
 		},
 		{
 			title: '状态',
 			dataIndex: 'state',
 			scopedSlots: { customRender: 'stateSlot' },
-			width: '100px',
+			width: '110px',
 		},
 		{
 			title: '操作',
@@ -53,6 +53,16 @@ export default {
 	pagination: {
 		...pagination
 	},
+	filters: {
+		...filters,
+		STATUS: ASSETS_STATUS,
+		hasID: false,
+		hasTitle: false,
+		hasObjectId: true,
+		hasName: true,
+	},
+	ASSETS_STATUS,
+	BADGE_STATUS,
 	actionList: ['删除'],
 	allowAdd: false,
 	withModal: false,

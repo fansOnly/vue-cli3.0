@@ -1,6 +1,7 @@
 <template>
 	<PageSkeleton
         :selectedRowKeys="selectedRowKeys"
+        :filters="filters"
         :withModal="withModal"
         :allowAdd="allowAdd"
         :visible="visible"
@@ -8,21 +9,33 @@
         :modalTitle="modalTitle"
         @delItem="delItem"
         @delMultiItems="delMultiItems"
+        @handleFilter="handleFilter"
+        @handleFilterReset="handleFilterReset"
         @showModal="showModal"
         @handleCancel="handleCancel"
         @handleSubmit="handleSubmit"
     >
+        <!-- 渲染筛选条件 -->
+        <template v-slot:filterAfterSlot="{ filterForm }">
+            <!-- <a-col v-if="filters.hasName" :span="6">
+                <a-form-item label="数据名称" >
+                    <a-input v-decorator="['name', {rules: [{message: '请输入数据名称',}], initialValue: ''}]"
+                        placeholder="请输入数据名称" />
+                </a-form-item>
+            </a-col> -->
+        </template>
         <!-- 渲染数据 -->
         <template slot="tableSlot">
             <a-table rowKey="id" :loading="loading" :columns="columns" :dataSource="accountList" :pagination="pagination" :rowSelection="rowSelection" bordered @change="handleChange" >
                 <span slot="stateSlot" slot-scope="action">
-                    <span v-if="action == 0" style="color:red;">{{ACCOUNT_STATUS[action]}}</span>
-                    <span v-if="action == 1" style="color:green;">{{ACCOUNT_STATUS[action]}}</span>
+                    <a-badge :status="BADGE_STATUS(action)" :text="ACCOUNT_STATUS[action]" />
+                    <!-- <span v-if="action == 0" style="color:red;">{{ACCOUNT_STATUS[action]}}</span>
+                    <span v-if="action == 1" style="color:green;">{{ACCOUNT_STATUS[action]}}</span> -->
                 </span>
-                <span slot="actionSlot" slot-scope="action, record, index">
+                <span slot="actionSlot" slot-scope="action, record">
                     <a @click="showModal('edit', record.id)">编辑</a>
                     <a-divider type="vertical" />
-                    <a-popconfirm title='确认删除当前信息吗?' @confirm="() => delItem(index)">
+                    <a-popconfirm title='确认删除当前信息吗?' @confirm="() => delItem(record.id)">
                         <a href="javascript:;">删除</a>
                     </a-popconfirm>
                 </span>
@@ -73,10 +86,9 @@
 <script>
     import PageSkeleton from '@/components/skeleton/index.vue';
 
-    import { getAccountList, addAccount, getAccountDetail, updateAccount } from '@/api/account';
+    import { getAccountList, addAccount, getAccountDetail, updateAccount, deleteAccount } from '@/api/account';
     import config from './config'
-
-    import { ACCOUNT_STATUS } from '@/utils/configSetting';
+    import Tools from '@/utils/Tools';
 
     export default {
         name: 'Account',
@@ -85,7 +97,8 @@
         },
         data () {
             return {
-                ACCOUNT_STATUS,
+                ACCOUNT_STATUS: config.ACCOUNT_STATUS,
+                BADGE_STATUS: config.BADGE_STATUS,
                 withModal: config.withModal,
                 allowAdd: config.allowAdd,
                 allowEdit: config.allowEdit,
@@ -98,6 +111,7 @@
                 visible: false,
                 modalTitle: '',
                 okBtnDisabled: false,
+                filters: config.filters,
                 // ***************************
                 action: '',
                 initialAccount: {},
@@ -127,15 +141,21 @@
 				console.log('selectedRowKeys', selectedRowKeys);
 				this.selectedRowKeys = selectedRowKeys;
 			},
-			delItem(index) {
-				console.log(`删除第 ${index} 项`);
-				this.accountList.splice(index, 1);
+			delItem(id) {
+                this.deleteAccountFn([id]);
 			},
 			delMultiItems() {
-				this.accountList = this.accountList.filter(
-                    item => !this.selectedRowKeys.includes(item.id)
+				const deleteList = this.accountList.filter(
+                    item => this.selectedRowKeys.includes(item.id)
                 );
-                this.selectedRowKeys = [];
+                const deleteIds = Tools.pluck(deleteList, 'id');
+                this.deleteAccountFn(deleteIds);
+            },
+            handleFilter (values) {
+                console.log('handleFilter', values);
+                this.getAccountListFn(values);
+            },
+            handleFilterReset () {
                 this.getAccountListFn();
             },
             handleChange (pagination) {
@@ -189,15 +209,15 @@
                 this.form.resetFields();
             },
             // api
-            async getAccountListFn () {
+            async getAccountListFn (filters={}) {
                 // console.log('config.pagination', config.pagination);
-                const params = { page: config.pagination.page, pageSize: config.pagination.pageSize };
+                const params = { page: config.pagination.page, pageSize: config.pagination.pageSize, ...filters };
                 const data = await getAccountList(params);
                 this.loading = false;
 				this.accountList = data.data;
 				this.pagination = {
+					...config.pagination,
 					total: data.total,
-					...config.pagination
 				};
 
                 this.resetFormData();
@@ -229,6 +249,18 @@
                     this.$message.success(data.msg, 1, () => {
                         this.okBtnDisabled = false;
                         this.visible = false;
+                        this.getAccountListFn();
+                    });
+                } else {
+                    this.$message.error(data.msg, 1);
+                }
+            },
+            async deleteAccountFn (ids) {
+                const params = { ids: ids };
+                const data = await deleteAccount(params);
+                if (data.code == '200') {
+                    this.$message.success(data.msg, 1, () => {
+                        this.selectedRowKeys = [];
                         this.getAccountListFn();
                     });
                 } else {

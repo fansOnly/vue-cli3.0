@@ -10,6 +10,7 @@
         @handleFilter="handleFilter"
         @handleFilterReset="handleFilterReset"
         @handlePhotopreviewCancel="handlePhotopreviewCancel"
+        @showModal="showModal"
     >
         <!-- 渲染筛选条件 -->
         <template v-slot:filterAfterSlot="{ filterForm }">
@@ -131,7 +132,7 @@
 			},
 			showModal (action, editId) {
                 if (action == 'add') {
-					this.$router.push({name: 'infoEdit'});
+					this.$router.push({name: 'infoEdit', params: {id: 0}});
                 } else if (action == 'edit') {
 					this.$router.push({name: 'infoEdit', params: {id: editId}});
                 } else {

@@ -646,14 +646,11 @@ export default {
 		if (!Object.prototype.toString.call(time) === '[object Date]') {
 			throw new Error(`${time} on type error, time should be date or timestamp ...`);
 		}
-		if (this.isNumber(time)) {
+		if (typeof time === 'number') {
 			// 时间戳
 			while (time.toString().length < 13) {
 				time += '0';
 			}
-			// if (time.toString().length != 13) {
-			// 	time = Number(time + '' + (13 - time.toString().length));
-			// }
 			time = new Date(Number(time));
 		}
 		// console.log('time: ', time);
@@ -751,23 +748,13 @@ export default {
 	},
 
 	/**
-	* 字符串补零
-	* @param  {String} str
-	* @return {String}
-	*/
-	fillZero(str) {
-		str = (str).toString();
-		return str[1] ? str : '0' + str
-	},
-
-	/**
 	* 价格补零
 	* @param  {String} str
 	* @return {String}
 	*/
 	priceFixedZero(str) {
-		if (!this.isNumber(Number(str))) {
-			return;
+		if (typeof str !== 'number' || str === null) {
+			throw new Error('illegal param type, only accept number')
 		}
 		return (str).toFixed(2)
 	},
@@ -805,6 +792,29 @@ export default {
 			result = num + result
 		}
 		return `${prefix}${result}${list[1] ? `.${list[1]}` : ''}`
+	},
+
+	/**
+	* 格式化时间
+	* @param  {String} 时间格式
+	* @param  {Number} 时间戳
+	* @return {String} 格式化时间
+	*/
+	dateFormatter (formatter, timestamp) {
+		const date = typeof timestamp === 'number' ? new Date(timestamp) : new Date();
+		const Y = date.getFullYear() + '',
+			  M = date.getMonth() + 1,
+			  D = date.getDate(),
+			  H = date.getHours(),
+			  m = date.getMinutes(),
+			  s = date.getSeconds();
+		return formatter.replace(/YYYY|yyyy/g, Y)
+						.replace(/YY|yy/g, Y.substr(2,2))
+						.replace(/MM/g, M < 10 ? '0' + M : M)
+						.replace(/DD/g, D < 10 ? '0' + D : D)
+						.replace(/HH|hh/g, H < 10 ? '0' + H : H)
+						.replace(/mm/g, m < 10 ? '0' + m : m)
+						.replace(/ss/g, s < 10 ? '0' + s : s)
 	},
 
 	/**
@@ -923,5 +933,19 @@ export default {
 			dealedDecimal = fixZero(digit);
 		}
 		return Number(`${integer}.${dealedDecimal}`);
-	}
+	},
+
+	/**
+	 * 随机打乱数组排序
+	 * @param {Array}
+	 * @return {Array}
+	 */
+	shuffle(arr) {
+		let i = arr.length;
+		while (i) {
+			let j = Math.floor(Math.random() * i--);
+			[arr[j], arr[i]] = [arr[i], arr[j]];
+		}
+		return arr;
+	},
 }

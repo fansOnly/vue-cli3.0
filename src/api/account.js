@@ -28,3 +28,7 @@ export const deleteAccountClass = params => post('/account/class/delete', params
 export const getPermissionList = () => get('/account/permission')
 // 获取全部可配置权限节点树
 export const getPermissionTree = () => get('/account/permission/tree')
+// 获取权限详情
+export const getPermissionDetail = params => get('/account/permission/detail', params)
+// 更新权限详情
+export const updatePermissionDetail = params => post('/account/permission/update', params)

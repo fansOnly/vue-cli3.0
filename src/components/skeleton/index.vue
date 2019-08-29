@@ -4,7 +4,68 @@
             <BreadCrumbComponent />
         </template>
         <div class="container">
-            <!-- 内容区域 -->
+            <!-- 筛选区域 -->
+            <a-form ref="filterForm" class="ant-advanced-search-form" :form="form" @submit.prevent="handleFilter">
+                <a-row :gutter="24">
+                    <a-col v-if="filters.hasID" :span="6">
+                        <a-form-item label="数据ID">
+                            <a-input v-decorator="['id', {rules: [{message: '请输入数据ID',}], initialValue: ''}]"
+                                placeholder="请输入数据ID" />
+                        </a-form-item>
+                    </a-col>
+                    <slot name="filterBeforeSlot"></slot>
+                    <a-col v-if="filters.hasTitle" :span="6">
+                        <a-form-item label="数据标题">
+                            <a-input v-decorator="['title', {rules: [{message: '请输入数据标题',}], initialValue: ''}]"
+                                placeholder="请输入数据标题" />
+                        </a-form-item>
+                    </a-col>
+                    <a-col v-if="filters.hasName" :span="6">
+                        <a-form-item label="数据名称" >
+                            <a-input v-decorator="['name', {rules: [{message: '请输入数据名称',}], initialValue: ''}]"
+                                placeholder="请输入数据名称" />
+                        </a-form-item>
+                    </a-col>
+                    <slot name="filterAfterSlot"></slot>
+                    <a-col v-if="filters.hasPhone" :span="6">
+                        <a-form-item label="手机号码" >
+                            <a-input v-decorator="['phone', {rules: [{message: '请输入手机号码',}], initialValue: ''}]"
+                                placeholder="请输入手机号码" />
+                        </a-form-item>
+                    </a-col>
+                    <a-col v-if="filters.hasAdmin" :span="6">
+                        <a-form-item label="发布人" >
+                            <a-input v-decorator="['admin', {rules: [{message: '请输入发布人',}], initialValue: ''}]"
+                                placeholder="请输入发布人" />
+                        </a-form-item>
+                    </a-col>
+                    <a-col v-if="filters.hasCreateTime" :span="6">
+                        <a-form-item label="发布日期" >
+                            <a-date-picker v-decorator="['create_time', {rules: [{type: 'object',message: '请选择发布日期',}]}]"
+                                placeholder="请选择发布日期" style="width: 100%" />
+                        </a-form-item>
+                    </a-col>
+                    <a-col v-if="filters.hasState" :span="6">
+                        <a-form-item label="数据状态" >
+                            <a-select v-decorator="['state', {rules: [{message: '请选择数据状态',}], initialValue: ''}]"
+                                placeholder="请选择数据状态">
+                                <a-select-option value="">全部</a-select-option>
+                                <template v-for="(item, index) in filters.STATUS">
+                                    <a-select-option :key="index" :value="index+''">{{item}}</a-select-option>
+                                </template>
+                            </a-select>
+                        </a-form-item>
+                    </a-col>
+                </a-row>
+                <a-row>
+                    <a-col :span="24">
+                        <a-form-item style="margin-bottom:0;text-align: right;">
+                            <a-button type="primary" html-type="submit">搜索</a-button>
+                            <a-button :style="{ marginLeft: '8px' }" @click="handleReset">重置</a-button>
+                        </a-form-item>
+                    </a-col>
+                </a-row>
+            </a-form>
             <div v-if="withOptionBar" class="option-bar">
                 <!-- 内容操作区域 -->
                 <a-button v-if="allowAdd" style="margin-right:10px;" type="primary" @click="showModal('add')">新增</a-button>
@@ -39,13 +100,11 @@
 
 <script>
     import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue';
-    // import Modal from '@/components/modal/index.vue';
 
     export default {
         name: 'PageSkeleton',
         components: {
             BreadCrumbComponent,
-            // Modal,
         },
         props: {
             withBreadcrumb: {
@@ -78,6 +137,9 @@
                     return []
                 }
             },
+            filters: {
+                type: Object,
+            },
             photoPreviewVisible: {
                 type: Boolean,
                 default: function () {
@@ -108,6 +170,9 @@
                     return false
                 }
             },
+        },
+        beforeCreate () {
+            this.form = this.$form.createForm(this);
         },
         methods: {
 			delItem(index) {
@@ -142,6 +207,24 @@
             },
             handleSubmit () {
                 this.$emit('handleSubmit');
+            },
+            handleFilter () {
+                this.form.validateFields((err, fieldsValue) => {
+                    if (!err) {
+                        const values = {
+                            ...fieldsValue,
+                            create_time:
+                                fieldsValue['create_time'] &&
+                                fieldsValue['create_time'].format('YYYY-MM-DD')
+                        };
+                        // console.log('handleFilter form: ', values);
+                        this.$emit('handleFilter', values);
+                    }
+                })
+            },
+            handleReset () {
+                this.form.resetFields();
+                this.$emit('handleFilterReset');
             },
         }
     }

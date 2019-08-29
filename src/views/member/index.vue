@@ -1,6 +1,7 @@
 <template>
 	<PageSkeleton
         :selectedRowKeys="selectedRowKeys"
+        :filters="filters"
         :withModal="withModal"
         :allowAdd="allowAdd"
         :visible="visible"
@@ -10,11 +11,16 @@
         :previewPhoto="previewPhoto"
         @delItem="delItem"
         @delMultiItems="delMultiItems"
+        @handleFilter="handleFilter"
+        @handleFilterReset="handleFilterReset"
         @handlePhotopreviewCancel="handlePhotopreviewCancel"
         @showModal="showModal"
         @handleCancel="handleCancel"
         @handleSubmit="handleSubmit"
     >
+        <!-- 渲染筛选条件 -->
+        <template v-slot:filterAfterSlot="{ filterForm }">
+        </template>
         <!-- 渲染数据 -->
         <template slot="tableSlot">
             <a-table rowKey="id" :loading="loading" :columns="columns" :dataSource="memberList" :pagination="pagination" :rowSelection="rowSelection" bordered @change="handleChange" >
@@ -23,14 +29,12 @@
                 <a v-else href="javascript:;" @click="handlePhotoPreview(action)"><img :src="action" style="width:30px;height:30px;" alt=""></a>
             </template>
             <span slot="stateSlot" slot-scope="action">
-                <span v-if="action == 0" style="color:red;">{{MEMBER_STATUS[action]}}</span>
-                <span v-if="action == 1" style="color:orange;">{{MEMBER_STATUS[action]}}</span>
-                <span v-if="action == 2" style="color:green;">{{MEMBER_STATUS[action]}}</span>
+                <a-badge :status="BADGE_STATUS(action)" :text="MEMBER_STATUS[action]" />
             </span>
-            <span slot="actionSlot" slot-scope="action, record, index">
+            <span slot="actionSlot" slot-scope="action, record">
                 <a @click="showModal('edit', record.id)">{{allowEdit ? '编辑' : '查看'}}</a>
                 <a-divider type="vertical" />
-                <a-popconfirm title='确认删除当前信息吗?' @confirm="() => delItem(index)">
+                <a-popconfirm title='确认删除当前信息吗?' @confirm="() => delItem(record.id)">
                     <a href="javascript:;">删除</a>
                 </a-popconfirm>
             </span>
@@ -94,10 +98,9 @@
 <script>
     import PageSkeleton from '@/components/skeleton/index.vue';
 
-    import { getMemberList, addMember, getMemberDetail, updateMember } from '@/api/member';
+    import { getMemberList, addMember, getMemberDetail, updateMember, deleteMember } from '@/api/member';
     import config from './config'
-
-    import { MEMBER_STATUS } from '@/utils/configSetting';
+    import Tools from '@/utils/Tools';
 
     export default {
         name: 'Banner',
@@ -106,7 +109,8 @@
         },
         data () {
             return {
-                MEMBER_STATUS,
+                MEMBER_STATUS: config.MEMBER_STATUS,
+                BADGE_STATUS: config.BADGE_STATUS,
                 withModal: config.withModal,
                 allowAdd: config.allowAdd,
                 allowEdit: config.allowEdit,
@@ -119,6 +123,7 @@
                 visible: false,
                 modalTitle: '',
                 okBtnDisabled: false,
+                filters: config.filters,
                 // ***************************
                 action: '',
                 initialMember: {},
@@ -147,15 +152,21 @@
 				console.log('selectedRowKeys', selectedRowKeys);
 				this.selectedRowKeys = selectedRowKeys;
 			},
-			delItem(index) {
-				console.log(`删除第 ${index} 项`);
-				this.memberList.splice(index, 1);
+			delItem(id) {
+                this.deleteMemberFn([id]);
 			},
 			delMultiItems() {
-                this.memberList = this.memberList.filter(
-                    item => !this.selectedRowKeys.includes(item.id)
+				const deleteList = this.memberList.filter(
+                    item => this.selectedRowKeys.includes(item.id)
                 );
-                this.selectedRowKeys = [];
+                const deleteIds = Tools.pluck(deleteList, 'id');
+                this.deleteMemberFn(deleteIds);
+            },
+            handleFilter (values) {
+                console.log('handleFilterValues', values);
+                this.getMemberListFn(values);
+            },
+            handleFilterReset () {
                 this.getMemberListFn();
             },
             handleChange (pagination) {
@@ -254,9 +265,9 @@
                 this.allowEdit && this.form.resetFields();
             },
             // api
-            async getMemberListFn () {
+            async getMemberListFn (filters={}) {
                 // console.log('config.pagination', config.pagination);
-                const params = { page: config.pagination.page, pageSize: config.pagination.pageSize };
+                const params = { page: config.pagination.page, pageSize: config.pagination.pageSize, ...filters };
                 const data = await getMemberList(params);
                 this.loading = false;
 				this.memberList = data.data;
@@ -301,6 +312,18 @@
                     this.$message.success(data.msg, 1, () => {
                         this.okBtnDisabled = false;
                         this.visible = false;
+                        this.getMemberListFn();
+                    });
+                } else {
+                    this.$message.error(data.msg, 1);
+                }
+            },
+            async deleteMemberFn (ids) {
+                const params = { ids: ids };
+                const data = await deleteMember(params);
+                if (data.code == '200') {
+                    this.$message.success(data.msg, 1, () => {
+                        this.selectedRowKeys = [];
                         this.getMemberListFn();
                     });
                 } else {

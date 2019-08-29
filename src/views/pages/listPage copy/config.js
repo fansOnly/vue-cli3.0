@@ -1,5 +1,5 @@
-import Tools from '@/utils/Tools';
-import { pagination, filters, INFO_STATUS, BADGE_STATUS } from '@/utils/configSetting';
+import Tools from '@/utils/Tools'
+import { pagination, filters } from '@/utils/configSetting';
 
 export default {
     columns: [
@@ -17,11 +17,7 @@ export default {
 		{
 			title: '标题',
 			dataIndex: 'title',
-		},
-		{
-			title: '缩略图',
-			dataIndex: 'thumbnail',
-			scopedSlots: { customRender: 'thumbnailSlot' }
+			scopedSlots: { customRender: 'titlex' },
 		},
 		{
 			title: '发布时间',
@@ -32,13 +28,13 @@ export default {
 		{
 			title: '状态',
 			dataIndex: 'state',
-			scopedSlots: { customRender: 'stateSlot' },
+			scopedSlots: { customRender: 'statex' },
 			width: '100px',
 		},
 		{
 			title: '操作',
 			dataIndex: 'action',
-			scopedSlots: { customRender: 'actionSlot' },
+			scopedSlots: { customRender: 'actionx' },
 			width: '120px'
 		}
 	],
@@ -46,13 +42,7 @@ export default {
 		...pagination
 	},
 	filters: {
-		...filters,
-		STATUS: INFO_STATUS,
-		hasAdmin: false
+		...filters
 	},
-	INFO_STATUS,
-	BADGE_STATUS,
 	actionList: ['编辑','删除'],
-	withModal: false,
-	allowEdit: true,
 }

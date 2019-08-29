@@ -30,16 +30,6 @@
 								readonly
 							/>
 						</a-form-item>
-						<a-form-item label="活动时间" v-bind="formItemLayout">
-							<a-range-picker
-								:showTime="{ format: 'HH:mm' }"
-								format="YYYY-MM-DD HH:mm"
-								:placeholder="['开始时间', '结束时间']"
-								@change="onChange"
-								@ok="onOk"
-								class="ant-form-item_style2"
-							/>
-						</a-form-item>
 						<a-form-item label="简介" v-bind="formItemLayout">
 							<a-textarea v-decorator="['intro']" placeholder="请输入简介" :autosize="{ minRows: 2, maxRows: 4 }" />
 						</a-form-item>
@@ -99,19 +89,6 @@
 								<p class="ant-upload-hint">只能上传jpg,png,gif</p>
 							</a-upload-dragger>
 						</a-form-item>
-						<a-form-item v-bind="formItemLayout" label="状态" hasFeedback class="ant-form-item_style2">
-							<a-select
-								v-decorator="['state',{rules: [{ required: true, message: '请设置状态', }],initialValue: '1'},]"
-								allowClear
-								placeholder="请设置状态"
-							>
-								<a-select-option value="1">待审核</a-select-option>
-								<a-select-option value="2">已审核</a-select-option>
-								<a-select-option value="3">已置顶</a-select-option>
-								<a-select-option value="0">已下架</a-select-option>
-							</a-select>
-						</a-form-item>
-
 						<a-form-item v-bind="formItemLayout" label="标签" hasFeedback class="ant-form-item_style2">
 							<a-select
 								v-decorator="['tags', {rules: [{ required: false, message: '请选择商品标签', type: 'array' }],}]"
@@ -124,41 +101,17 @@
 								<a-select-option value="sale">折扣</a-select-option>
 							</a-select>
 						</a-form-item>
-						<a-form-item v-bind="formItemLayout" label="性别" class="ant-form-item_style2">
-							<a-radio-group v-decorator="['gender']">
-								<a-radio value="1">男</a-radio>
-								<a-radio value="0">女</a-radio>
-							</a-radio-group>
-						</a-form-item>
-						<a-form-item v-bind="formItemLayout" label="性别" class="ant-form-item_style2">
-							<a-radio-group v-decorator="['sex']">
-								<a-radio-button value="1">男</a-radio-button>
-								<a-radio-button value="0">女</a-radio-button>
-							</a-radio-group>
-						</a-form-item>
-						<a-form-item v-bind="formItemLayout" label="多选项" class="ant-form-item_style2">
-							<a-checkbox-group v-decorator="['checkbox', {initialValue: ['A', 'B']}]">
-								<a-row>
-									<a-col :span="8">
-										<a-checkbox value="A">A</a-checkbox>
-									</a-col>
-									<a-col :span="8">
-										<a-checkbox disabled value="B">B</a-checkbox>
-									</a-col>
-									<a-col :span="8">
-										<a-checkbox value="C">C</a-checkbox>
-									</a-col>
-									<a-col :span="8">
-										<a-checkbox value="D">D</a-checkbox>
-									</a-col>
-									<a-col :span="8">
-										<a-checkbox value="E">E</a-checkbox>
-									</a-col>
-								</a-row>
-							</a-checkbox-group>
-						</a-form-item>
-						<a-form-item v-bind="formItemLayout" label="Rate" class="ant-form-item_style2">
-							<a-rate v-decorator="['rate', {initialValue: 3.5}]" allow-half />
+						<a-form-item v-bind="formItemLayout" label="状态" hasFeedback class="ant-form-item_style2">
+							<a-select
+								v-decorator="['state',{rules: [{ required: true, message: '请设置状态', }],initialValue: '1'},]"
+								allowClear
+								placeholder="请设置状态"
+							>
+								<a-select-option value="1">待审核</a-select-option>
+								<a-select-option value="2">已审核</a-select-option>
+								<a-select-option value="3">已置顶</a-select-option>
+								<a-select-option value="0">已下架</a-select-option>
+							</a-select>
 						</a-form-item>
 					</a-col>
 				</a-row>
@@ -211,18 +164,20 @@
 			this.form = this.$form.createForm(this);
 		},
 		mounted() {
-			// console.log('edit-page-router:', this.$route);
 			this.id = this.$route.params.id;
-
-			// 设置默认值
-			this.form.setFieldsValue({
-				sortnum: 20,
-				create_time: moment()
-			});
-			// this.$nextTick(() => {
-			//   // To disabled submit button at the beginning.
-			//   this.form.validateFields();
-			// });
+			if (this.id) {
+				// 
+			} else {
+				// 设置默认值
+				this.form.setFieldsValue({
+					sortnum: 20,
+					create_time: moment()
+				});
+				// this.$nextTick(() => {
+				//   // To disabled submit button at the beginning.
+				//   this.form.validateFields();
+				// });
+			}
 		},
 		methods: {
 			onChange(value, dateString) {

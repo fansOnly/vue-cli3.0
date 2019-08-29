@@ -1,14 +1,26 @@
 <template>
     <PageSkeleton
         :selectedRowKeys="selectedRowKeys"
+        :filters="filters"
         :withModal="withModal"
         :allowAdd="allowAdd"
         :photoPreviewVisible="photoPreviewVisible"
         :previewPhoto="previewPhoto"
         @delItem="delItem"
         @delMultiItems="delMultiItems"
+        @handleFilter="handleFilter"
+        @handleFilterReset="handleFilterReset"
         @handlePhotopreviewCancel="handlePhotopreviewCancel"
     >
+        <!-- 渲染筛选条件 -->
+        <template v-slot:filterBeforeSlot="{ filterForm }">
+            <a-col v-if="filters.hasObjectId" :span="6">
+                <a-form-item label="关联ID">
+                    <a-input v-decorator="['object_id', {rules: [{message: '请输入关联ID',}], initialValue: ''}]"
+                        placeholder="请输入关联ID" />
+                </a-form-item>
+            </a-col>
+        </template>
         <!-- 渲染数据 -->
         <template slot="tableSlot">
             <a-table rowKey="id" :loading="loading" :columns="columns" :dataSource="assetsList" :pagination="pagination" :rowSelection="rowSelection" bordered @change="handleChange" >
@@ -17,11 +29,10 @@
                     <a v-else href="javascript:;" @click="handlePhotoPreview(action)"><img :src="action" style="width:30px;height:30px;" alt=""></a>
                 </span>
                 <span slot="stateSlot" slot-scope="action">
-                    <span v-if="action == 0" style="color:red;">{{ASSETS_STATUS[action]}}</span>
-                    <span v-if="action == 1" style="color:green;">{{ASSETS_STATUS[action]}}</span>
+                    <a-badge :status="BADGE_STATUS(action)" :text="ASSETS_STATUS[action]" />
                 </span>
-                <span slot="actionSlot" slot-scope="action, record, index">
-                    <a-popconfirm title='确认删除当前信息吗?' @confirm="() => delItem(index)">
+                <span slot="actionSlot" slot-scope="action, record">
+                    <a-popconfirm title='确认删除当前信息吗?' @confirm="() => delItem(record.id)">
                         <a href="javascript:;">删除</a>
                     </a-popconfirm>
                 </span>
@@ -37,7 +48,7 @@
     import { getAssetsList, deleteAssets } from '@/api/setting';
     import config from './config'
 
-    import { ASSETS_STATUS } from '@/utils/configSetting';
+    import Tools from '@/utils/Tools';
 
     export default {
         name: 'Assets',
@@ -46,14 +57,18 @@
         },
         data () {
             return {
-                ASSETS_STATUS,
+                ASSETS_STATUS: config.ASSETS_STATUS,
+                BADGE_STATUS: config.BADGE_STATUS,
                 withModal: config.withModal,
                 allowAdd: config.allowAdd,
                 assetsList: [],
                 columns: config.columns,
                 pagination: {},
                 loading: true,
+                // 传递给PageSkeleton组件的props
                 selectedRowKeys: [],
+                filters: config.filters,
+                // ***************************
                 photoPreviewVisible: false,
                 previewPhoto: '',
             }
@@ -75,15 +90,21 @@
 				console.log('selectedRowKeys', selectedRowKeys);
 				this.selectedRowKeys = selectedRowKeys;
 			},
-			delItem(index) {
-				console.log(`删除第 ${index} 项`);
-				this.assetsList.splice(index, 1);
+			delItem(id) {
+                this.deleteAssetsFn([id]);
 			},
 			delMultiItems() {
-				this.assetsList = this.assetsList.filter(
-                    item => !this.selectedRowKeys.includes(item.id)
+				const deleteList = this.assetsList.filter(
+                    item => this.selectedRowKeys.includes(item.id)
                 );
-                this.selectedRowKeys = [];
+                const deleteIds = Tools.pluck(deleteList, 'id');
+                this.deleteAssetsFn(deleteIds);
+            },
+            handleFilter (values) {
+                console.log('handleFilter', values);
+                this.getAssetsListFn(values);
+            },
+            handleFilterReset () {
                 this.getAssetsListFn();
             },
             handlePhotopreviewCancel() {
@@ -107,9 +128,9 @@
                 this.getAssetsListFn();
 			},
             // api
-            async getAssetsListFn () {
+            async getAssetsListFn (filters={}) {
                 // console.log('config.pagination', config.pagination);
-                const params = { page: config.pagination.page, pageSize: config.pagination.pageSize };
+                const params = { page: config.pagination.page, pageSize: config.pagination.pageSize, ...filters };
                 const data = await getAssetsList(params);
                 this.loading = false;
 				this.assetsList = data.data;
@@ -119,10 +140,12 @@
 					...config.pagination
 				};
             },
-            async deleteAssetsFn (params) {
+            async deleteAssetsFn (ids) {
+                const params = { ids: ids };
                 const data = await deleteAssets(params);
                 if (data.code == '200') {
                     this.$message.success(data.msg, 1, () => {
+                        this.selectedRowKeys = [];
                         this.getAssetsListFn();
                     });
                 } else {

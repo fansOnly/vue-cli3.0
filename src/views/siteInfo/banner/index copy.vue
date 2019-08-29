@@ -1,20 +1,20 @@
 <template>
-    <PageSkeleton
-        :selectedRowKeys="selectedRowKeys"
-        :visible="visible"
-        :modalTitle="modalTitle"
-        :okBtnDisabled="okBtnDisabled"
-        :photoPreviewVisible="photoPreviewVisible"
-        :previewPhoto="previewPhoto"
-        @delItem="delItem"
-        @delMultiItems="delMultiItems"
-        @handlePhotopreviewCancel="handlePhotopreviewCancel"
-        @showModal="showModal"
-        @handleCancel="handleCancel"
-        @handleSubmit="handleSubmit"
-    >
-        <!-- 渲染数据 -->
-        <template slot="tableSlot">
+	<div>
+		<BreadCrumbComponent />
+		<div class="container">
+            <!-- 内容区域 -->
+            <div class="option-bar">
+                <!-- 内容操作区域 -->
+                <a-button style="margin-right:10px;" type="primary" @click="showModal('add')">新增</a-button>
+                <template v-if="selectedRowKeys.length">
+                    <a-button style="margin-right:10px;" type="default" @click="delMultiItems">批量删除</a-button>
+                    <div>
+                        当前共选择
+                        <strong style="color:#1890ff;">{{selectedRowKeys.length}}</strong> 条信息
+                    </div>
+                </template>
+            </div>
+            <!-- 内容展示区域 -->
             <a-table rowKey="id" :loading="loading" :columns="columns" :dataSource="bannerList" :pagination="pagination" :rowSelection="rowSelection" bordered >
                 <span slot="imagex" slot-scope="action">
                     <span v-if="!action.length">暂无</span>
@@ -28,46 +28,50 @@
                     </a-popconfirm>
                 </span>
             </a-table>
-        </template>
-        <!-- 渲染编辑框 -->
-        <template slot="formSlot">
-            <a-form layout="vertical" :form="form">
-                <a-form-item v-if="action == 'edit'" label="幻灯片ID">
-                    <a-input v-decorator="['id', {initialValue: initialBanner.id}]" disabled />
-                </a-form-item>
-                <a-form-item label="幻灯片名称">
-                    <a-input v-decorator="['title', {rules: [{required: true,}], initialValue: initialBanner.title || ''}]" />
-                </a-form-item>
-                <a-form-item >
-                    <span slot="label">幻灯片图片<span style="color:rgba(0,0,0,0.45);font-size:13px;">(只能上传jpg,png,gif,mp4)</span></span>
-                    <a-upload
-                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                        listType="picture-card"
-                        v-decorator="['fileList', {rules: [{validator: validateImage}]}]"
-                        :fileList="fileList"
-                        :beforeUpload="beforeUpload"
-                        @preview="handlePhotoPreview"
-                        @change="handlePhotoChange"
-                    >
-                        <div v-if="fileList.length == 0">
-                            <a-icon type="plus" />
-                            <div class="ant-upload-text">上传</div>
-                        </div>
-                    </a-upload>
-                </a-form-item>
-                <a-form-item label="幻灯片链接">
-                    <a-input v-decorator="['url', {initialValue: initialBanner.url || ''}]" />
-                </a-form-item>
-                <a-form-item label="幻灯片描述">
-                    <a-input v-decorator="['content', {initialValue: initialBanner.content || ''}]" />
-                </a-form-item>
-            </a-form>
-        </template>
-    </PageSkeleton>
+            <!-- banner新增/修改弹窗 -->
+            <Modal :visible="visible" :modalTitle="modalTitle" @cancel="handleCancel" @ok="handleSubmit">
+                <a-form layout="vertical" :form="form">
+                    <a-form-item v-if="action == 'edit'" label="幻灯片ID">
+                        <a-input v-decorator="['id', {initialValue: initialBanner.id}]" disabled />
+                    </a-form-item>
+                    <a-form-item label="幻灯片名称">
+                        <a-input v-decorator="['title', {rules: [{required: true,}], initialValue: initialBanner.title || ''}]" />
+                    </a-form-item>
+                    <a-form-item >
+                        <span slot="label">幻灯片图片<span style="color:rgba(0,0,0,0.45);font-size:13px;">(只能上传jpg,png,gif,mp4)</span></span>
+                        <a-upload
+                            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                            listType="picture-card"
+                            v-decorator="['fileList', {rules: [{validator: validateImage}]}]"
+                            :fileList="fileList"
+                            :beforeUpload="beforeUpload"
+                            @preview="handlePhotoPreview"
+                            @change="handlePhotoChange"
+                        >
+                            <div v-if="fileList.length == 0">
+                                <a-icon type="plus" />
+                                <div class="ant-upload-text">上传</div>
+                            </div>
+                        </a-upload>
+                    </a-form-item>
+                    <a-form-item label="幻灯片链接">
+                        <a-input v-decorator="['url', {initialValue: initialBanner.url || ''}]" />
+                    </a-form-item>
+                    <a-form-item label="幻灯片描述">
+                        <a-input v-decorator="['content', {initialValue: initialBanner.content || ''}]" />
+                    </a-form-item>
+                </a-form>
+            </Modal>
+            <a-modal :visible="photoPreviewVisible" :footer="null" @cancel="handlePhotopreviewCancel">
+                <img alt="" style="width: 100%" :src="previewPhoto" />
+            </a-modal>
+		</div>
+	</div>
 </template>
 
 <script>
-    import PageSkeleton from '@/components/skeleton/index.vue';
+    import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue';
+    import Modal from '@/components/modal/index.vue';
 
     import { getBannerList, addBanner, getBannerDetail, updateBanner } from '@/api/banner';
 
@@ -96,7 +100,7 @@
         },
         {
 			title: '发布时间',
-			dataIndex: 'createTime',
+			dataIndex: 'create_time',
             width: '200px'
 		},
 		{
@@ -110,7 +114,8 @@
     export default {
         name: 'Banner',
         components: {
-            PageSkeleton,
+            BreadCrumbComponent,
+            Modal,
         },
         data () {
             return {
@@ -118,12 +123,9 @@
                 columns,
                 pagination: false,
                 loading: true,
-                // 传递给PageSkeleton组件的props
-                selectedRowKeys: [],
                 visible: false,
                 modalTitle: '',
-                okBtnDisabled: false,
-                // ***************************
+                selectedRowKeys: [],
                 action: '',
                 initialBanner: {},
                 photoPreviewVisible: false,
@@ -157,11 +159,21 @@
 				this.bannerList.splice(index, 1);
 			},
 			delMultiItems() {
-				this.bannerList = this.bannerList.filter(
-                    item => !this.selectedRowKeys.includes(item.id)
-                );
-                this.selectedRowKeys = [];
-                this.getBannerListFn();
+				const that = this;
+				this.$confirm({
+					title: '删除提醒',
+					content: '确认删除当前选中的信息吗?',
+					okType: 'danger',
+					onOk() {
+						that.bannerList = that.bannerList.filter(
+							item => !that.selectedRowKeys.includes(item.id)
+						);
+						that.selectedRowKeys = [];
+					},
+					onCancel() {
+						console.log('Cancel');
+					}
+                });
 			},
             handlePhotopreviewCancel() {
 				this.photoPreviewVisible = false;
@@ -259,11 +271,9 @@
                 }
             },
             async addBannerFn (params) {
-                this.okBtnDisabled = true;
                 const data = await addBanner(params);
                 if (data.code == '200') {
                     this.$message.success(data.msg, 1, () => {
-                        this.okBtnDisabled = false;
                         this.visible = false;
                         this.getBannerListFn();
                     });
@@ -272,11 +282,9 @@
                 }
             },
             async updateBannerFn (params) {
-                this.okBtnDisabled = true;
                 const data = await updateBanner(params);
                 if (data.code == '200') {
                     this.$message.success(data.msg, 1, () => {
-                        this.okBtnDisabled = false;
                         this.visible = false;
                         this.getBannerListFn();
                     });
