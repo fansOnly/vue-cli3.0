@@ -70,3 +70,7 @@
     color: #fff;
     box-shadow: -1px 0 0 0 #1890ff;
 }
+
+.form-label_top .ant-form-item-label  {
+    line-height: 1.5;
+}

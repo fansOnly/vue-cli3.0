@@ -6,7 +6,7 @@
 				<a-row>
 					<a-col :span="17">
 						<a-form-item label="序号" v-bind="formItemLayout">
-							<a-input-number v-decorator="['sortnum',]" placeholder="请输入序号" />
+							<a-input-number v-decorator="['sortnum',{initialValue: detail.sortnum}]" :step="10" :min="10" placeholder="请输入序号" />
 						</a-form-item>
 						<a-form-item v-bind="formItemLayout">
 							<span slot="label">
@@ -16,13 +16,13 @@
 								</a-tooltip>
 							</span>
 							<a-input
-								v-decorator="['title',{rules: [{required: true, message: '请输入标题！',}]}]"
+								v-decorator="['title',{rules: [{required: true, message: '请输入标题！',}],initialValue: detail.title}]"
 								placeholder="请输入标题"
 							/>
 						</a-form-item>
 						<a-form-item label="发布时间" v-bind="formItemLayout">
 							<a-date-picker
-								v-decorator="['create_time', {rules: [{ type: 'object', required: true, message: '请选择发布时间' }],}]"
+								v-decorator="['create_time', {rules: [{ type: 'object', required: true, message: '请选择发布时间' }],initialValue: detail.create_time}]"
 								show-time
 								format="YYYY-MM-DD HH:mm:ss"
 								placeholder="请选择发布时间"
@@ -30,19 +30,19 @@
 								readonly
 							/>
 						</a-form-item>
-						<a-form-item label="简介" v-bind="formItemLayout">
-							<a-textarea v-decorator="['intro']" placeholder="请输入简介" :autosize="{ minRows: 2, maxRows: 4 }" />
+						<a-form-item label="简介" v-bind="formItemLayout" class="form-label_top">
+							<a-textarea v-decorator="['intro',{initialValue: detail.intro}]" placeholder="请输入简介" :autosize="{ minRows: 2, maxRows: 4 }" />
 						</a-form-item>
-						<a-form-item label="内容" v-bind="formItemLayout">
-							<a-textarea v-decorator="['content']" placeholder="请输入内容" :rows="8" />
+						<a-form-item label="内容" v-bind="formItemLayout" class="form-label_top">
+							<a-textarea v-decorator="['content',{initialValue: detail.content}]" placeholder="请输入内容" :rows="8" />
 						</a-form-item>
 						<a-form-item v-bind="formItemLayout" label="附件">
 							<a-upload
-								v-decorator="['files', {getValueFromEvent: fileUpload,}]"
-								name="files"
+								v-decorator="['file', {getValueFromEvent: fileUploadSingle,}]"
 								action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
 								list-type="text"
 								accept=".rar, .zip, .txt, .ppt, .xlc, .doc, .docx, .xml, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+								:fileList="file"
 							>
 								<a-button>
 									<a-icon type="upload" />点击上传
@@ -50,24 +50,22 @@
 								<span class="label-tip">只能上传zip,rar,doc,xls,ppt,txt</span>
 							</a-upload>
 						</a-form-item>
-						<a-form-item v-bind="formItemLayout" label="相册" extra="只能上传jpg,png,gif">
+						<a-form-item v-bind="formItemLayout" label="相册" extra="只能上传jpg,png,gif" class="form-label_top">
 							<a-upload
+								v-decorator="['photos',]"
 								action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
 								listType="picture-card"
-								v-decorator="['photos',]"
+								accept=".png, .jpg, .gif, .jpeg, .svg, .ico"
 								multiple
-								:defaultFileList="photosList"
+								:fileList="photos"
 								@preview="handlePhotoPreview"
 								@change="handlePhotoChange"
 							>
-								<div v-if="photosList.length < maxLength">
+								<div v-if="photos.length < maxLength">
 									<a-icon type="plus" />
 									<div class="ant-upload-text">上传</div>
 								</div>
 							</a-upload>
-							<a-modal :visible="photoPreviewVisible" :footer="null" @cancel="handlePhotopreviewCancel">
-								<img alt="example" style="width: 100%" :src="previewPhoto" />
-							</a-modal>
 						</a-form-item>
 						<a-form-item :wrapper-col="{ offset: 3 }" style="text-align:left;">
 							<a-button type="primary" html-type="submit" :disabled="hasErrors(form.getFieldsError())">发布</a-button>
@@ -76,22 +74,38 @@
 					</a-col>
 					<a-col :span="5" :offset="2">
 						<a-form-item v-bind="formItemLayout" label="缩略图" class="ant-form-item_style2">
-							<a-upload-dragger
-								v-decorator="['thumbnail', {getValueFromEvent: uploadThumbnail,}]"
+							<a-upload
+								v-decorator="['thumbnail',]"
+								action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+								listType="picture-card"
+								accept=".png, .jpg, .gif, .jpeg, .svg, .ico"
+								:fileList="thumbnail"
+								@preview="handlePhotoPreview"
+								@change="handleThumbnailChange"
+							>
+								<div v-if="thumbnail.length == 0">
+									<a-icon type="plus" />
+									<div class="ant-upload-text">上传</div>
+								</div>
+							</a-upload>
+							<!-- <a-upload-dragger
+								v-decorator="['thumbnail', {getValueFromEvent: thumbnailUploadSingle,}]"
 								name="thumbnail"
 								action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-								:disabled="uploadDisabled"
+								accept=".png, .jpg, .gif, .jpeg, .svg, .ico"
+								:disabled="thumbnail.length > 0"
+								:fileList="thumbnail"
 							>
-								<p class="ant-upload-drag-icon" style="margin-bottom:0;">
-									<a-icon type="inbox" />
-								</p>
-								<p class="ant-upload-text" style="margin-bottom:0;">点击或拖拽上传</p>
-								<p class="ant-upload-hint">只能上传jpg,png,gif</p>
-							</a-upload-dragger>
+							<p class="ant-upload-drag-icon" style="margin-bottom:0;">
+								<a-icon type="inbox" />
+							</p>
+							<p class="ant-upload-text" style="margin-bottom:0;">点击或拖拽上传</p>
+							<p class="ant-upload-hint">只能上传jpg,png,gif</p>
+							</a-upload-dragger> -->
 						</a-form-item>
 						<a-form-item v-bind="formItemLayout" label="标签" hasFeedback class="ant-form-item_style2">
 							<a-select
-								v-decorator="['tags', {rules: [{ required: false, message: '请选择商品标签', type: 'array' }],}]"
+								v-decorator="['tags', {initialValue: detail.tags}]"
 								mode="multiple"
 								allowClear
 								placeholder="请选择商品标签"
@@ -116,13 +130,17 @@
 					</a-col>
 				</a-row>
 			</a-form>
+			<a-modal :visible="photoPreviewVisible" :footer="null" @cancel="handlePhotopreviewCancel">
+				<img alt="" style="width: 100%" :src="previewPhoto" />
+			</a-modal>
 		</div>
 	</div>
 </template>
 <script>
 	import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue';
-	import { message } from 'ant-design-vue';
 	import moment from 'moment';
+
+	import { getInfoDetail, addInfo, updateInfo } from '@/api/info';
 
 	function hasErrors(fieldsError) {
 		return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -131,7 +149,7 @@
 	export default {
 		name: 'listEditPage',
 		components: {
-			BreadCrumbComponent
+			BreadCrumbComponent,
 		},
 		data() {
 			return {
@@ -149,15 +167,9 @@
 				maxLength: 9,
 				photoPreviewVisible: false,
 				previewPhoto: '',
-				photosList: [
-					{
-						uid: '-1',
-						name: 'xxx.png',
-						status: 'done',
-						url:'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-					}
-				],
-				uploadDisabled: false
+				photos: [],
+				file: [],
+				thumbnail: [],
 			};
 		},
 		beforeCreate() {
@@ -166,7 +178,7 @@
 		mounted() {
 			this.id = this.$route.params.id;
 			if (this.id) {
-				// 
+				this.getInfoDetailFn();
 			} else {
 				// 设置默认值
 				this.form.setFieldsValue({
@@ -180,20 +192,12 @@
 			}
 		},
 		methods: {
-			onChange(value, dateString) {
-				console.log('Selected Time: ', value);
-				console.log('Formatted Selected Time: ', dateString);
-			},
-			onOk(value) {
-				console.log('onOk: ', value);
-			},
-			fileUpload(e) {
-				console.log('fileUpload:', e);
-				// console.log('==================files====================', this.form.getFieldValue('files'))
-				if (Array.isArray(e)) {
-					return e;
+			fileUploadSingle(e) {
+				// console.log('fileUpload:', e);
+				if (e.fileList.length > 1) {
+					e.fileList.shift();
 				}
-				return e && e.fileList;
+				this.file = e.fileList;
 			},
 			handlePhotopreviewCancel() {
 				this.photoPreviewVisible = false;
@@ -203,31 +207,66 @@
 				this.photoPreviewVisible = true;
 			},
 			handlePhotoChange({ fileList }) {
-				if (fileList.length > 9) {
+				if (fileList.length > this.maxLength) {
 					fileList.splice(8);
 				}
-				this.photosList = fileList;
+				this.photos = fileList;
 			},
-			uploadThumbnail(e) {
-				console.log('uploadThumbnail:', e);
-				this.uploadDisabled = e.fileList.length > 0;
-
-				if (Array.isArray(e)) {
-					return e;
-				}
-				return e && e.fileList;
+			handleThumbnailChange ({ fileList }) {
+				this.thumbnail = fileList;
 			},
 			handelSubmit(e) {
 				e.preventDefault();
-				this.form.validateFields((err, values) => {
+				this.form.validateFields((err, fieldsValue) => {
 					if (!err) {
+						const values = {
+                            ...fieldsValue,
+                            create_time:
+                                fieldsValue['create_time'] &&
+								fieldsValue['create_time'].format('YYYY-MM-DD hh:mm:ss'),
+							photos: this.photos || fieldsValue.photos,
+							file: this.file || fieldsValue.file,
+							thumbnail: this.thumbnail || fieldsValue.thumbnail,
+                        };
 						console.log('Received values of form: ', values);
-						message.success('', 1, () => {
-							history.back();
-						})
+						if (this.id) {
+							this.updateInfoFn(values);
+						} else {
+							this.addInfoFn(values);
+						}
 					}
 				});
-			}
+			},
+			// api
+			async getInfoDetailFn () {
+				const params = {id: this.id}
+				const data = await getInfoDetail(params);
+				if (data.code == '200') {
+					this.detail = data.data;
+					this.detail.create_time = moment(this.detail.create_time, 'YYYY-MM-DD hh:mm:ss');
+					this.photos = data.data.photos;
+					this.file = data.data.file;
+					this.thumbnail = data.data.thumbnail;
+				}
+			},
+			async updateInfoFn (params) {
+				params = {id: this.id, classid: 1, ...params}
+				const data = await updateInfo(params);
+				if (data.code == '200') {
+					this.$message.success(data.msg, 1, () => {
+						this.$router.replace({name: 'infoEdit', params:{id: parseInt(Math.random() * 99999999)}});
+					})
+				}
+			},
+			async addInfoFn (params) {
+				params = {classid: 1, ...params}
+				const data = await addInfo(params);
+				if (data.code == '200') {
+					this.$message.success(data.msg, 1, () => {
+						this.$router.replace({name: 'infoEdit', params:{id: parseInt(Math.random() * 9999999)}});
+					})
+				}
+			},
 		}
 	};
 </script>

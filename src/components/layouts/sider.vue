@@ -118,9 +118,23 @@
 		},
 		{
 			key: 'infolist',
-			name: '文章列表',
+			name: '信息发布',
 			icon: 'table',
-			path: '/admin/info/index'
+			path: '',
+			subs: [
+				{
+					key: 'info.index',
+					name: '文章管理',
+					icon: '',
+					path: '/admin/info/index'
+				},
+				{
+					key: 'info.class',
+					name: '文章分类管理',
+					icon: '',
+					path: '/admin/info/class'
+				},
+			]
 		},
 		{
 			key: 'first1',

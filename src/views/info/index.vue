@@ -132,7 +132,8 @@
 			},
 			showModal (action, editId) {
                 if (action == 'add') {
-					this.$router.push({name: 'infoEdit', params: {id: 0}});
+					// this.$router.push({name: 'infoEdit', params: {id: 0}});
+					this.$router.push({name: 'infoAdd'});
                 } else if (action == 'edit') {
 					this.$router.push({name: 'infoEdit', params: {id: editId}});
                 } else {

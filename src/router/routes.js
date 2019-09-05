@@ -24,11 +24,12 @@ const Assets = () => import('@/views/assets/index.vue');
 
 const InfoList = () => import('@/views/info/index.vue');
 const InfoEdit = () => import('@/views/info/edit/index.vue');
+const InfoClass = () => import('@/views/info/class/index.vue');
 
 const routes = [
 	{
 		path: '/',
-		name: 'Index',
+		name: 'index',
 		beforeEnter: (to, from ,next) => {
 			if (!localStorage.getItem('token')) {
 				next({
@@ -43,7 +44,7 @@ const routes = [
 	},
 	{
 		path: '/login',
-		name: 'Login',
+		name: 'login',
 		component: Login,
 		meta: {
 			breadcrumbName: '登陆',
@@ -179,6 +180,16 @@ const routes = [
 				},
 			},
 			{
+				path: '/admin/info/class',
+				name: 'infoClass',
+				component: InfoClass,
+				meta: {
+					requireAuth: true,
+					breadcrumbName: '文章分类',
+					depth: 2,
+				},
+			},
+			{
 				path: '/admin/info/index',
 				name: 'infoList',
 				component: InfoList,
@@ -194,7 +205,18 @@ const routes = [
 				component: InfoEdit,
 				meta: {
 					requireAuth: true,
-					breadcrumbName: '文章详情',
+					breadcrumbName: '编辑文章',
+					depth: 3,
+				},
+			},
+			{
+				path: '/admin/info/add',
+				alias: '/admin/info/edit/0',
+				name: 'infoAdd',
+				component: InfoEdit,
+				meta: {
+					requireAuth: true,
+					breadcrumbName: '新增文章',
 					depth: 3,
 				},
 			},

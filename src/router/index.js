@@ -46,23 +46,38 @@ router.beforeEach((to, from, next) => {
     }
 
     if (to.meta.breadcrumbName) {
-        if (to.meta.depth == 2) {
-            resetRoutes(to);
-        }
-        if (to.meta.depth == 3) {
-            addRoutes(to);
+        if (from.name == to.name) {
+            updateRoutes(to);
+        } else {
+            if (to.meta.depth == 2) {
+                resetRoutes(to);
+            }
+            if (to.meta.depth == 3) {
+                addRoutes(to);
+            }
         }
     }
     
     next();
 })
 
-const resetRoutes = (to) => {
-	store.dispatch('breadcrumb/resetRoutes', {path: to.path, breadcrumbName: to.meta.breadcrumbName})
+const resetRoutes = to => {
+	store.dispatch('breadcrumb/resetRoutes', {path: to.path, name: to.name, breadcrumbName: to.meta.breadcrumbName})
 }
 
-const addRoutes = (to) => {
-	store.dispatch('breadcrumb/addRoutes', {path: to.path, breadcrumbName: to.meta.breadcrumbName})
+const addRoutes = to => {
+	store.dispatch('breadcrumb/addRoutes', {path: to.path, name: to.name, breadcrumbName: to.meta.breadcrumbName})
+}
+
+const updateRoutes = to => {
+    const routes = store.state.breadcrumb.routes;
+    let repeatIndex = 0;
+    routes.map((route, index) => {
+        if (to.name == route.name) {
+            repeatIndex = index;
+        }
+    })
+	store.dispatch('breadcrumb/updateRoutes', { index: repeatIndex, route: {path: to.path, name: to.name, breadcrumbName: to.meta.breadcrumbName}})
 }
 
 export default router;
