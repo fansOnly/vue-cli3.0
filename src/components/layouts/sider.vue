@@ -134,6 +134,12 @@
 					icon: '',
 					path: '/admin/info/class'
 				},
+				{
+					key: 'info.recycle',
+					name: '文章回收站',
+					icon: '',
+					path: '/admin/info/recycle'
+				},
 			]
 		},
 		{

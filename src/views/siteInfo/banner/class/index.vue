@@ -23,12 +23,12 @@
                     <a-badge :status="BADGE_STATUS(action)" :text="BANNER_CLASS_STATUS[action]" />
                 </span>
                 <span slot="actionSlot" slot-scope="action, record">
-                    <a @click="showModal('edit', record.id)">编辑</a>
-                    <a-divider type="vertical" />
-                    <router-link :to="{name: 'bannerList', params: {classid: record.id}}">管理</router-link>
-                    <a-divider type="vertical" />
+                    <a-button size="small" @click="showPages(record)">管理</a-button>
+                    <span>&nbsp;</span>
+                    <a-button size="small" @click="showModal('edit', record.id)">{{allowEdit ? '编辑' : '查看'}}</a-button>
+                    <span>&nbsp;</span>
                     <a-popconfirm title='确认删除当前信息吗?' @confirm="() => delItem(record.id)">
-                        <a href="javascript:;">删除</a>
+                        <a-button size="small" type="danger" >删除</a-button>
                     </a-popconfirm>
                 </span>
             </a-table>
@@ -122,6 +122,9 @@
             },
             handleFilterReset () {
                 this.getBannerClassListFn();
+            },
+            showPages (record) {
+                this.$router.push({name: 'bannerList', params: {classid: record.id}})
             },
             showModal (action, editId) {
                 if (action == 'add') {

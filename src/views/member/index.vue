@@ -24,20 +24,20 @@
         <!-- 渲染数据 -->
         <template slot="tableSlot">
             <a-table rowKey="id" :loading="loading" :columns="columns" :dataSource="memberList" :pagination="pagination" :rowSelection="rowSelection" bordered @change="handleChange" >
-            <template slot="avatarSlot" slot-scope="action">
-                <span v-if="!action">暂无</span>
-                <a v-else href="javascript:;" @click="handlePhotoPreview(action)"><img :src="action" style="width:30px;height:30px;" alt=""></a>
-            </template>
-            <span slot="stateSlot" slot-scope="action">
-                <a-badge :status="BADGE_STATUS(action)" :text="MEMBER_STATUS[action]" />
-            </span>
-            <span slot="actionSlot" slot-scope="action, record">
-                <a @click="showModal('edit', record.id)">{{allowEdit ? '编辑' : '查看'}}</a>
-                <a-divider type="vertical" />
-                <a-popconfirm title='确认删除当前信息吗?' @confirm="() => delItem(record.id)">
-                    <a href="javascript:;">删除</a>
-                </a-popconfirm>
-            </span>
+                <template slot="avatarSlot" slot-scope="action">
+                    <span v-if="!action">暂无</span>
+                    <a v-else href="javascript:;" @click="handlePhotoPreview(action)"><img :src="action" style="width:30px;height:30px;" alt=""></a>
+                </template>
+                <span slot="stateSlot" slot-scope="action">
+                    <a-badge :status="BADGE_STATUS(action)" :text="MEMBER_STATUS[action]" />
+                </span>
+                <span slot="actionSlot" slot-scope="action, record">
+                    <a-button size="small" @click="showModal('edit', record.id)">{{allowEdit ? '编辑' : '查看'}}</a-button>
+                    <span>&nbsp;</span>
+                    <a-popconfirm title='确认删除当前信息吗?' @confirm="() => delItem(record.id)">
+                        <a-button size="small" type="danger" >删除</a-button>
+                    </a-popconfirm>
+                </span>
             </a-table>
         </template>
         <!-- 渲染编辑框 -->

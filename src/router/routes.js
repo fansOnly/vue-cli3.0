@@ -25,6 +25,7 @@ const Assets = () => import('@/views/assets/index.vue');
 const InfoList = () => import('@/views/info/index.vue');
 const InfoEdit = () => import('@/views/info/edit/index.vue');
 const InfoClass = () => import('@/views/info/class/index.vue');
+const InfoRecycle = () => import('@/views/info/recycle/index.vue');
 
 const routes = [
 	{
@@ -217,6 +218,16 @@ const routes = [
 				meta: {
 					requireAuth: true,
 					breadcrumbName: '新增文章',
+					depth: 3,
+				},
+			},
+			{
+				path: '/admin/info/recycle',
+				name: 'infoRecycle',
+				component: InfoRecycle,
+				meta: {
+					requireAuth: true,
+					breadcrumbName: '回收站',
 					depth: 3,
 				},
 			},

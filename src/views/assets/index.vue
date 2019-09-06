@@ -33,7 +33,7 @@
                 </span>
                 <span slot="actionSlot" slot-scope="action, record">
                     <a-popconfirm title='确认删除当前信息吗?' @confirm="() => delItem(record.id)">
-                        <a href="javascript:;">删除</a>
+                        <a-button size="small" type="danger" >删除</a-button>
                     </a-popconfirm>
                 </span>
             </a-table>

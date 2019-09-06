@@ -3,17 +3,24 @@
         :selectedRowKeys="selectedRowKeys"
         :filters="filters"
         :withModal="withModal"
-        :photoPreviewVisible="photoPreviewVisible"
-        :previewPhoto="previewPhoto"
-        @delItem="delItem"
-        @delMultiItems="delMultiItems"
+        :allowAdd="allowAdd"
+        @delItem="clearItem"
+        @delMultiItems="clearMultiItems"
         @handleFilter="handleFilter"
         @handleFilterReset="handleFilterReset"
-        @handlePhotopreviewCancel="handlePhotopreviewCancel"
-        @showModal="showModal"
     >
         <!-- 渲染筛选条件 -->
         <template v-slot:filterAfterSlot="{ filterForm }">
+            <a-col v-if="filters.hasCreateTime" :span="6">
+                <a-form-item label="删除日期" >
+                    <a-date-picker v-decorator="['delete_time', {rules: [{type: 'object',message: '请选择删除日期',}]}]"
+                        placeholder="请选择删除日期" style="width: 100%" />
+                </a-form-item>
+            </a-col>
+        </template>
+        <!-- 渲染操作按钮 -->
+        <template v-slot="optionSlot">
+            <a-button style="margin-right:10px;" type="default" @click="delMultiItems">批量还原</a-button>
         </template>
         <!-- 渲染数据 -->
         <template slot="tableSlot">
@@ -26,9 +33,9 @@
                     <a-badge :status="BADGE_STATUS(action)" :text="INFO_STATUS[action]" />
                 </span>
                 <span slot="actionSlot" slot-scope="action, record">
-                    <a-button size="small" @click="showModal('edit', record.id)">{{allowEdit ? '编辑' : '查看'}}</a-button>
+                    <a-button size="small" @click="restoreItem(record.id)">还原</a-button>
                     <span>&nbsp;</span>
-                    <a-popconfirm title='确认删除当前信息吗?' @confirm="() => delItem(record.id)">
+                    <a-popconfirm title='确认删除当前信息吗?' @confirm="() => clearItem(record.id)">
                         <a-button size="small" type="danger" >删除</a-button>
                     </a-popconfirm>
                 </span>
@@ -43,13 +50,13 @@
 <script>
 	import PageSkeleton from '@/components/skeleton/index.vue';
 
-	import { getInfoList, deleteInfo } from '@/api/info';
+	import { getInfoList, restoreInfo, clearInfo } from '@/api/info';
 
 	import config from './config';
 	import Tools from '@/utils/Tools';
 
 	export default {
-		name: 'infoPage',
+		name: 'infoRecycle',
 		components: {
 			PageSkeleton,
 		},
@@ -57,13 +64,13 @@
 			return {
 				INFO_STATUS: config.INFO_STATUS,
                 BADGE_STATUS: config.BADGE_STATUS,
-                withModal: config.withModal,
-                allowEdit: config.allowEdit,
                 infoList: [],
                 columns: config.columns,
                 pagination: {},
                 loading: true,
                 // 传递给PageSkeleton组件的props
+                withModal: config.withModal,
+                allowAdd: config.allowAdd,
                 selectedRowKeys: [],
                 filters: config.filters,
                 // ***************************
@@ -93,15 +100,18 @@
 				console.log('selectedRowKeys', selectedRowKeys);
 				this.selectedRowKeys = selectedRowKeys;
 			},
-			delItem(id) {
-                this.deleteInfoFn([id]);
+			clearItem(id) {
+                this.clearInfoFn([id]);
 			},
-			delMultiItems() {
+			restoreItem(id) {
+                this.restoreInfoFn([id]);
+			},
+			clearMultiItems() {
 				const deleteList = this.infoList.filter(
                     item => this.selectedRowKeys.includes(item.id)
                 );
                 const deleteIds = Tools.pluck(deleteList, 'id');
-                this.deleteInfoFn(deleteIds);
+                this.clearInfoFn(deleteIds);
             },
             handleFilter (values) {
                 console.log('handleFilterValues', values);
@@ -118,9 +128,6 @@
                 config.pagination.pageSize = pagination.pageSize;
                 this.getInfoListFn();
 			},
-            handlePhotopreviewCancel() {
-				this.photoPreviewVisible = false;
-            },
 			handlePhotoPreview(file) {
                 if (typeof file === 'string') {
                     this.previewPhoto = file;
@@ -130,16 +137,6 @@
                 }
 				this.photoPreviewVisible = true;
 			},
-			showModal (action, editId) {
-                if (action == 'add') {
-					// this.$router.push({name: 'infoEdit', params: {id: 0}});
-					this.$router.push({name: 'infoAdd'});
-                } else if (action == 'edit') {
-					this.$router.push({name: 'infoEdit', params: {id: editId}});
-                } else {
-                    this.$message.error('非法操作');
-                }
-            },
 			// api
 			async getInfoListFn (filters={}) {
 				const params = { page: config.pagination.page, pageSize: config.pagination.pageSize, ...filters };
@@ -152,9 +149,21 @@
 					...config.pagination
 				};
 			},
-			async deleteInfoFn (ids) {
+			async restoreInfoFn (ids) {
                 const params = { ids: ids };
-                const data = await deleteInfo(params);
+                const data = await restoreInfo(params);
+                if (data.code == '200') {
+                    this.$message.success(data.msg, 1, () => {
+                        this.selectedRowKeys = [];
+                        this.getInfoListFn();
+                    });
+                } else {
+                    this.$message.error(data.msg, 1);
+                }
+            },
+			async clearInfoFn (ids) {
+                const params = { ids: ids };
+                const data = await clearInfo(params);
                 if (data.code == '200') {
                     this.$message.success(data.msg, 1, () => {
                         this.selectedRowKeys = [];

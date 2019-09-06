@@ -29,14 +29,12 @@
             <a-table rowKey="id" :loading="loading" :columns="columns" :dataSource="accountList" :pagination="pagination" :rowSelection="rowSelection" bordered @change="handleChange" >
                 <span slot="stateSlot" slot-scope="action">
                     <a-badge :status="BADGE_STATUS(action)" :text="ACCOUNT_STATUS[action]" />
-                    <!-- <span v-if="action == 0" style="color:red;">{{ACCOUNT_STATUS[action]}}</span>
-                    <span v-if="action == 1" style="color:green;">{{ACCOUNT_STATUS[action]}}</span> -->
                 </span>
                 <span slot="actionSlot" slot-scope="action, record">
-                    <a @click="showModal('edit', record.id)">编辑</a>
-                    <a-divider type="vertical" />
+                    <a-button size="small" @click="showModal('edit', record.id)">{{allowEdit ? '编辑' : '查看'}}</a-button>
+                    <span>&nbsp;</span>
                     <a-popconfirm title='确认删除当前信息吗?' @confirm="() => delItem(record.id)">
-                        <a href="javascript:;">删除</a>
+                        <a-button size="small" type="danger" >删除</a-button>
                     </a-popconfirm>
                 </span>
             </a-table>

@@ -20,6 +20,21 @@
 								placeholder="请输入标题"
 							/>
 						</a-form-item>
+						<a-form-item v-bind="formItemLayout" label="栏目分类" hasFeedback>
+							<a-tree-select
+								style="width: 100%"
+								v-decorator="['parent_id', {rules: [{required: true, type: 'array', message: '请选择栏目分类'}], initialValue: detail.parent_id}]"
+								:dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
+								placeholder='请选择栏目分类'
+								multiple
+								treeCheckable
+								allowClear
+								treeDefaultExpandAll
+								treeDataSimpleMode
+								:treeData="infoClassTree"
+								:showCheckedStrategy="SHOW_PARENT"
+							/>
+						</a-form-item>
 						<a-form-item label="发布时间" v-bind="formItemLayout">
 							<a-date-picker
 								v-decorator="['create_time', {rules: [{ type: 'object', required: true, message: '请选择发布时间' }],initialValue: detail.create_time}]"
@@ -140,7 +155,10 @@
 	import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue';
 	import moment from 'moment';
 
-	import { getInfoDetail, addInfo, updateInfo } from '@/api/info';
+	import { getInfoDetail, addInfo, updateInfo, getInfoClassTree } from '@/api/info';
+
+	import { TreeSelect } from 'ant-design-vue'
+	const SHOW_PARENT = TreeSelect.SHOW_PARENT
 
 	function hasErrors(fieldsError) {
 		return Object.keys(fieldsError).some(field => fieldsError[field]);
@@ -170,6 +188,8 @@
 				photos: [],
 				file: [],
 				thumbnail: [],
+				infoClassTree: [],
+				SHOW_PARENT,
 			};
 		},
 		beforeCreate() {
@@ -190,6 +210,7 @@
 				//   this.form.validateFields();
 				// });
 			}
+            this.getInfoClassTreeFn();
 		},
 		methods: {
 			fileUploadSingle(e) {
@@ -267,6 +288,11 @@
 					})
 				}
 			},
+            async getInfoClassTreeFn () {
+                const data = await getInfoClassTree();
+				this.infoClassTree = data.data;
+				this.infoClassTree.shift();
+            },
 		}
 	};
 </script>

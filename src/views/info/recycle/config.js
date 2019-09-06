@@ -8,12 +8,6 @@ export default {
 			dataIndex: 'id',
 			width: '120px'
 		},
-        {
-			title: '序号',
-			dataIndex: 'sortnum',
-			sorter: (a, b) => a.sortnum - b.sortnum,
-			width: '80px'
-		},
 		{
 			title: '标题',
 			dataIndex: 'title',
@@ -30,10 +24,10 @@ export default {
 			sorter: (a, b) => Tools.date2Timestamp(a.create_time) - Tools.date2Timestamp(b.create_time)
 		},
 		{
-			title: '状态',
-			dataIndex: 'state',
-			scopedSlots: { customRender: 'stateSlot' },
-			width: '100px',
+			title: '删除时间',
+			dataIndex: 'delete_time',
+			width: '200px',
+			sorter: (a, b) => Tools.date2Timestamp(a.delete_time) - Tools.date2Timestamp(b.delete_time)
 		},
 		{
 			title: '操作',
@@ -47,13 +41,14 @@ export default {
 	},
 	filters: {
 		...filters,
-		delete_time: 0,
 		STATUS: INFO_STATUS,
-		hasAdmin: false
+		hasAdmin: false,
+		hasState: false,
 	},
 	INFO_STATUS,
 	BADGE_STATUS,
-	actionList: ['编辑','删除'],
+	actionList: ['还原','删除'],
 	withModal: false,
-	allowEdit: true,
+	allowEdit: false,
+	allowAdd: false,
 }

@@ -16,8 +16,8 @@ const actions = {
     resetRoutes ({ commit }, route) {
         commit('RESET_BREADCRUMB', route);
     },
-    addRoutes ({ commit }, route) {
-        commit('ADD_BREADCRUMB', route)
+    addRoutes ({ commit }, payload) {
+        commit('ADD_BREADCRUMB', payload)
     },
     updateRoutes ({ commit }, payload) {
         commit('UPDATE_BREADCRUMB', payload)
@@ -29,7 +29,10 @@ const mutations = {
         state.routes = [].concat(state.routes.shift());
         state.routes.push(route);
     },
-    [ADD_BREADCRUMB] (state, route) {
+    [ADD_BREADCRUMB] (state, {name, route}) {
+        if (name && name.toLowerCase().indexOf('add') != '-1') {
+            state.routes.pop();
+        }
         state.routes.push(route);
     },
     [UPDATE_BREADCRUMB] (state, {index, route}) {

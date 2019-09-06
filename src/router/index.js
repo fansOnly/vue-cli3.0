@@ -53,7 +53,7 @@ router.beforeEach((to, from, next) => {
                 resetRoutes(to);
             }
             if (to.meta.depth == 3) {
-                addRoutes(to);
+                addRoutes(to, from);
             }
         }
     }
@@ -65,8 +65,8 @@ const resetRoutes = to => {
 	store.dispatch('breadcrumb/resetRoutes', {path: to.path, name: to.name, breadcrumbName: to.meta.breadcrumbName})
 }
 
-const addRoutes = to => {
-	store.dispatch('breadcrumb/addRoutes', {path: to.path, name: to.name, breadcrumbName: to.meta.breadcrumbName})
+const addRoutes = (to, from) => {
+	store.dispatch('breadcrumb/addRoutes', {name: from.name, route: {path: to.path, name: to.name, breadcrumbName: to.meta.breadcrumbName}})
 }
 
 const updateRoutes = to => {

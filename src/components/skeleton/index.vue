@@ -5,7 +5,7 @@
         </template>
         <div class="container">
             <!-- 筛选区域 -->
-            <a-form ref="filterForm" class="ant-advanced-search-form" :form="form" @submit.prevent="handleFilter">
+            <a-form v-if="withFilter" ref="filterForm" class="ant-advanced-search-form" :form="form" @submit.prevent="handleFilter">
                 <a-row :gutter="24">
                     <a-col v-if="filters.hasID" :span="6">
                         <a-form-item label="数据ID">
@@ -71,6 +71,7 @@
                 <a-button v-if="allowAdd" style="margin-right:10px;" type="primary" @click="showModal('add')">新增</a-button>
                 <template v-if="selectedRowKeys.length">
                     <a-button style="margin-right:10px;" type="default" @click="delMultiItems">批量删除</a-button>
+                    <slot name="optionSlot"></slot>
                     <div>
                         当前共选择
                         <strong style="color:#1890ff;">{{selectedRowKeys.length}}</strong> 条信息
@@ -81,9 +82,6 @@
             <slot name="tableSlot"></slot>
             <!-- 信息查看/修改弹窗 -->
             <template v-if="withModal">
-                <!-- <Modal :visible="visible" :modalTitle="modalTitle" :okBtnDisabled="okBtnDisabled" @cancel="handleCancel" @ok="handleSubmit">
-                    <slot name="formSlot"></slot>
-                </Modal> -->
                 <a-modal :visible="visible" :okButtonProps="{props: {disabled: okBtnDisabled}}" :maskClosable="false" @cancel="handleCancel" @ok="handleSubmit">
                     <div class="modal-header">
                         <div class="modal-header_title">{{modalTitle}}</div>
@@ -108,6 +106,12 @@
         },
         props: {
             withBreadcrumb: {
+                type: Boolean,
+                default: function () {
+                    return true
+                }
+            },
+            withFilter: {
                 type: Boolean,
                 default: function () {
                     return true
@@ -139,6 +143,9 @@
             },
             filters: {
                 type: Object,
+                default: function () {
+                    return {}
+                }
             },
             photoPreviewVisible: {
                 type: Boolean,

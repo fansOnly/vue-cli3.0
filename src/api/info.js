@@ -1,7 +1,9 @@
 import { get, post } from '@/utils/http'
 
+// 获取文章分类树
+export const getInfoClassTree = () => get('/info/class/tree')
 // 获取文章分类列表
-export const getInfoClassList = params => get('/info/class/index', params)
+export const getInfoClassList = () => get('/info/class/index')
 // 获取文章分类详情
 export const getInfoClassDetail = params => get('/info/class/detail', params)
 // 新增文章分类
@@ -22,3 +24,7 @@ export const addInfo = params => post('/info/add', params)
 export const updateInfo = params => post('/info/update', params)
 // 删除文章
 export const deleteInfo = params => post('/info/delete', params)
+// 还原文章
+export const restoreInfo = params => post('/info/restore', params)
+// 清除文章
+export const clearInfo = params => post('/info/clear', params)
