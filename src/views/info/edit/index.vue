@@ -2,7 +2,7 @@
 	<div>
 		<BreadCrumbComponent />
 		<div class="container">
-			<a-form :form="form" @submit="handelSubmit">
+			<a-form :form="form" @submit="handleSubmit">
 				<a-row>
 					<a-col :span="17">
 						<a-form-item label="序号" v-bind="formItemLayout">
@@ -57,7 +57,7 @@
 								action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
 								list-type="text"
 								accept=".rar, .zip, .txt, .ppt, .xlc, .doc, .docx, .xml, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-								:fileList="file"
+								:fileList="detail.file"
 							>
 								<a-button>
 									<a-icon type="upload" />点击上传
@@ -72,11 +72,11 @@
 								listType="picture-card"
 								accept=".png, .jpg, .gif, .jpeg, .svg, .ico"
 								multiple
-								:fileList="photos"
+								:fileList="detail.photos"
 								@preview="handlePhotoPreview"
 								@change="handlePhotoChange"
 							>
-								<div v-if="photos.length < maxLength">
+								<div v-if="detail.photos && detail.photos.length < maxLength">
 									<a-icon type="plus" />
 									<div class="ant-upload-text">上传</div>
 								</div>
@@ -84,7 +84,7 @@
 						</a-form-item>
 						<a-form-item :wrapper-col="{ offset: 3 }" style="text-align:left;">
 							<a-button type="primary" html-type="submit" :disabled="hasErrors(form.getFieldsError())">发布</a-button>
-							<a-button html-type="submit" style="margin-left:10px;">保存</a-button>
+							<a-button html-type="button" style="margin-left:10px;">保存</a-button>
 						</a-form-item>
 					</a-col>
 					<a-col :span="5" :offset="2">
@@ -94,11 +94,11 @@
 								action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
 								listType="picture-card"
 								accept=".png, .jpg, .gif, .jpeg, .svg, .ico"
-								:fileList="thumbnail"
+								:fileList="detail.thumbnail"
 								@preview="handlePhotoPreview"
 								@change="handleThumbnailChange"
 							>
-								<div v-if="thumbnail.length == 0">
+								<div v-if="detail.thumbnail && detail.thumbnail.length == 0">
 									<a-icon type="plus" />
 									<div class="ant-upload-text">上传</div>
 								</div>
@@ -185,9 +185,6 @@
 				maxLength: 9,
 				photoPreviewVisible: false,
 				previewPhoto: '',
-				photos: [],
-				file: [],
-				thumbnail: [],
 				infoClassTree: [],
 				SHOW_PARENT,
 			};
@@ -201,10 +198,17 @@
 				this.getInfoDetailFn();
 			} else {
 				// 设置默认值
-				this.form.setFieldsValue({
+				// this.form.setFieldsValue({
+				// 	sortnum: 20,
+				// 	create_time: moment(),
+				// });
+				this.detail = {
 					sortnum: 20,
-					create_time: moment()
-				});
+					create_time: moment(),
+					file: [],
+					photos: [],
+					thumbnail: [],
+				}
 				// this.$nextTick(() => {
 				//   // To disabled submit button at the beginning.
 				//   this.form.validateFields();
@@ -218,7 +222,7 @@
 				if (e.fileList.length > 1) {
 					e.fileList.shift();
 				}
-				this.file = e.fileList;
+				this.detail.file = e.fileList;
 			},
 			handlePhotopreviewCancel() {
 				this.photoPreviewVisible = false;
@@ -231,12 +235,12 @@
 				if (fileList.length > this.maxLength) {
 					fileList.splice(8);
 				}
-				this.photos = fileList;
+				this.detail.photos = fileList;
 			},
 			handleThumbnailChange ({ fileList }) {
-				this.thumbnail = fileList;
+				this.detail.thumbnail = fileList;
 			},
-			handelSubmit(e) {
+			handleSubmit(e) {
 				e.preventDefault();
 				this.form.validateFields((err, fieldsValue) => {
 					if (!err) {
@@ -245,9 +249,6 @@
                             create_time:
                                 fieldsValue['create_time'] &&
 								fieldsValue['create_time'].format('YYYY-MM-DD hh:mm:ss'),
-							photos: this.photos || fieldsValue.photos,
-							file: this.file || fieldsValue.file,
-							thumbnail: this.thumbnail || fieldsValue.thumbnail,
                         };
 						console.log('Received values of form: ', values);
 						if (this.id) {
@@ -265,9 +266,6 @@
 				if (data.code == '200') {
 					this.detail = data.data;
 					this.detail.create_time = moment(this.detail.create_time, 'YYYY-MM-DD hh:mm:ss');
-					this.photos = data.data.photos;
-					this.file = data.data.file;
-					this.thumbnail = data.data.thumbnail;
 				}
 			},
 			async updateInfoFn (params) {

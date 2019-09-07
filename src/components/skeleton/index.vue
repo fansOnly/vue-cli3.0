@@ -8,7 +8,7 @@
             <a-form v-if="withFilter" ref="filterForm" class="ant-advanced-search-form" :form="form" @submit.prevent="handleFilter">
                 <a-row :gutter="24">
                     <a-col v-if="filters.hasID" :span="6">
-                        <a-form-item label="数据ID">
+                        <a-form-item label="数据编号">
                             <a-input v-decorator="['id', {rules: [{message: '请输入数据ID',}], initialValue: ''}]"
                                 placeholder="请输入数据ID" />
                         </a-form-item>
@@ -34,7 +34,7 @@
                         </a-form-item>
                     </a-col>
                     <a-col v-if="filters.hasAdmin" :span="6">
-                        <a-form-item label="发布人" >
+                        <a-form-item label="发布人员" >
                             <a-input v-decorator="['admin', {rules: [{message: '请输入发布人',}], initialValue: ''}]"
                                 placeholder="请输入发布人" />
                         </a-form-item>
@@ -70,7 +70,7 @@
                 <!-- 内容操作区域 -->
                 <a-button v-if="allowAdd" style="margin-right:10px;" type="primary" @click="showModal('add')">新增</a-button>
                 <template v-if="selectedRowKeys.length">
-                    <a-button style="margin-right:10px;" type="default" @click="delMultiItems">批量删除</a-button>
+                    <a-button style="margin-right:10px;" type="danger" @click="delMultiItems">批量删除</a-button>
                     <slot name="optionSlot"></slot>
                     <div>
                         当前共选择
@@ -220,9 +220,8 @@
                     if (!err) {
                         const values = {
                             ...fieldsValue,
-                            create_time:
-                                fieldsValue['create_time'] &&
-                                fieldsValue['create_time'].format('YYYY-MM-DD')
+                            create_time: fieldsValue['create_time'] && fieldsValue['create_time'].format('YYYY-MM-DD'),
+                            delete_time: fieldsValue['delete_time'] && fieldsValue['delete_time'].format('YYYY-MM-DD'),
                         };
                         // console.log('handleFilter form: ', values);
                         this.$emit('handleFilter', values);

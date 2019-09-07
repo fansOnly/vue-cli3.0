@@ -7,7 +7,6 @@ Vue.use(Vuex)
 import locale from './modules/locale'
 import setting from './modules/setting'
 import breadcrumb from './modules/breadcrumb'
-import page from './modules/page'
 
 import createLogger from '@/utils/storeLogger'
 
@@ -17,7 +16,6 @@ const modules = {
     locale,
     setting,
     breadcrumb,
-    page,
 }
 
 const store = new Vuex.Store({

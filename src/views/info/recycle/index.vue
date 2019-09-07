@@ -19,8 +19,8 @@
             </a-col>
         </template>
         <!-- 渲染操作按钮 -->
-        <template v-slot="optionSlot">
-            <a-button style="margin-right:10px;" type="default" @click="delMultiItems">批量还原</a-button>
+        <template slot="optionSlot">
+            <a-button style="margin-right:10px;" type="default" @click="restoreMultiItems">批量还原</a-button>
         </template>
         <!-- 渲染数据 -->
         <template slot="tableSlot">
@@ -52,8 +52,8 @@
 
 	import { getInfoList, restoreInfo, clearInfo } from '@/api/info';
 
-	import config from './config';
-	import Tools from '@/utils/Tools';
+    import config from './config';
+    import moment from 'moment';
 
 	export default {
 		name: 'infoRecycle',
@@ -96,22 +96,29 @@
 			this.classid = this.$route.params.classid;
 		},
 		methods: {
-			checkItems(selectedRowKeys) {
+			checkItems (selectedRowKeys) {
 				console.log('selectedRowKeys', selectedRowKeys);
 				this.selectedRowKeys = selectedRowKeys;
 			},
-			clearItem(id) {
+			clearItem (id) {
                 this.clearInfoFn([id]);
 			},
-			restoreItem(id) {
+			restoreItem (id) {
                 this.restoreInfoFn([id]);
 			},
-			clearMultiItems() {
+			clearMultiItems () {
 				const deleteList = this.infoList.filter(
                     item => this.selectedRowKeys.includes(item.id)
                 );
-                const deleteIds = Tools.pluck(deleteList, 'id');
+                const deleteIds = deleteList.map(item => item.id);
                 this.clearInfoFn(deleteIds);
+            },
+            restoreMultiItems () {
+                const restoreList = this.infoList.filter(
+                    item => this.selectedRowKeys.includes(item.id)
+                );
+                const restoreIds = restoreList.map(item => item.id);
+                this.restoreInfoFn(restoreIds);
             },
             handleFilter (values) {
                 console.log('handleFilterValues', values);
@@ -128,7 +135,7 @@
                 config.pagination.pageSize = pagination.pageSize;
                 this.getInfoListFn();
 			},
-			handlePhotoPreview(file) {
+			handlePhotoPreview (file) {
                 if (typeof file === 'string') {
                     this.previewPhoto = file;
                 }

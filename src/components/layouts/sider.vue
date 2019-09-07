@@ -117,7 +117,7 @@
 			]
 		},
 		{
-			key: 'infolist',
+			key: 'info',
 			name: '信息发布',
 			icon: 'table',
 			path: '',
@@ -139,6 +139,20 @@
 					name: '文章回收站',
 					icon: '',
 					path: '/admin/info/recycle'
+				},
+			]
+		},
+		{
+			key: 'message',
+			name: '留言管理',
+			icon: 'contacts',
+			path: '',
+			subs: [
+				{
+					key: 'message.index',
+					name: '全部留言',
+					icon: '',
+					path: '/admin/message/index'
 				},
 			]
 		},

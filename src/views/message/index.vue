@@ -23,13 +23,9 @@
         </template>
         <!-- 渲染数据 -->
         <template slot="tableSlot">
-            <a-table rowKey="id" :loading="loading" :columns="columns" :dataSource="memberList" :pagination="pagination" :rowSelection="rowSelection" bordered @change="handleChange" >
-                <template slot="avatarSlot" slot-scope="action">
-                    <span v-if="!action">暂无</span>
-                    <a v-else href="javascript:;" @click="handlePhotoPreview(action)"><img :src="action" style="width:30px;height:30px;" alt=""></a>
-                </template>
+            <a-table rowKey="id" :loading="loading" :columns="columns" :dataSource="messageList" :pagination="pagination" :rowSelection="rowSelection" bordered @change="handleChange" >
                 <span slot="stateSlot" slot-scope="action">
-                    <a-badge :status="BADGE_STATUS(action)" :text="MEMBER_STATUS[action]" />
+                    <a-badge :status="BADGE_STATUS(action)" :text="MESSAGE_STATUS[action]" />
                 </span>
                 <span slot="actionSlot" slot-scope="action, record">
                     <a-button size="small" @click="showModal('edit', record.id)">{{allowEdit ? '编辑' : '查看'}}</a-button>
@@ -43,51 +39,43 @@
         <!-- 渲染编辑框 -->
         <template slot="formSlot">
             <a-form layout="vertical" :form="form">
-                <a-form-item v-if="action == 'edit'" label="会员ID">
-                    <a-input v-decorator="['id', {initialValue: initialMember.id}]" disabled />
+                <a-form-item v-if="action == 'edit'" label="留言ID">
+                    <a-input v-decorator="['id', {initialValue: initialMessage.id}]" disabled />
                 </a-form-item>
-                <a-form-item label="会员序号">
-                    <a-input v-decorator="['sortnum', {initialValue: initialMember.sortnum}]" :disabled="!allowEdit" />
+                <a-form-item label="留言序号">
+                    <a-input v-decorator="['sortnum', {initialValue: initialMessage.sortnum}]" :disabled="!allowEdit" />
                 </a-form-item>
-                <a-form-item label="会员姓名">
-                    <a-input v-decorator="['name', {rules: [{required: allowEdit,}], initialValue: initialMember.name || ''}]" :disabled="!allowEdit" />
+                <a-form-item label="留言姓名">
+                    <a-input v-decorator="['name', {rules: [{required: allowEdit,}], initialValue: initialMessage.name || ''}]" :disabled="!allowEdit" />
+                </a-form-item>
+                <a-form-item label="留言手机">
+                    <a-input v-decorator="['phone', {rules: [{required: allowEdit, pattern: allowEdit && /^1[3456789]\d{9}$/, message: '错误的手机号码'}], initialValue: initialMessage.phone || ''}]" :disabled="!allowEdit" />
+                </a-form-item>
+                <a-form-item label="留言邮箱">
+                    <a-input v-decorator="['email', {rules: [{type: 'email'}],initialValue: initialMessage.email || ''}]" :disabled="!allowEdit" />
                 </a-form-item>
                 <a-form-item >
-                    <span slot="label">会员头像<span v-if="allowEdit" style="color:rgba(0,0,0,0.45);font-size:13px;">(只能上传jpg,png,gif)</span></span>
+                    <span slot="label">附件图片<span v-if="allowEdit" style="color:rgba(0,0,0,0.45);font-size:13px;">(只能上传jpg,png,gif)</span></span>
                     <a-upload
                         action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                         listType="picture-card"
                         v-decorator="['fileList', {rules: [{required: allowEdit, validator: allowEdit && validateImage}]}]"
                         :disabled="!allowEdit"
-                        :fileList="fileList"
-                        :remove="() => { return allowEdit;}"
-                        :beforeUpload="beforeUpload"
+                        :fileList="initialMessage.photos"
                         @preview="handlePhotoPreview"
-                        @change="handlePhotoChange"
                     >
-                        <div v-if="fileList.length == 0">
+                        <div v-if="initialMessage.photos && initialMessage.photos.length == 0">
                             <a-icon type="plus" />
                             <div class="ant-upload-text">上传</div>
                         </div>
                     </a-upload>
                 </a-form-item>
-                <a-form-item label="会员手机">
-                    <a-input v-decorator="['phone', {rules: [{required: allowEdit, pattern: allowEdit && /^1[3456789]\d{9}$/, message: '错误的手机号码'}], initialValue: initialMember.phone || ''}]" :disabled="!allowEdit" />
-                </a-form-item>
-                <a-form-item label="会员邮箱">
-                    <a-input v-decorator="['email', {rules: [{type: 'email'}],initialValue: initialMember.email || ''}]" :disabled="!allowEdit" />
-                </a-form-item>
-                <a-form-item label="会员性别">
-                    <a-radio-group v-decorator="['gender', {initialValue: initialMember.gender+''}]" :disabled="!allowEdit" buttonStyle="solid" >
-                        <a-radio-button value="0">女</a-radio-button>
-                        <a-radio-button value="1">男</a-radio-button>
-                    </a-radio-group>
-                </a-form-item>
-                <a-form-item label="会员状态">
-                    <a-radio-group v-decorator="['state', {initialValue: initialMember.state}]" :disabled="!allowEdit" buttonStyle="solid" >
-                        <a-radio-button value="已冻结">已冻结</a-radio-button>
-                        <a-radio-button value="待审核">待审核</a-radio-button>
-                        <a-radio-button value="已审核">已审核</a-radio-button>
+                <a-form-item label="留言状态">
+                    <a-radio-group v-decorator="['state', {initialValue: initialMessage.state}]" :disabled="!allowEdit" buttonStyle="solid" >
+                        <a-radio-button value="未查看">未查看</a-radio-button>
+                        <a-radio-button value="已查看">已查看</a-radio-button>
+                        <a-radio-button value="已回复">已回复</a-radio-button>
+                        <a-radio-button value="已置顶">已置顶</a-radio-button>
                     </a-radio-group>
                 </a-form-item>
             </a-form>
@@ -98,23 +86,22 @@
 <script>
     import PageSkeleton from '@/components/skeleton/index.vue';
 
-    import { getMemberList, addMember, getMemberDetail, updateMember, deleteMember } from '@/api/member';
+    import { getMessageList, getMessageDetail, updateMessage, deleteMessage } from '@/api/message';
     import config from './config'
-    import Tools from '@/utils/Tools';
 
     export default {
-        name: 'Member',
+        name: 'Message',
         components: {
             PageSkeleton,
         },
         data () {
             return {
-                MEMBER_STATUS: config.MEMBER_STATUS,
+                MESSAGE_STATUS: config.MESSAGE_STATUS,
                 BADGE_STATUS: config.BADGE_STATUS,
                 withModal: config.withModal,
                 allowAdd: config.allowAdd,
                 allowEdit: config.allowEdit,
-                memberList: [],
+                messageList: [],
                 columns: config.columns,
                 pagination: {},
                 loading: true,
@@ -124,12 +111,11 @@
                 modalTitle: '',
                 okBtnDisabled: false,
                 filters: config.filters,
-                // ***************************
-                action: '',
-                initialMember: {},
                 photoPreviewVisible: false,
                 previewPhoto: '',
-                fileList: [],
+                // ***************************
+                action: '',
+                initialMessage: {},
             }
         },
         computed: {
@@ -145,7 +131,7 @@
             this.form = this.$form.createForm(this);
         },
         created () {
-            this.getMemberListFn();
+            this.getMessageListFn();
         },
         methods: {
             checkItems(selectedRowKeys) {
@@ -153,29 +139,29 @@
 				this.selectedRowKeys = selectedRowKeys;
 			},
 			delItem(id) {
-                this.deleteMemberFn([id]);
+                this.deleteMessageFn([id]);
 			},
 			delMultiItems() {
-				const deleteList = this.memberList.filter(
+				const deleteList = this.messageList.filter(
                     item => this.selectedRowKeys.includes(item.id)
                 );
-                const deleteIds = Tools.pluck(deleteList, 'id');
-                this.deleteMemberFn(deleteIds);
+                const deleteIds = deleteList.map(item => item.id);
+                this.deleteMessageFn(deleteIds);
             },
             handleFilter (values) {
                 console.log('handleFilterValues', values);
-                this.getMemberListFn(values);
+                this.getMessageListFn(values);
             },
             handleFilterReset () {
-                this.getMemberListFn();
+                this.getMessageListFn();
             },
             handleChange (pagination) {
-                if (!this.memberList.length) return;
+                if (!this.messageList.length) return;
                 // console.log('pagination', pagination);
 				this.loading = true;
                 config.pagination.page = pagination.current;
                 config.pagination.pageSize = pagination.pageSize;
-                this.getMemberListFn();
+                this.getMessageListFn();
 			},
             handlePhotopreviewCancel() {
 				this.photoPreviewVisible = false;
@@ -189,34 +175,16 @@
                 }
 				this.photoPreviewVisible = true;
             },
-            beforeUpload (file, fileList) {
-                console.log('beforeUpload', file, fileList);
-                // TODO 此处自行处理上传逻辑
-                // return false;
-            },
 			handlePhotoChange({ fileList }) {
                 // console.log('handlePhotoChange', fileList);
-                this.fileList = fileList;
-            },
-            validateImage (rule, value, callback) {
-                console.log('validateImage',  value)
-                if (!this.fileList.length) {
-                    if (!value || !value.fileList.length) {
-                        callback(new Error('请上传用户头像'));
-                    }
-                }
-                callback();
+                this.initialMessage.photos = fileList;
             },
             showModal (action, editId) {
-                if (action == 'add') {
-                    this.action = action;
-                    this.modalTitle = '新增信息';
-                    this.visible = true;
-                } else if (action == 'edit') {
+                if (action == 'edit') {
                     this.editId = editId;
                     this.action = action;
-                    this.modalTitle = this.allowEdit ? '编辑信息' : '查看信息';
-                    this.getMemberDetailFn();
+                    this.modalTitle = this.allowEdit ? '编辑留言' : '查看留言';
+                    this.getMessageDetailFn();
                 } else {
                     this.$message.error('非法操作');
                 }
@@ -229,28 +197,13 @@
                 if (!this.allowEdit) {
                     this.handleCancel();
                 } else {
-                    console.log('form.isFieldsTouched()', this.form.isFieldsTouched());
+                    // console.log('form.isFieldsTouched()', this.form.isFieldsTouched());
                     this.form.validateFields((err, values) => {
                         if (!err) {
                             if (this.form.isFieldsTouched()) {
-                                // 处理参数
-                                if (typeof values.fileList !== 'undefined') {
-                                    let imageArr = [];
-                                    values.fileList.fileList.length && values.fileList.fileList.map(item => {
-                                        imageArr.push({url: item.response.url, name: item.name, size: item.size, type: item.type})
-                                    })
-                                    values.image = imageArr;
-                                } else {
-                                    values.image = this.fileList;
-                                }
-                                delete values.fileList;
-
                                 console.log('form values: ', values);
-                                if (this.action == 'add') {
-                                    this.addMemberFn(values);
-                                }
                                 if(this.action == 'edit') {
-                                    this.updateMemberFn(values);
+                                    this.updateMessageFn(values);
                                 }
                             } else {
                                 this.handleCancel();
@@ -260,17 +213,16 @@
                 }
             },
             resetFormData () {
-                this.initialMember = {};
-                this.fileList = [];
+                this.initialMessage.reply = '';
                 this.allowEdit && this.form.resetFields();
             },
             // api
-            async getMemberListFn (filters={}) {
+            async getMessageListFn (filters={}) {
                 // console.log('config.pagination', config.pagination);
                 const params = { page: config.pagination.page, pageSize: config.pagination.pageSize, ...filters };
-                const data = await getMemberList(params);
+                const data = await getMessageList(params);
                 this.loading = false;
-				this.memberList = data.data;
+				this.messageList = data.data;
                 this.currentPage = data.current;
 				this.pagination = {
 					total: data.total,
@@ -279,52 +231,33 @@
 
                 this.allowEdit && this.resetFormData();
             },
-            async getMemberDetailFn () {
-                const data = await getMemberDetail({id: this.editId})
+            async getMessageDetailFn () {
+                const data = await getMessageDetail({id: this.editId})
                 if (data.code == '200') {
-                    this.initialMember = data.data;
-                    this.fileList = [{
-                        name: 'avatar',
-                        url: data.data.avatar,
-                        status: 'done',
-                        uid: '-1',
-                    }];
+                    this.initialMessage = data.data;
                     this.visible = true;
                 }
             },
-            async addMemberFn (params) {
+            async updateMessageFn (params) {
                 this.okBtnDisabled = true;
-                const data = await addMember(params);
+                const data = await updateMessage(params);
                 if (data.code == '200') {
                     this.$message.success(data.msg, 1, () => {
                         this.okBtnDisabled = false;
                         this.visible = false;
-                        this.getMemberListFn();
+                        this.getMessageListFn();
                     });
                 } else {
                     this.$message.error(data.msg, 1);
                 }
             },
-            async updateMemberFn (params) {
-                this.okBtnDisabled = true;
-                const data = await updateMember(params);
-                if (data.code == '200') {
-                    this.$message.success(data.msg, 1, () => {
-                        this.okBtnDisabled = false;
-                        this.visible = false;
-                        this.getMemberListFn();
-                    });
-                } else {
-                    this.$message.error(data.msg, 1);
-                }
-            },
-            async deleteMemberFn (ids) {
+            async deleteMessageFn (ids) {
                 const params = { ids: ids };
-                const data = await deleteMember(params);
+                const data = await deleteMessage(params);
                 if (data.code == '200') {
                     this.$message.success(data.msg, 1, () => {
                         this.selectedRowKeys = [];
-                        this.getMemberListFn();
+                        this.getMessageListFn();
                     });
                 } else {
                     this.$message.error(data.msg, 1);

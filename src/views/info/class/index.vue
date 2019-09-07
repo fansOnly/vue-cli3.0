@@ -40,13 +40,11 @@
                     <a-input v-decorator="['id', {initialValue: initialInfoClass.id}]" disabled />
                 </a-form-item>
                 <a-form-item label="栏目分类">
-                    <!-- <a-input v-decorator="['parent_id', {rules: [{required: true,}], initialValue: initialInfoClass.parent_id || ''}]" /> -->
                     <a-tree-select
                         style="width: 100%"
                         v-decorator="['parent_id', {rules: [{required: true,}], initialValue: initialInfoClass.parent_id || ''}]"
                         :dropdownStyle="{ maxHeight: '200px', overflow: 'auto' }"
                         placeholder='请选择栏目分类'
-                        showSearch
                         allowClear
                         treeDefaultExpandAll
                         :treeData="infoClassTree"
@@ -67,7 +65,7 @@
                     <a-upload
                         action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                         listType="picture-card"
-                        v-decorator="['thumbnail', {rules: [{required: true, validator: validateImage}]}]"
+                        v-decorator="['thumbnail', {rules: [{validator: validateImage}]}]"
                         :fileList="initialInfoClass.thumbnail"
                         :beforeUpload="beforeUpload"
                         @preview="handlePhotoPreview"
@@ -149,8 +147,8 @@
                 this.initialInfoClass.thumbnail = fileList;
             },
             validateImage (rule, value, callback) {
-                console.log('validateImage',  value)
-                if (!this.initialInfoClass.thumbnail.length) {
+                console.log('validateImage', rule,  value)
+                if (!this.initialInfoClass.thumbnail.length && rule.required) {
                     if (!value || !value.fileList.length) {
                         callback(new Error('请上传用户头像'));
                     }

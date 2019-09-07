@@ -74,6 +74,9 @@ export const MEMBER_STATUS = ['已冻结', '待审核', '已审核'];
 // 文章状态管理  info
 export const INFO_STATUS = ['已下架', '待审核', '已审核', '已置顶'];
 
+// 文章状态管理  info
+export const MESSAGE_STATUS = ['未查看', '已查看', '已回复', '已置顶'];
+
 export const BADGE_STATUS = state => {
     return ['default', 'processing', 'success', 'error', 'warinng'][state]
 }

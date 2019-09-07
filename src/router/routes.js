@@ -27,6 +27,9 @@ const InfoEdit = () => import('@/views/info/edit/index.vue');
 const InfoClass = () => import('@/views/info/class/index.vue');
 const InfoRecycle = () => import('@/views/info/recycle/index.vue');
 
+
+const MessageList = () => import('@/views/message/index.vue');
+
 const routes = [
 	{
 		path: '/',
@@ -228,6 +231,16 @@ const routes = [
 				meta: {
 					requireAuth: true,
 					breadcrumbName: '回收站',
+					depth: 3,
+				},
+			},
+			{
+				path: '/admin/message/index',
+				name: 'messageList',
+				component: MessageList,
+				meta: {
+					requireAuth: true,
+					breadcrumbName: '留言管理',
 					depth: 3,
 				},
 			},
