@@ -42,9 +42,6 @@
                 <a-form-item v-if="action == 'edit'" label="留言ID">
                     <a-input v-decorator="['id', {initialValue: initialMessage.id}]" disabled />
                 </a-form-item>
-                <a-form-item label="留言序号">
-                    <a-input v-decorator="['sortnum', {initialValue: initialMessage.sortnum}]" :disabled="!allowEdit" />
-                </a-form-item>
                 <a-form-item label="留言姓名">
                     <a-input v-decorator="['name', {rules: [{required: allowEdit,}], initialValue: initialMessage.name || ''}]" :disabled="!allowEdit" />
                 </a-form-item>
@@ -54,28 +51,35 @@
                 <a-form-item label="留言邮箱">
                     <a-input v-decorator="['email', {rules: [{type: 'email'}],initialValue: initialMessage.email || ''}]" :disabled="!allowEdit" />
                 </a-form-item>
+                <a-form-item label="留言内容">
+                    <a-textarea v-decorator="['content', {initialValue: initialMessage.content || ''}]" :autosize="{minRows:2, maxRows:4}" :disabled="!allowEdit" />
+                </a-form-item>
                 <a-form-item >
                     <span slot="label">附件图片<span v-if="allowEdit" style="color:rgba(0,0,0,0.45);font-size:13px;">(只能上传jpg,png,gif)</span></span>
                     <a-upload
                         action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                         listType="picture-card"
-                        v-decorator="['fileList', {rules: [{required: allowEdit, validator: allowEdit && validateImage}]}]"
+                        v-decorator="['fileList']"
                         :disabled="!allowEdit"
                         :fileList="initialMessage.photos"
                         @preview="handlePhotoPreview"
                     >
-                        <div v-if="initialMessage.photos && initialMessage.photos.length == 0">
-                            <a-icon type="plus" />
-                            <div class="ant-upload-text">上传</div>
-                        </div>
                     </a-upload>
+                </a-form-item>
+                <a-form-item label="留言时间">
+                    <a-input v-decorator="['create_time', {initialValue: initialMessage.create_time || ''}]" disabled />
+                </a-form-item>
+                <a-form-item label="留言回复">
+                    <a-textarea v-decorator="['reply', {initialValue: initialMessage.reply || ''}]" :autosize="{minRows:2, maxRows:4}" :disabled="!initialMessage.state != '2'" />
+                </a-form-item>
+                <a-form-item v-if="initialMessage.reply_time != ''" label="回复时间">
+                    <a-input v-decorator="['reply_time', {initialValue: initialMessage.reply_time || ''}]" disabled />
                 </a-form-item>
                 <a-form-item label="留言状态">
                     <a-radio-group v-decorator="['state', {initialValue: initialMessage.state}]" :disabled="!allowEdit" buttonStyle="solid" >
-                        <a-radio-button value="未查看">未查看</a-radio-button>
-                        <a-radio-button value="已查看">已查看</a-radio-button>
-                        <a-radio-button value="已回复">已回复</a-radio-button>
-                        <a-radio-button value="已置顶">已置顶</a-radio-button>
+                        <template v-for="(item, index) in MESSAGE_STATUS">
+                            <a-radio-button :key="index" :value="index">{{item}}</a-radio-button>
+                        </template>
                     </a-radio-group>
                 </a-form-item>
             </a-form>

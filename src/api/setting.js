@@ -9,3 +9,6 @@ export const updateSiteInfo = params => post('/siteinfo/update', params)
 export const getAssetsList = params => get('/assets/index', params)
 // 删除系统资源
 export const deleteAssets = params => post('/assets/delete', params)
+
+
+// ***********************************echart相关数据**********************************************

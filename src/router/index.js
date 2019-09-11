@@ -46,7 +46,7 @@ router.beforeEach((to, from, next) => {
     }
 
     if (to.meta.breadcrumbName) {
-        if (from.name == to.name) {
+        if (from.meta.depth == to.meta.depth) {
             updateRoutes(to);
         } else {
             if (to.meta.depth == 2) {
@@ -73,7 +73,7 @@ const updateRoutes = to => {
     const routes = store.state.breadcrumb.routes;
     let repeatIndex = 0;
     routes.map((route, index) => {
-        if (to.name == route.name) {
+        if (to.depth == route.depth) {
             repeatIndex = index;
         }
     })

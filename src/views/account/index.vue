@@ -86,7 +86,6 @@
 
     import { getAccountList, addAccount, getAccountDetail, updateAccount, deleteAccount } from '@/api/account';
     import config from './config'
-    import Tools from '@/utils/Tools';
 
     export default {
         name: 'Account',
@@ -146,7 +145,7 @@
 				const deleteList = this.accountList.filter(
                     item => this.selectedRowKeys.includes(item.id)
                 );
-                const deleteIds = Tools.pluck(deleteList, 'id');
+                const deleteIds = deleteList.map(item => item.id);
                 this.deleteAccountFn(deleteIds);
             },
             handleFilter (values) {

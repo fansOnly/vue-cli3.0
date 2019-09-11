@@ -48,12 +48,11 @@
 </template>
 
 <script>
-	import PageSkeleton from '@/components/skeleton/index.vue';
+	import PageSkeleton from '@/components/skeleton/index.vue'
 
-	import { getInfoList, restoreInfo, clearInfo } from '@/api/info';
+	import { getInfoList, restoreInfo, clearInfo } from '@/api/info'
 
-    import config from './config';
-    import moment from 'moment';
+    import config from './config'
 
 	export default {
 		name: 'infoRecycle',

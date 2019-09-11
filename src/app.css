@@ -48,7 +48,9 @@
 }
 
 .ant-advanced-search-form .ant-form-item-label {
-    max-width: 80px;
+    min-width: 80px;
+    width: 80px;
+    white-space: nowrap;
 }
 
 .ant-advanced-search-form .ant-form-item-control-wrapper {

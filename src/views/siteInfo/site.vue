@@ -57,6 +57,12 @@
                     inputValue: '',
                 })
             },
+            handleInputCancel () {
+                Object.assign(this, {
+                    inputVisible: false,
+                    inputValue: '',
+                })
+            },
             handleSubmit (e) {
                 e.preventDefault();
                 const allfFields = {
@@ -65,6 +71,9 @@
                     seo_info: ['seo_title', 'seo_keyword', 'seo_description'],
                     hotwords_info: []
                 };
+                if (this.tabActiveKey == 'hotwords_info') {
+                    return;
+                }
                 const currentFileds = allfFields[this.tabActiveKey];
                 this.form.validateFields(currentFileds, (errors, values) => {
                     if (!errors) {
@@ -83,8 +92,7 @@
                 this.hotwords_info = hotwords_info;
             },
             async updateSiteInfoFn (datas) {
-                const params = { [this.tabActiveKey]: datas, tag: this.tabActiveKey }
-                console.log(params);
+                const params = { [this.tabActiveKey]: datas, tag: this.tabActiveKey };
                 const data = await updateSiteInfo(params);
                 if (data.code == '200') {
                     this.$message.success(data.msg, 1, () => {

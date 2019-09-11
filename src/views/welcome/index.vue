@@ -2,7 +2,7 @@
 <script>
 	import moment from 'moment';
 	import Tools from '@/utils/Tools';
-    import { visitEchartOption, payEchartOption, searchTotalEchartOption, searchPerEchartOption, salesEchartOption } from './config';
+	import { visitEchartOption, payEchartOption, searchTotalEchartOption, searchPerEchartOption, salesEchartOption } from './config';
     
     visitEchartOption.dataset.source = [
         ['2019-08-01', 12],
@@ -108,7 +108,7 @@
     }
 
 	export default {
-		name: 'Welcomex',
+		name: 'Welcome',
 		data() {
 			return {
 				percent: 78,
@@ -153,7 +153,6 @@
 			};
 		},
 		mounted() {
-            // console.log(this.$echarts)
             // 渲染访问量统计
 			const visitEchartEle = document.getElementById('visitEchart');
 			let visitEchart = this.$echarts.init(visitEchartEle);

@@ -241,7 +241,7 @@ const routes = [
 				meta: {
 					requireAuth: true,
 					breadcrumbName: '留言管理',
-					depth: 3,
+					depth: 2,
 				},
 			},
 		],

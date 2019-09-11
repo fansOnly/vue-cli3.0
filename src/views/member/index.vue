@@ -83,11 +83,14 @@
                         <a-radio-button value="1">男</a-radio-button>
                     </a-radio-group>
                 </a-form-item>
+                <a-form-item label="注册时间">
+                    <a-input v-decorator="['create_time', {initialValue: initialMember.create_time || ''}]" disabled />
+                </a-form-item>
                 <a-form-item label="会员状态">
                     <a-radio-group v-decorator="['state', {initialValue: initialMember.state}]" :disabled="!allowEdit" buttonStyle="solid" >
-                        <a-radio-button value="已冻结">已冻结</a-radio-button>
-                        <a-radio-button value="待审核">待审核</a-radio-button>
-                        <a-radio-button value="已审核">已审核</a-radio-button>
+                        <template v-for="(item, index) in MEMBER_STATUS">
+                            <a-radio-button :key="index" :value="index">{{item}}</a-radio-button>
+                        </template>
                     </a-radio-group>
                 </a-form-item>
             </a-form>

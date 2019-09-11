@@ -11,11 +11,11 @@
 			<div class="search">
 				<a-input-search placeholder="input search text" @search="handleSearch" enterButton />
 			</div>
-			<div class="notice">
+			<router-link to='/admin/message/index' class="notice">
 				<a-badge dot>
 					<a-icon type="bell" style="color:#777;font-size:20px;vertical-align:middle;cursor:pointer;" />
 				</a-badge>
-			</div>
+			</router-link>
 			<div>
 				<a-dropdown overlayClassName="user-options" placement="topRight">
 					<div class="user-opt">

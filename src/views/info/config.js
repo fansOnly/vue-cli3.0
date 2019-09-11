@@ -49,7 +49,7 @@ export default {
 		...filters,
 		delete_time: 0,
 		STATUS: INFO_STATUS,
-		hasAdmin: true
+		hasAdmin: false
 	},
 	INFO_STATUS,
 	BADGE_STATUS,

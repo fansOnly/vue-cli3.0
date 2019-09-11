@@ -2,6 +2,7 @@
 import axios from 'axios'
 import qs from 'qs'
 import router from '../router/index'
+import { message } from 'ant-design-vue'
 
 const codeMessage = {
 	200: '服务器成功返回请求的数据。',
@@ -36,20 +37,22 @@ axios.defaults.timeout = 5000;
 
 // 添加请求拦截器
 axios.interceptors.request.use(config => {
-	// TODO...AUTH_TOKEN
+	// console.log('config', config);
+	// AUTH_TOKEN
 	const token = localStorage.getItem('token');
 	if (token) {
-		config.headers['Authorization'] = token
+		config.headers['Token'] = token;
 	}
 	return config;
 }, error => {
+	// console.log('error', error);
 	return Promise.reject(error);
 });
 
 // 添加响应拦截器
 axios.interceptors.response.use(response => {
+	// console.log('response', response);
 	const responseCode = response.status;
-	// TODO...
 	switch (responseCode) {
 		case 200:
 			break;
@@ -85,11 +88,13 @@ axios.interceptors.response.use(response => {
 	return Promise.resolve(response);
 
 }, error => {
-	// console.log('error', error)
+	// console.log('response error', error)
+	message.error('请求错误。', 1);
 	return Promise.reject(error);
 });
 
 function handleStatus(status) {
+	message.error(codeMessage[status]);
 	throw new Error(codeMessage[status]);
 }
 
@@ -98,9 +103,9 @@ export const get = (url, params) => {
 		url += '?' + qs.stringify(params)
 	}
 	return axios.get(url)
-		.then(res => {
-			return res.data;
-		})
+	.then(res => {
+		return res.data;
+	})
 }
 
 export const post = (url, params, options = {}) => {
