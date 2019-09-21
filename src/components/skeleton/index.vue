@@ -82,7 +82,7 @@
             <slot name="tableSlot"></slot>
             <!-- 信息查看/修改弹窗 -->
             <template v-if="withModal">
-                <a-modal :visible="visible" :okButtonProps="{props: {disabled: okBtnDisabled}}" :maskClosable="false" @cancel="handleCancel" @ok="handleSubmit">
+                <a-modal :visible="visible" width="50%" :okButtonProps="{props: {disabled: okBtnDisabled}}" :maskClosable="false" @cancel="handleCancel" @ok="handleSubmit">
                     <div class="modal-header">
                         <div class="modal-header_title">{{modalTitle}}</div>
                     </div>

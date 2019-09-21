@@ -41,7 +41,7 @@
         <!-- 渲染编辑框 -->
         <template slot="formSlot">
             <a-form layout="vertical" :form="form">
-                <a-form-item v-if="action == 'edit'" label="管理员ID">
+                <a-form-item v-if="action == 'edit'" label="管理员分类ID">
                     <a-input v-decorator="['id', {initialValue: initialAccountClass.id}]" disabled />
                 </a-form-item>
                 <a-form-item label="分类名称">

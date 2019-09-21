@@ -43,56 +43,76 @@
         <!-- 渲染编辑框 -->
         <template slot="formSlot">
             <a-form layout="vertical" :form="form">
-                <a-form-item v-if="action == 'edit'" label="会员ID">
-                    <a-input v-decorator="['id', {initialValue: initialMember.id}]" disabled />
-                </a-form-item>
-                <a-form-item label="会员序号">
-                    <a-input v-decorator="['sortnum', {initialValue: initialMember.sortnum}]" :disabled="!allowEdit" />
-                </a-form-item>
-                <a-form-item label="会员姓名">
-                    <a-input v-decorator="['name', {rules: [{required: allowEdit,}], initialValue: initialMember.name || ''}]" :disabled="!allowEdit" />
-                </a-form-item>
-                <a-form-item >
-                    <span slot="label">会员头像<span v-if="allowEdit" style="color:rgba(0,0,0,0.45);font-size:13px;">(只能上传jpg,png,gif)</span></span>
-                    <a-upload
-                        action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                        listType="picture-card"
-                        v-decorator="['fileList', {rules: [{required: allowEdit, validator: allowEdit && validateImage}]}]"
-                        :disabled="!allowEdit"
-                        :fileList="fileList"
-                        :remove="() => { return allowEdit;}"
-                        :beforeUpload="beforeUpload"
-                        @preview="handlePhotoPreview"
-                        @change="handlePhotoChange"
-                    >
-                        <div v-if="fileList.length == 0">
-                            <a-icon type="plus" />
-                            <div class="ant-upload-text">上传</div>
-                        </div>
-                    </a-upload>
-                </a-form-item>
-                <a-form-item label="会员手机">
-                    <a-input v-decorator="['phone', {rules: [{required: allowEdit, pattern: allowEdit && /^1[3456789]\d{9}$/, message: '错误的手机号码'}], initialValue: initialMember.phone || ''}]" :disabled="!allowEdit" />
-                </a-form-item>
-                <a-form-item label="会员邮箱">
-                    <a-input v-decorator="['email', {rules: [{type: 'email'}],initialValue: initialMember.email || ''}]" :disabled="!allowEdit" />
-                </a-form-item>
-                <a-form-item label="会员性别">
-                    <a-radio-group v-decorator="['gender', {initialValue: initialMember.gender+''}]" :disabled="!allowEdit" buttonStyle="solid" >
-                        <a-radio-button value="0">女</a-radio-button>
-                        <a-radio-button value="1">男</a-radio-button>
-                    </a-radio-group>
-                </a-form-item>
-                <a-form-item label="注册时间">
-                    <a-input v-decorator="['create_time', {initialValue: initialMember.create_time || ''}]" disabled />
-                </a-form-item>
-                <a-form-item label="会员状态">
-                    <a-radio-group v-decorator="['state', {initialValue: initialMember.state}]" :disabled="!allowEdit" buttonStyle="solid" >
-                        <template v-for="(item, index) in MEMBER_STATUS">
-                            <a-radio-button :key="index" :value="index">{{item}}</a-radio-button>
-                        </template>
-                    </a-radio-group>
-                </a-form-item>
+                <a-row :gutter="16">
+                    <a-col :span="12">
+                        <a-form-item v-if="action == 'edit'" label="会员ID">
+                            <a-input v-decorator="['id', {initialValue: initialMember.id}]" disabled />
+                        </a-form-item>
+                    </a-col>
+                    <a-col :span="12">
+                    <a-form-item label="会员序号">
+                        <a-input v-decorator="['sortnum', {initialValue: initialMember.sortnum}]" :disabled="!allowEdit" />
+                    </a-form-item>
+                    </a-col>
+                    <a-col :span="12">
+                    <a-form-item label="会员姓名">
+                        <a-input v-decorator="['name', {rules: [{required: allowEdit,}], initialValue: initialMember.name || ''}]" :disabled="!allowEdit" />
+                    </a-form-item>
+                    </a-col>
+                    <a-col :span="12">
+                    <a-form-item label="会员手机">
+                        <a-input v-decorator="['phone', {rules: [{required: allowEdit, pattern: allowEdit && /^1[3456789]\d{9}$/, message: '错误的手机号码'}], initialValue: initialMember.phone || ''}]" :disabled="!allowEdit" />
+                    </a-form-item>
+                    </a-col>
+                    <a-col :span="12">
+                    <a-form-item label="会员邮箱">
+                        <a-input v-decorator="['email', {rules: [{type: 'email'}],initialValue: initialMember.email || ''}]" :disabled="!allowEdit" />
+                    </a-form-item>
+                    </a-col>
+                    <a-col :span="12">
+                    <a-form-item label="会员性别">
+                        <a-radio-group v-decorator="['gender', {initialValue: initialMember.gender+''}]" :disabled="!allowEdit" buttonStyle="solid" >
+                            <a-radio-button value="0">女</a-radio-button>
+                            <a-radio-button value="1">男</a-radio-button>
+                        </a-radio-group>
+                    </a-form-item>
+                    </a-col>
+                    <a-col :span="12">
+                    <a-form-item label="注册时间">
+                        <a-input v-decorator="['create_time', {initialValue: initialMember.create_time || ''}]" disabled />
+                    </a-form-item>
+                    </a-col>
+                    <a-col :span="24">
+                    <a-form-item >
+                        <span slot="label">会员头像<span v-if="allowEdit" style="color:rgba(0,0,0,0.45);font-size:13px;">(只能上传jpg,png,gif)</span></span>
+                        <a-upload
+                            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                            listType="picture-card"
+                            v-decorator="['fileList', {rules: [{required: allowEdit, validator: allowEdit && validateImage}]}]"
+                            :disabled="!allowEdit"
+                            :fileList="fileList"
+                            :remove="() => { return allowEdit;}"
+                            :beforeUpload="beforeUpload"
+                            @preview="handlePhotoPreview"
+                            @change="handlePhotoChange"
+                        >
+                            <div v-if="fileList.length == 0">
+                                <a-icon type="plus" />
+                                <div class="ant-upload-text">上传</div>
+                            </div>
+                        </a-upload>
+                    </a-form-item>
+                    </a-col>
+                    <a-col :span="12">
+                    <a-form-item label="会员状态">
+                        <a-radio-group v-decorator="['state', {initialValue: initialMember.state}]" :disabled="!allowEdit" buttonStyle="solid" >
+                            <template v-for="(item, index) in MEMBER_STATUS">
+                                <a-radio-button :key="index" :value="index">{{item}}</a-radio-button>
+                            </template>
+                        </a-radio-group>
+                    </a-form-item>
+                    </a-col>
+                </a-row>
             </a-form>
         </template>
     </PageSkeleton>

@@ -42,26 +42,36 @@
         <!-- 渲染编辑框 -->
         <template slot="formSlot">
             <a-form layout="vertical" :form="form">
+                <a-row :gutter="16">
+                    <a-col :span="24">
                 <a-form-item v-if="action == 'edit'" label="管理员ID">
                     <a-input v-decorator="['id', {initialValue: initialAccount.id}]" disabled />
-                </a-form-item>
+                </a-form-item></a-col>
+                <a-col :span="12">
                 <a-form-item label="管理员账号">
                     <a-input v-decorator="['username', {rules: [{required: true,}], initialValue: initialAccount.username || ''}]" />
-                </a-form-item>
+                </a-form-item></a-col>
+                <a-col :span="12">
                 <a-form-item label="管理员密码">
                     <a-input :type="showPass ? 'text' : 'password'" v-decorator="['password', {rules: [{required: true,}], initialValue: initialAccount.password || ''}]" >
-                        <a-icon type='eye' slot="addonAfter" @click="togglePassword" />
+                        <a-icon type='eye' :style="{color: showPass ? '#1890ff' : 'rgba(0, 0, 0, 0.65)'}" slot="addonAfter" @click="togglePassword" />
                     </a-input>
-                </a-form-item>
+                </a-form-item></a-col>
+                <a-col :span="12">
                 <a-form-item label="管理员姓名">
                     <a-input v-decorator="['name', {rules: [{required: true,}], initialValue: initialAccount.name || ''}]" />
                 </a-form-item>
+                </a-col>
+                <a-col :span="12">
                 <a-form-item label="管理员手机">
                     <a-input v-decorator="['phone', {rules: [{pattern: /^1[3456789]\d{9}$/, message: '错误的手机号码'}], initialValue: initialAccount.phone || ''}]" />
-                </a-form-item>
+                </a-form-item></a-col>
+                <a-col :span="12">
                 <a-form-item label="管理员邮箱">
                     <a-input v-decorator="['email', {rules: [{type: 'email'}], initialValue: initialAccount.email || ''}]" />
                 </a-form-item>
+                </a-col>
+                <a-col :span="24">
                 <a-form-item label="管理员分类">
                     <a-radio-group v-decorator="['type', {rules:[{required: true, }], initialValue: initialAccount.type}]" buttonStyle="solid" >
                         <a-radio-button value="超级管理员" disabled>超级管理员</a-radio-button>
@@ -70,12 +80,16 @@
                         <a-radio-button value="普通管理员">普通管理员</a-radio-button>
                     </a-radio-group>
                 </a-form-item>
+                </a-col>
+                <a-col :span="24">
                 <a-form-item label="管理员状态">
                     <a-radio-group v-decorator="['state', {rules:[{required: true, }], initialValue: initialAccount.state}]" buttonStyle="solid" >
                         <a-radio-button value="禁用">禁用</a-radio-button>
                         <a-radio-button value="正常">正常</a-radio-button>
                     </a-radio-group>
                 </a-form-item>
+                </a-col>
+                </a-row>
             </a-form>
         </template>
     </PageSkeleton>

@@ -39,21 +39,40 @@
         <!-- 渲染编辑框 -->
         <template slot="formSlot">
             <a-form layout="vertical" :form="form">
+                <a-row :gutter="16">
+                <a-col :span="24">
                 <a-form-item v-if="action == 'edit'" label="留言ID">
                     <a-input v-decorator="['id', {initialValue: initialMessage.id}]" disabled />
                 </a-form-item>
+                </a-col>
+
+                <a-col :span="12">
                 <a-form-item label="留言姓名">
                     <a-input v-decorator="['name', {rules: [{required: allowEdit,}], initialValue: initialMessage.name || ''}]" :disabled="!allowEdit" />
                 </a-form-item>
+                </a-col>
+                <a-col :span="12">
                 <a-form-item label="留言手机">
                     <a-input v-decorator="['phone', {rules: [{required: allowEdit, pattern: allowEdit && /^1[3456789]\d{9}$/, message: '错误的手机号码'}], initialValue: initialMessage.phone || ''}]" :disabled="!allowEdit" />
                 </a-form-item>
+                </a-col>
+                <a-col :span="12">
                 <a-form-item label="留言邮箱">
                     <a-input v-decorator="['email', {rules: [{type: 'email'}],initialValue: initialMessage.email || ''}]" :disabled="!allowEdit" />
                 </a-form-item>
+                </a-col>
+                <a-col :span="12">
+                <a-form-item label="留言时间">
+                    <a-input v-decorator="['create_time', {initialValue: initialMessage.create_time || ''}]" disabled />
+                </a-form-item>
+                </a-col>
+                <a-col :span="24">
                 <a-form-item label="留言内容">
                     <a-textarea v-decorator="['content', {initialValue: initialMessage.content || ''}]" :autosize="{minRows:2, maxRows:4}" :disabled="!allowEdit" />
                 </a-form-item>
+                </a-col>
+
+                <a-col :span="24">
                 <a-form-item >
                     <span slot="label">附件图片<span v-if="allowEdit" style="color:rgba(0,0,0,0.45);font-size:13px;">(只能上传jpg,png,gif)</span></span>
                     <a-upload
@@ -66,15 +85,18 @@
                     >
                     </a-upload>
                 </a-form-item>
-                <a-form-item label="留言时间">
-                    <a-input v-decorator="['create_time', {initialValue: initialMessage.create_time || ''}]" disabled />
-                </a-form-item>
+                </a-col>
+                <a-col :span="24">
                 <a-form-item label="留言回复">
                     <a-textarea v-decorator="['reply', {initialValue: initialMessage.reply || ''}]" :autosize="{minRows:2, maxRows:4}" :disabled="!initialMessage.state != '2'" />
                 </a-form-item>
+                </a-col>
+                <a-col :span="12">
                 <a-form-item v-if="initialMessage.reply_time != ''" label="回复时间">
                     <a-input v-decorator="['reply_time', {initialValue: initialMessage.reply_time || ''}]" disabled />
                 </a-form-item>
+                </a-col>
+                <a-col :span="24">
                 <a-form-item label="留言状态">
                     <a-radio-group v-decorator="['state', {initialValue: initialMessage.state}]" :disabled="!allowEdit" buttonStyle="solid" >
                         <template v-for="(item, index) in MESSAGE_STATUS">
@@ -82,6 +104,8 @@
                         </template>
                     </a-radio-group>
                 </a-form-item>
+                </a-col>
+                </a-row>
             </a-form>
         </template>
     </PageSkeleton>
