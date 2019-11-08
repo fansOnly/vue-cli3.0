@@ -46,7 +46,7 @@
 	import { getInfoList, deleteInfo } from '@/api/info';
 
 	import config from './config';
-	import Tools from '@/utils/Tools';
+	import { pluck } from '@/utils/util';
 
 	export default {
 		name: 'infoPage',
@@ -100,7 +100,7 @@
 				const deleteList = this.infoList.filter(
                     item => this.selectedRowKeys.includes(item.id)
                 );
-                const deleteIds = Tools.pluck(deleteList, 'id');
+                const deleteIds = pluck(deleteList, 'id');
                 this.deleteInfoFn(deleteIds);
             },
             handleFilter (values) {

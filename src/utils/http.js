@@ -22,6 +22,8 @@ const codeMessage = {
 	504: '网关超时。',
 };
 
+const useMock = true;
+
 if (process.env.NODE_ENV == 'development') {
 	// easy-mock
 	axios.defaults.baseURL = 'https://www.easy-mock.com/mock/5d5902cebbb1323e7792375d/snowe/vue';
@@ -37,21 +39,17 @@ axios.defaults.timeout = 5000;
 
 // 添加请求拦截器
 axios.interceptors.request.use(config => {
-	// console.log('config', config);
-	// AUTH_TOKEN
 	const token = localStorage.getItem('token');
 	if (token) {
 		config.headers['Token'] = token;
 	}
 	return config;
 }, error => {
-	// console.log('error', error);
 	return Promise.reject(error);
 });
 
 // 添加响应拦截器
 axios.interceptors.response.use(response => {
-	// console.log('response', response);
 	const responseCode = response.status;
 	switch (responseCode) {
 		case 200:
@@ -88,7 +86,6 @@ axios.interceptors.response.use(response => {
 	return Promise.resolve(response);
 
 }, error => {
-	// console.log('response error', error)
 	message.error('请求错误。', 1);
 	return Promise.reject(error);
 });
@@ -98,7 +95,7 @@ function handleStatus(status) {
 	throw new Error(codeMessage[status]);
 }
 
-export const get = (url, params) => {
+const get = (url, params) => {
 	if (typeof params !== 'undefined') {
 		url += '?' + qs.stringify(params)
 	}
@@ -108,16 +105,23 @@ export const get = (url, params) => {
 	})
 }
 
-export const post = (url, params, options = {}) => {
+const post = (url, params, options = {}) => {
 	return axios.post(url, params, {...options})
 	.then(res => {
 		return res.data;
 	})
 }
 
-export const upload = ({url, params, options = {}}) => {
+const upload = ({url, params, options = {}}) => {
 	return axios.post(url, params, {...options, headers: {'Content-Type': 'multipart/form-data'}})
 	.then(res => {
 		return res.data;
 	})
+}
+
+export {
+	useMock,
+	get,
+	post,
+	upload
 }

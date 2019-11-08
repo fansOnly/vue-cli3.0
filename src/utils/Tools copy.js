@@ -25,7 +25,7 @@ export default {
 	 * @return {String}
 	 */
 	randString(size) {
-		let result  = ''
+		let result = ''
 		let allChar = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 		size = size || 1
@@ -206,7 +206,7 @@ export default {
 	 * @return {Boolean}
 	 */
 	isFinite(value) {
-	return typeof value == 'number' && isFinite(value)
+		return typeof value == 'number' && isFinite(value)
 	},
 
 	/**
@@ -215,7 +215,7 @@ export default {
 	 * @return {Boolean}
 	 */
 	isNaN(value) {
-	return this.isNumber(value) && value != +value
+		return this.isNumber(value) && value != +value
 	},
 
 	/**
@@ -330,7 +330,7 @@ export default {
 
 		if (typeof target === 'boolean') {
 			deep = target
-			target = arguments[ i ] || {}
+			target = arguments[i] || {}
 			i++
 		}
 
@@ -344,7 +344,7 @@ export default {
 		}
 
 		for (; i < length; i++) {
-			if ( (options = arguments[ i ]) != null ) {
+			if ((options = arguments[i]) != null) {
 				for (name in options) {
 					src = target[name]
 					copy = options[name]
@@ -386,8 +386,8 @@ export default {
 		if (!obj || this.type(obj) !== '[object Object]') {
 			return !1
 		}
-		proto = getProto( obj )
-		if ( !proto ) {
+		proto = getProto(obj)
+		if (!proto) {
 			return !0
 		}
 		Ctor = hasOwn.call(proto, 'constructor') && proto.constructor
@@ -412,7 +412,7 @@ export default {
 		*/
 	type(obj) {
 		const toString = Object.prototype.toString
-		if ( obj == null ) {
+		if (obj == null) {
 			return obj + ''
 		}
 		return typeof obj === 'object' || typeof obj === 'function' ? toString.call(obj) || 'object' : typeof obj
@@ -511,12 +511,12 @@ export default {
 		*/
 	encodeUriQuery(value, pctEncodeSpaces) {
 		return encodeURIComponent(value)
-		.replace(/%40/gi, '@')
-		.replace(/%3A/gi, ':')
-		.replace(/%24/g, '$')
-		.replace(/%2C/gi, ',')
-		.replace(/%3B/gi, ';')
-		.replace(/%20/g, (pctEncodeSpaces ? '%20' : '+'))
+			.replace(/%40/gi, '@')
+			.replace(/%3A/gi, ':')
+			.replace(/%24/g, '$')
+			.replace(/%2C/gi, ',')
+			.replace(/%3B/gi, ';')
+			.replace(/%20/g, (pctEncodeSpaces ? '%20' : '+'))
 	},
 
 	/**
@@ -528,12 +528,12 @@ export default {
 		if (!obj) return ''
 		let that = this
 		let parts = []
-		for(let key in obj) {
+		for (let key in obj) {
 			const value = obj[key]
 			if (value === null || that.isUndefined(value)) return
 			if (that.isArray(value)) {
-				value.forEach(function(v) {
-					parts.push(that.encodeUriQuery(key)  + '=' + that.encodeUriQuery(that.serializeValue(v)))
+				value.forEach(function (v) {
+					parts.push(that.encodeUriQuery(key) + '=' + that.encodeUriQuery(that.serializeValue(v)))
 				})
 			} else {
 				parts.push(that.encodeUriQuery(key) + '=' + that.encodeUriQuery(that.serializeValue(value)))
@@ -563,8 +563,8 @@ export default {
 		* @param  {String} str / {Object} obj
 		* @return {Boolean}
 		*/
-	isEqual(value1,value2) {
-		return  !this.isNull(value1) && !this.isNull(value2) && typeof value1 === typeof value2 && value1 === value2
+	isEqual(value1, value2) {
+		return !this.isNull(value1) && !this.isNull(value2) && typeof value1 === typeof value2 && value1 === value2
 	},
 
 	/**
@@ -582,7 +582,7 @@ export default {
 		* @return {String}
 		*/
 	randNumber(size) {
-		let result  = ''
+		let result = ''
 		let allChar = '0123456789'
 
 		size = size || 1
@@ -625,11 +625,11 @@ export default {
 		* @param  {Number} end
 		* @return {String}
 		*/
-	subStr(str,start,end){
+	subStr(str, start, end) {
 		if (typeof str !== 'string') {
 			return str.toString()
 		}
-		return str.substring(start,end)
+		return str.substring(start, end)
 	},
 
 	/**
@@ -639,21 +639,18 @@ export default {
 		* @param  {String} str2
 		* @return {String}
 		*/
-	formatDate(time, str1='', str2='') {
+	formatDate(time, str1 = '', str2 = '') {
 		if (time === '' || time === 0 || time === null || time === undefined) {
 			throw new Error(`${time} on value error, time should be some available value ...`);
 		}
 		if (!Object.prototype.toString.call(time) === '[object Date]') {
 			throw new Error(`${time} on type error, time should be date or timestamp ...`);
 		}
-		if (this.isNumber(time)) {
+		if (typeof time === 'number') {
 			// 时间戳
 			while (time.toString().length < 13) {
 				time += '0';
 			}
-			// if (time.toString().length != 13) {
-			// 	time = Number(time + '' + (13 - time.toString().length));
-			// }
 			time = new Date(Number(time));
 		}
 		// console.log('time: ', time);
@@ -665,11 +662,11 @@ export default {
 		var minute = time.getMinutes()
 		var second = time.getSeconds()
 
-		const Ymd = str1 && ([year, month, day]).map(function(n) {
+		const Ymd = str1 && ([year, month, day]).map(function (n) {
 			n = n.toString()
 			return n[1] ? n : '0' + n
 		}).join(str1);
-		const His = str2 && ([hour, minute, second]).map(function(n) {
+		const His = str2 && ([hour, minute, second]).map(function (n) {
 			n = n.toString()
 			return n[1] ? n : '0' + n
 		}).join(str2);
@@ -682,7 +679,7 @@ export default {
 		* @param  {String} time '2019-08-01 12:12:12'
 		* @return {Number}
 		*/
-	date2Timestamp (date) {
+	date2Timestamp(date) {
 		if (typeof date !== 'string') {
 			date = date + '';
 		}
@@ -700,15 +697,15 @@ export default {
 		}
 		// 秒数
 		const seconds = Math.floor(timestamp / 1000);
-		const day = Math.floor(seconds / (24*60*60));
-		const hour = Math.floor((seconds - day*24*60*60) / 3600);
+		const day = Math.floor(seconds / (24 * 60 * 60));
+		const hour = Math.floor((seconds - day * 24 * 60 * 60) / 3600);
 		// 分钟位
-		const min = Math.floor(((seconds - day*24*60*60 - hour*60*60 ) / 60));
+		const min = Math.floor(((seconds - day * 24 * 60 * 60 - hour * 60 * 60) / 60));
 		// 秒位 equal to => var sec = second % 60;
-		const sec = (seconds - day*24*60*60 - hour * 3600 - min * 60);
+		const sec = (seconds - day * 24 * 60 * 60 - hour * 3600 - min * 60);
 		// 毫秒位，保留2位
 		const microSec = Math.floor((timestamp % 1000) / 10);
-		const time = [day, hour, min, sec, microSec].map(function(n) {
+		const time = [day, hour, min, sec, microSec].map(function (n) {
 			n = n.toString()
 			return n[1] ? n : '0' + n
 		})
@@ -742,7 +739,7 @@ export default {
 	* @param  {Object}
 	* @return {Array}
 	*/
-	object2Array (obj) {
+	object2Array(obj) {
 		var arr = []
 		for (let i in obj) {
 			arr.push(obj[i]); //属性
@@ -751,23 +748,13 @@ export default {
 	},
 
 	/**
-	* 字符串补零
-	* @param  {String} str
-	* @return {String}
-	*/
-	fillZero (str) {
-		str = (str).toString();
-		return str[1] ? str : '0' + str
-	},
-
-	/**
 	* 价格补零
 	* @param  {String} str
 	* @return {String}
 	*/
-	priceFixedZero (str) {
-		if (!this.isNumber(Number(str))) {
-			return;
+	priceFixedZero(str) {
+		if (typeof str !== 'number' || str === null) {
+			throw new Error('illegal param type, only accept number')
 		}
 		return (str).toFixed(2)
 	},
@@ -778,16 +765,56 @@ export default {
 		* @param  {String} str
 		* @return {String}
 		*/
-	formatNumber (num, str=',') {
-		if (!this.isNumber(Number(num))) {
-			return;
+	// version 1.0
+	// parseTomoney (num, str=',') {
+	// 	if (typeof num !== 'number' || num === 0 || isNaN(num)) {
+	// 		return;
+	// 	}
+	// 	return [...[...num.toString()].reduceRight((a, b) => {
+	// 		if ((a.length + 1) % 4 == 0 ) {
+	// 			b = str + b
+	// 		}
+	// 		return a + b
+	// 	}, '')].reverse().join('');
+	// },
+	// version 1.0
+	parseTomoney(value, str = ',') {
+		value += ''
+		const list = value.split('.')
+		const prefix = list[0].charAt(0) === '-' ? '-' : ''
+		let num = prefix ? list[0].slice(1) : list[0]
+		let result = ''
+		while (num.length > 3) {
+			result = `${str}${num.slice(-3)}${result}`
+			num = num.slice(0, num.length - 3)
 		}
-		return [...[...num.toString()].reduceRight((a, b) => {
-			if ((a.length + 1) % 4 == 0 ) {
-				b = str + b
-			}
-			return a + b
-		}, '')].reverse().join('');
+		if (num) {
+			result = num + result
+		}
+		return `${prefix}${result}${list[1] ? `.${list[1]}` : ''}`
+	},
+
+	/**
+	* 格式化时间
+	* @param  {String} 时间格式
+	* @param  {Number} 时间戳
+	* @return {String} 格式化时间
+	*/
+	dateFormatter (formatter, timestamp) {
+		const date = typeof timestamp === 'number' ? new Date(timestamp) : new Date();
+		const Y = date.getFullYear() + '',
+			  M = date.getMonth() + 1,
+			  D = date.getDate(),
+			  H = date.getHours(),
+			  m = date.getMinutes(),
+			  s = date.getSeconds();
+		return formatter.replace(/YYYY|yyyy/g, Y)
+						.replace(/YY|yy/g, Y.substr(2,2))
+						.replace(/MM/g, M < 10 ? '0' + M : M)
+						.replace(/DD/g, D < 10 ? '0' + D : D)
+						.replace(/HH|hh/g, H < 10 ? '0' + H : H)
+						.replace(/mm/g, m < 10 ? '0' + m : m)
+						.replace(/ss/g, s < 10 ? '0' + s : s)
 	},
 
 	/**
@@ -796,7 +823,7 @@ export default {
 		* @param  {type} 类型
 		* @return {Boolean}
 		*/
-	getType (data, type) {
+	getType(data, type) {
 		const typeObj = {
 			'[object String]': 'string',
 			'[object Number]': 'number',
@@ -830,18 +857,18 @@ export default {
 	 * @param {Array<Object>} cache
 	 * @return {*}
 	 */
-	deepCopy (obj, cache = []) {
+	deepCopy(obj, cache = []) {
 		// just return if obj is immutable value
 		if (obj === null || typeof obj !== 'object') {
 			return obj
 		}
-	
+
 		// if obj is hit, it is in circular structure
 		const hit = find(cache, c => c.original === obj)
 		if (hit) {
 			return hit.copy
 		}
-	
+
 		const copy = Array.isArray(obj) ? [] : {}
 		// put the copy into cache at first
 		// because we want to refer it in recursive deepCopy
@@ -849,11 +876,76 @@ export default {
 			original: obj,
 			copy
 		})
-	
+
 		Object.keys(obj).forEach(key => {
 			copy[key] = this.deepCopy(obj[key], cache)
 		})
-	
+
 		return copy
+	},
+
+	/**
+	 * 获取url参数
+	 * @param {String}
+	 * @return {Obejct}
+	 */
+	getUrlParams(url, name) {
+		const pattern = /(\w+)=(\w+)/ig;
+		let params = {};
+		url.replace(pattern, function (a, b, c) {
+			params[b] = c;
+		});
+		return name in params ? params[name] : params;
+	},
+
+	/**
+	 * 强制保留n位小数
+	 * @param {Number}
+	 * @param {Number}
+	 * @return {Number}
+	 */
+	numberToFixed(num, digit) {
+		const integer = num.toString().split('.')[0];
+		const decimal = num.toString().split('.')[1];
+		let dealedDecimal = '';
+		const fixZero = len => {
+			let i = 1;
+			let zero = '';
+			while (i <= len) {
+				zero += '0';
+				i++;
+			}
+			return zero;
+		}
+		if (typeof decimal !== 'undefined') {
+			if (decimal.length >= digit) {
+				dealedDecimal = decimal.substring(0, digit - 1);
+				let boundaryNumber = Number(decimal.split('')[digit - 1]);
+				const afterNumber = Number(decimal.split('')[digit]);
+				if (afterNumber >= 5) {
+					boundaryNumber += 1;
+				}
+				dealedDecimal = dealedDecimal + boundaryNumber;
+			} else {
+				dealedDecimal = decimal + fixZero(digit - decimal.length);
+			}
+		} else {
+			dealedDecimal = fixZero(digit);
+		}
+		return Number(`${integer}.${dealedDecimal}`);
+	},
+
+	/**
+	 * 随机打乱数组排序
+	 * @param {Array}
+	 * @return {Array}
+	 */
+	shuffle(arr) {
+		let i = arr.length;
+		while (i) {
+			let j = Math.floor(Math.random() * i--);
+			[arr[j], arr[i]] = [arr[i], arr[j]];
+		}
+		return arr;
 	},
 }

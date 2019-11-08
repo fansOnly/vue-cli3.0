@@ -9,45 +9,45 @@
                 <a-row :gutter="24">
                     <a-col v-if="filters.hasID" :span="6">
                         <a-form-item label="数据编号">
-                            <a-input v-decorator="['id', {rules: [{message: '请输入数据ID',}], initialValue: ''}]"
+                            <a-input v-decorator="['fid', {rules: [{message: '请输入数据ID',}], initialValue: ''}]"
                                 placeholder="请输入数据ID" />
                         </a-form-item>
                     </a-col>
                     <slot name="filterBeforeSlot"></slot>
                     <a-col v-if="filters.hasTitle" :span="6">
                         <a-form-item label="数据标题">
-                            <a-input v-decorator="['title', {rules: [{message: '请输入数据标题',}], initialValue: ''}]"
+                            <a-input v-decorator="['ftitle', {rules: [{message: '请输入数据标题',}], initialValue: ''}]"
                                 placeholder="请输入数据标题" />
                         </a-form-item>
                     </a-col>
                     <a-col v-if="filters.hasName" :span="6">
                         <a-form-item label="数据名称" >
-                            <a-input v-decorator="['name', {rules: [{message: '请输入数据名称',}], initialValue: ''}]"
+                            <a-input v-decorator="['fname', {rules: [{message: '请输入数据名称',}], initialValue: ''}]"
                                 placeholder="请输入数据名称" />
                         </a-form-item>
                     </a-col>
                     <slot name="filterAfterSlot"></slot>
                     <a-col v-if="filters.hasPhone" :span="6">
                         <a-form-item label="手机号码" >
-                            <a-input v-decorator="['phone', {rules: [{message: '请输入手机号码',}], initialValue: ''}]"
+                            <a-input v-decorator="['fphone', {rules: [{message: '请输入手机号码',}], initialValue: ''}]"
                                 placeholder="请输入手机号码" />
                         </a-form-item>
                     </a-col>
                     <a-col v-if="filters.hasAdmin" :span="6">
                         <a-form-item label="发布人员" >
-                            <a-input v-decorator="['admin', {rules: [{message: '请输入发布人',}], initialValue: ''}]"
+                            <a-input v-decorator="['fadmin', {rules: [{message: '请输入发布人',}], initialValue: ''}]"
                                 placeholder="请输入发布人" />
                         </a-form-item>
                     </a-col>
                     <a-col v-if="filters.hasCreateTime" :span="6">
                         <a-form-item label="发布日期" >
-                            <a-date-picker v-decorator="['create_time', {rules: [{type: 'object',message: '请选择发布日期',}]}]"
+                            <a-date-picker v-decorator="['fcreate_time', {rules: [{type: 'object',message: '请选择发布日期',}]}]"
                                 placeholder="请选择发布日期" style="width: 100%" />
                         </a-form-item>
                     </a-col>
                     <a-col v-if="filters.hasState" :span="6">
                         <a-form-item label="数据状态" >
-                            <a-select v-decorator="['state', {rules: [{message: '请选择数据状态',}], initialValue: ''}]"
+                            <a-select v-decorator="['fstate', {rules: [{message: '请选择数据状态',}], initialValue: ''}]"
                                 placeholder="请选择数据状态">
                                 <a-select-option value="">全部</a-select-option>
                                 <template v-for="(item, index) in filters.STATUS">
@@ -219,9 +219,15 @@
                 this.form.validateFields((err, fieldsValue) => {
                     if (!err) {
                         const values = {
-                            ...fieldsValue,
-                            create_time: fieldsValue['create_time'] && fieldsValue['create_time'].format('YYYY-MM-DD'),
-                            delete_time: fieldsValue['delete_time'] && fieldsValue['delete_time'].format('YYYY-MM-DD'),
+                            // ...fieldsValue,
+                            id: fieldsValue['fid'],
+                            phone: fieldsValue['fphone'],
+                            name: fieldsValue['fname'],
+                            title: fieldsValue['ftitle'],
+                            admin: fieldsValue['fadmin'],
+                            state: fieldsValue['fstate'],
+                            create_time: fieldsValue['fcreate_time'] && fieldsValue['fcreate_time'].format('YYYY-MM-DD'),
+                            delete_time: fieldsValue['fdelete_time'] && fieldsValue['fdelete_time'].format('YYYY-MM-DD'),
                         };
                         // console.log('handleFilter form: ', values);
                         this.$emit('handleFilter', values);

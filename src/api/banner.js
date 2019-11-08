@@ -1,6 +1,8 @@
-import { get, post } from '@/utils/http'
+import { get, post, useMock } from '@/utils/http'
 
-// 获取幻灯片分类
+useMock && require('@/api/mock/banner.js')
+
+// 获取幻灯片分类列表
 export const getBannerClassList = params => get('/banner/class/index', params)
 // 获取幻灯片分类详情
 export const getBannerClassDetail = params => get('/banner/class/detail', params)

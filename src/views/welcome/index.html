@@ -25,24 +25,24 @@
             <div class="echart-card">
                 <div class="echart-card_label flex">
                     <div class="echart-card_title">访问量</div>
-                    <a-tooltip title="访问量">
+                    <a-tooltip title="周访问量">
                         <a-icon type="info-circle" />
                     </a-tooltip>
                 </div>
-                <div class="echart-card_total">8888888</div>
+                <div class="echart-card_total">{{visitTotal}}</div>
                 <div id='visitEchart' class="echart-card_data"></div>
-                <div class="echart-card_footer flex">日访问量<span class="number">8888</span></div>
+                <div class="echart-card_footer flex">日访问量<span class="number">{{dayVisit}}</span></div>
             </div>
         </a-col>
         <a-col :span="6">
             <div class="echart-card">
                 <div class="echart-card_label flex">
                     <div class="echart-card_title">支付笔数</div>
-                    <a-tooltip title="支付笔数">
+                    <a-tooltip title="周支付笔数">
                         <a-icon type="info-circle" />
                     </a-tooltip>
                 </div>
-                <div class="echart-card_total">6,560</div>
+                <div class="echart-card_total">{{payTotal}}</div>
                 <div id='payEchart' class="echart-card_data"></div>
                 <div class="echart-card_footer flex">转化率<span class="number">60%</span></div>
             </div>
@@ -89,7 +89,7 @@
                                     </a-tooltip>
                                 </div>
                                 <div class="search-card_total flex">
-                                    <div class="search-card_total_number">12,321</div>
+                                    <div class="search-card_total_number">{{searchTotal}}</div>
                                     <div class="search-card_total_yoy">
                                         <span class="number">12.1</span>
                                         <a-icon type="caret-up" class="increase" />
@@ -107,18 +107,18 @@
                                         </a-tooltip>
                                     </div>
                                     <div class="search-card_total flex">
-                                        <div class="search-card_total_number">2.7</div>
+                                        <div class="search-card_total_number">{{searchAvg}}</div>
                                         <div class="search-card_total_yoy">
                                             <span class="number">26.2</span>
                                             <a-icon type="caret-down" class="increase" />
                                         </div>
                                     </div>
-                                    <div id="searchPerEchart" class="search-card_echart"></div>
+                                    <div id="searchAvgEchart" class="search-card_echart"></div>
                                 </div>
                             </a-col>
                     </a-row>
                     <div class="search-table">
-                        <a-table rowKey='id' :columns="columns" :dataSource="datax" :pagination="pagination" size="small">
+                        <a-table rowKey='id' :columns="columns" :dataSource="searchHot" :pagination="pagination" size="small" @change="handleChange">
                             <template slot='title-link' slot-scope='text'>
                                 <a href="javascript:;">{{text}}</a>
                             </template>

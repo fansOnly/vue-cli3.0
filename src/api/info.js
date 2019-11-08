@@ -1,4 +1,6 @@
-import { get, post } from '@/utils/http'
+import { get, post, useMock } from '@/utils/http'
+
+useMock && require('@/api/mock/info.js')
 
 // 获取文章分类树
 export const getInfoClassTree = () => get('/info/class/tree')

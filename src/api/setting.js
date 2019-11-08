@@ -1,4 +1,6 @@
-import { get, post } from '@/utils/http'
+import { get, post, useMock } from '@/utils/http'
+
+useMock && require('@/api/mock/setting.js')
 
 // 获取系统基本设置
 export const getSiteInfo = () => get('/siteinfo/index')

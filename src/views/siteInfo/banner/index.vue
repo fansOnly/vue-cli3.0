@@ -48,7 +48,7 @@
                     <span slot="label">幻灯片图片<span style="color:rgba(0,0,0,0.45);font-size:13px;">(只能上传jpg,png,gif,mp4)</span></span>
                     <a-upload
                         action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                        listType="picture-card"
+                        :listType="listType"
                         v-decorator="['fileList', {rules: [{validator: validateImage}]}]"
                         :fileList="fileList"
                         :beforeUpload="beforeUpload"
@@ -79,7 +79,7 @@
 
     import config from './config'
 
-    import Tools from '@/utils/Tools'
+    import { pluck } from '@/utils/util'
 
     export default {
         name: 'Banner',
@@ -109,6 +109,7 @@
                 photoPreviewVisible: false,
                 previewPhoto: '',
                 fileList: [],
+                listType: 'picture-card'
             }
         },
         computed: {
@@ -139,7 +140,7 @@
 				const deleteList = this.bannerList.filter(
                     item => this.selectedRowKeys.includes(item.id)
                 );
-                const deleteIds = Tools.pluck(deleteList, 'id');
+                const deleteIds = pluck(deleteList, 'id');
                 this.deleteBannerFn(deleteIds);
             },
             handleFilter (values) {
@@ -158,6 +159,11 @@
             },
             beforeUpload (file, fileList) {
                 console.log('beforeUpload', file, fileList);
+                if (file.type == 'video/mp4') {
+                    this.listType = 'text';
+                } else {
+                    this.listType = 'picture-card';
+                }
                 // TODO 此处自行处理上传逻辑
                 // return false;
             },
@@ -169,7 +175,8 @@
                 console.log('validateImage',  value)
                 if (!this.fileList.length) {
                     if (!value || !value.fileList.length) {
-                        callback(new Error('请上传幻灯片图片'));
+                        this.listType = 'picture-card';
+                        callback(new Error('请上传幻灯片'));
                     }
                 }
                 callback();

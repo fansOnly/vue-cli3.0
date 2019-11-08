@@ -5,7 +5,7 @@
 <script>
     import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue';
     import { getSiteInfo, updateSiteInfo } from '@/api/setting';
-
+    
 	export default {
 		name: 'SiteSetting',
 		components: {

@@ -1,7 +1,7 @@
 <template>
 	<div class>
-		<!-- <div class="page" :style="{height:getWindowHeight}"> -->
-		<div class="page">
+		<div class="page" :style="{minHeight:getWindowHeight}">
+		<!-- <div class="page"> -->
 			<a-layout-sider class="sidebar" v-model="collapsed">
 				<div class="logo-wrap">
 					<img class="logo" src="../../assets/images/antd.svg" alt />
@@ -46,8 +46,8 @@
 		},
 		computed: {
 			getWindowHeight: function() {
-				return window.screen.availHeight + 'px';
-				// return document.documentElement.clientHeight + 'px';
+				// return window.screen.availHeight + 'px';
+				return document.documentElement.clientHeight + 'px';
 			}
 		},
 		methods: {

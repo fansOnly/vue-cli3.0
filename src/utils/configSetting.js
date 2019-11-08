@@ -33,7 +33,7 @@ export const formLayout = {
 export const pagination = {
     page: 1,
     pageSize: 10,
-    pageSizeOptions: ['10', '20', '30', '40'],
+    pageSizeOptions: ['10', '20', '30', '40', '50'],
     showSizeChanger: true,
     showQuickJumper: true,
     showTotal: total => `共 ${total} 条信息`,

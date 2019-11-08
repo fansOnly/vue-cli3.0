@@ -1,4 +1,4 @@
-import Tools from '@/utils/Tools';
+import { date2Timestamp } from '@/utils/util';
 import { pagination, filters, INFO_STATUS, BADGE_STATUS } from '@/utils/configSetting';
 
 export default {
@@ -27,7 +27,7 @@ export default {
 			title: '发布时间',
 			dataIndex: 'create_time',
 			width: '200px',
-			sorter: (a, b) => Tools.date2Timestamp(a.create_time) - Tools.date2Timestamp(b.create_time)
+			sorter: (a, b) => date2Timestamp(a.create_time) - date2Timestamp(b.create_time)
 		},
 		{
 			title: '状态',

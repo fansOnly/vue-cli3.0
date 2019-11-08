@@ -1,4 +1,6 @@
-import { get, post } from '@/utils/http'
+import { get, post, useMock } from '@/utils/http'
+
+useMock && require('@/api/mock/member.js')
 
 // 获取会员列表
 export const getMemberList = params => get('/member/index', params)

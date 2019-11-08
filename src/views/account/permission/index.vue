@@ -13,9 +13,7 @@
                     </a-directory-tree>
                 </a-col>
                 <a-col :span="12">
-                    <div class="node-tips">{{permissionDetail.content}}</div>
-                    <!-- <froala :tag="'textarea'" :config="config" v-model="model"></froala> -->
-                    <Editor @change="change" ></Editor>
+                    <Editor v-if="showEditor" :content="permissionDetail.content" @change="change" ></Editor>
                 </a-col>
             </a-row>
 		</div>
@@ -25,7 +23,7 @@
 <script>
     import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue';
 
-    import { getPermissionTree, getPermissionDetail } from '@/api/account';
+    import { getPermissionTree, getPermissionDetail, updatePermissionDetail } from '@/api/account';
     import Editor from './editor.vue'
 
     export default {
@@ -39,6 +37,8 @@
                 permissionList: [],
                 treeData: [],
                 permissionDetail: {},
+                nodeId: '',
+                showEditor: false,
             }
         },
         created () {
@@ -47,11 +47,13 @@
         methods: {
             change (content) {
                 console.log('content', content);
+                this.updatePermissionDetailFn(content);
             },
             selectTreeNode (selectedKeys, e) {
                 console.log('selectTreeNode', selectedKeys, e)
                 const nodeId = selectedKeys[0].split('-')[selectedKeys[0].split('-').length - 1];
                 this.nodeId = nodeId;
+                this.showEditor = false;
                 this.getPermissionDetailFn();
             },
             async getPermissionTreeFn () {
@@ -65,6 +67,16 @@
                 const data = await getPermissionDetail(params);
                 if (data.code == '200') {
                     this.permissionDetail = data.data;
+                    this.showEditor = true;
+                }
+            },
+            async updatePermissionDetailFn (content) {
+                const params = {id: this.nodeId, content: content}
+                const data = await updatePermissionDetail(params);
+                if (data.code == '200') {
+                    this.$message.success(data.msg, 1, () => {
+                        this.permissionDetail.content = content;
+					})
                 }
             }
         }

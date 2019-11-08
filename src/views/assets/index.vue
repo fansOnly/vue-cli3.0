@@ -48,7 +48,7 @@
     import { getAssetsList, deleteAssets } from '@/api/setting';
     import config from './config'
 
-    import Tools from '@/utils/Tools';
+    import { pluck } from '@/utils/util';
 
     export default {
         name: 'Assets',
@@ -97,7 +97,7 @@
 				const deleteList = this.assetsList.filter(
                     item => this.selectedRowKeys.includes(item.id)
                 );
-                const deleteIds = Tools.pluck(deleteList, 'id');
+                const deleteIds = pluck(deleteList, 'id');
                 this.deleteAssetsFn(deleteIds);
             },
             handleFilter (values) {

@@ -75,7 +75,7 @@
 
     import { getAccountClassList, addAccountClass, getAccountClassDetail, updateAccountClass, getPermissionList, deleteAccountClass } from '@/api/account';
     import config from './config'
-    import Tools from '@/utils/Tools';
+    import { pluck } from '@/utils/util';
 
     import { TreeSelect } from 'ant-design-vue'
     const SHOW_PARENT = TreeSelect.SHOW_PARENT;
@@ -143,7 +143,7 @@
 				const deleteList = this.accountClassList.filter(
                     item => this.selectedRowKeys.includes(item.id)
                 );
-                const deleteIds = Tools.pluck(deleteList, 'id');
+                const deleteIds = pluck(deleteList, 'id');
                 this.deleteAccountClassFn(deleteIds);
             },
             handleFilter (values) {
@@ -205,7 +205,6 @@
             },
             // api
             async getAccountClassListFn (filters={}) {
-                // console.log('config.pagination', config.pagination);
                 const params = { page: config.pagination.page, pageSize: config.pagination.pageSize, ...filters };
                 const data = await getAccountClassList(params);
                 this.loading = false;

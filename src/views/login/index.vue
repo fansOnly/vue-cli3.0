@@ -23,7 +23,7 @@
 <script>
 import { message } from 'ant-design-vue';
 // import LoadingComponent from '@/components/loading/index.vue'
-import Tools from '@/utils/Tools';
+import { randString } from '@/utils/util';
 
 export default {
   name: 'Login',
@@ -48,7 +48,7 @@ export default {
             message.success('登陆成功', 1).then(() => {
               const user = {id: 1, name: 'test'};
               localStorage.setItem('user', JSON.stringify(user));
-              localStorage.setItem('token', Tools.randString(32));
+              localStorage.setItem('token', randString(32));
               this.$router.push('/admin/index');
             });
           } else{

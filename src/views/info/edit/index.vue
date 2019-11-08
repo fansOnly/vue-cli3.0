@@ -5,20 +5,18 @@
 			<a-form :form="form" @submit="handleSubmit">
 				<a-row>
 					<a-col :span="17">
+						<a-form-item class='hidden'>
+							<a-input v-decorator="['adminid',{initialValue: detail.adminid || 1}]" />
+						</a-form-item>
 						<a-form-item label="序号" v-bind="formItemLayout">
 							<a-input-number v-decorator="['sortnum',{initialValue: detail.sortnum}]" :step="10" :min="10" placeholder="请输入序号" />
 						</a-form-item>
 						<a-form-item v-bind="formItemLayout">
 							<span slot="label">
-								<a-tooltip title="this is a tooltip.">
-									标题
-									<a-icon type="info-circle" class="label-tip" />
-								</a-tooltip>
+								<a-tooltip title="this is a tooltip.">标题<a-icon type="info-circle" class="label-tip" /></a-tooltip>
 							</span>
-							<a-input
-								v-decorator="['title',{rules: [{required: true, message: '请输入标题！',}],initialValue: detail.title}]"
-								placeholder="请输入标题"
-							/>
+							<a-input v-decorator="['title',{rules: [{required: true, message: '请输入标题！',}],initialValue: detail.title}]"
+								placeholder="请输入标题" />
 						</a-form-item>
 						<a-form-item v-bind="formItemLayout" label="栏目分类" hasFeedback>
 							<a-tree-select
@@ -245,11 +243,17 @@
 				this.form.validateFields((err, fieldsValue) => {
 					if (!err) {
 						const values = {
-                            ...fieldsValue,
+							...fieldsValue,
+							classid: fieldsValue['parent_id'].slice(),
+							tags: fieldsValue['tags'].slice(),
+							file: this.detail.file.slice(),
+							photos: this.detail.photos.slice(),
+							thumbnail: this.detail.thumbnail.slice(),
                             create_time:
                                 fieldsValue['create_time'] &&
 								fieldsValue['create_time'].format('YYYY-MM-DD hh:mm:ss'),
-                        };
+						};
+						delete values.parent_id;
 						console.log('Received values of form: ', values);
 						if (this.id) {
 							this.updateInfoFn(values);
@@ -264,21 +268,20 @@
 				const params = {id: this.id}
 				const data = await getInfoDetail(params);
 				if (data.code == '200') {
-					this.detail = data.data;
-					this.detail.create_time = moment(this.detail.create_time, 'YYYY-MM-DD hh:mm:ss');
+					this.detail = {...data.data, create_time: moment(data.data.create_time, 'YYYY-MM-DD hh:mm:ss')};
 				}
 			},
 			async updateInfoFn (params) {
-				params = {id: this.id, classid: 1, ...params}
+				params = {id: this.id, ...params}
 				const data = await updateInfo(params);
 				if (data.code == '200') {
 					this.$message.success(data.msg, 1, () => {
-						this.$router.replace({name: 'infoEdit', params:{id: parseInt(Math.random() * 99999999)}});
+						this.$router.replace({name: 'infoEdit', params:{id: Math.floor(Math.random() * 99999999)}});
 					})
 				}
 			},
 			async addInfoFn (params) {
-				params = {classid: 1, ...params}
+				// params = {classid: 1, ...params}
 				const data = await addInfo(params);
 				if (data.code == '200') {
 					this.$message.success(data.msg, 1, () => {

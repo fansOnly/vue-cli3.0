@@ -18,7 +18,7 @@
         </template>
         <!-- 渲染数据 -->
         <template slot="tableSlot">
-            <a-table rowKey="id" :loading="loading" :columns="columns" :dataSource="bannerClassList" :pagination="pagination" :rowSelection="rowSelection" bordered >
+            <a-table rowKey="id" :loading="loading" :columns="columns" :dataSource="bannerClassList" :pagination="pagination" :rowSelection="rowSelection" bordered @change="handleChange" >
                 <span slot="stateSlot" slot-scope="action">
                     <a-badge :status="BADGE_STATUS(action)" :text="BANNER_CLASS_STATUS[action]" />
                 </span>
@@ -57,7 +57,7 @@
     import { getBannerClassList, addBannerClass, getBannerClassDetail, updateBannerClass, deleteBannerClass } from '@/api/banner';
     import config from './config'
 
-    import Tools from '@/utils/Tools'
+    import { pluck } from '@/utils/util'
 
     export default {
         name: 'Banner',
@@ -73,7 +73,7 @@
                 allowEdit: config.allowEdit,
                 bannerClassList: [],
                 columns: config.columns,
-                pagination: false,
+                pagination: {},
                 loading: true,
                 // 传递给PageSkeleton组件的props
                 selectedRowKeys: [],
@@ -113,7 +113,7 @@
 				const deleteList = this.bannerClassList.filter(
                     item => this.selectedRowKeys.includes(item.id)
                 );
-                const deleteIds = Tools.pluck(deleteList, 'id');
+                const deleteIds = pluck(deleteList, 'id');
                 this.deleteBannerClassFn(deleteIds);
             },
             handleFilter (values) {
@@ -123,6 +123,14 @@
             handleFilterReset () {
                 this.getBannerClassListFn();
             },
+            handleChange (pagination) {
+                if (!this.bannerClassList.length) return;
+                // console.log('pagination', pagination);
+				this.loading = true;
+                config.pagination.page = pagination.current;
+                config.pagination.pageSize = pagination.pageSize;
+                this.getBannerClassListFn();
+			},
             showPages (record) {
                 this.$router.push({name: 'bannerList', params: {classid: record.id}})
             },
@@ -171,6 +179,11 @@
                 const data = await getBannerClassList(params);
 				this.loading = false;
                 this.bannerClassList = data.data;
+                this.currentPage = data.current;
+				this.pagination = {
+					total: data.total,
+					...config.pagination
+				};
 
                 this.resetFormData();
             },

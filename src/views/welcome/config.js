@@ -176,7 +176,7 @@ const searchTotalEchartOption = {
     ]
 };
 
-const searchPerEchartOption = {
+const searchAvgEchartOption = {
     tooltip: {
         ...tooltipBase,
         formatter: function(params) {
@@ -293,10 +293,38 @@ const salesEchartOption = {
     ]
 };
 
+const searchHotColumns = [
+    {
+        title: '排名',
+        dataIndex: 'id',
+        width: '10%'
+    },
+    {
+        title: '搜索关键词',
+        dataIndex: 'name',
+        scopedSlots: { customRender: 'title-link' },
+        width: '40%'
+    },
+    {
+        title: '用户数',
+        dataIndex: 'number',
+        sorter: (a, b) => a.number - b.number,
+        width: '25%'
+    },
+    {
+        title: '周增幅',
+        dataIndex: 'increase',
+        sorter: (a, b) => a.increase - b.increase,
+        scopedSlots: { customRender: 'increase-status' },
+        width: '25%'
+    }
+];
+
 export {
     visitEchartOption,
     payEchartOption,
     searchTotalEchartOption,
-    searchPerEchartOption,
+    searchAvgEchartOption,
     salesEchartOption,
+    searchHotColumns,
 }
