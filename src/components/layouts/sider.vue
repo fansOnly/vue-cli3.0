@@ -1,13 +1,14 @@
 <template>
 	<div>
 		<a-menu
-			:defaultSelectedKeys="defaultSelectedKeys"
+			:selectedKeys="selectedKeys"
 			:defaultOpenKeys="defaultOpenKeys"
 			:openKeys="openKeys"
 			mode="inline"
 			theme="dark"
 			:inlineCollapsed="collapsed"
 			@openChange="onOpenMenu"
+			@select="selectKeys"
 			@click="clickMenuItem"
 		>
 			<template v-for="item in menus">
@@ -157,25 +158,25 @@
 			]
 		},
 		{
-			key: 'first1',
+			key: 'lev1',
 			name: '一级分类',
 			icon: 'table',
 			path: '',
 			subs: [
 				{
-					key: 'second1',
+					key: 'lev1.lev2',
 					name: '二级分类',
 					icon: '',
 					path: ''
 				},
 				{
-					key: 'second2',
+					key: 'lev1.lev21',
 					name: '二级分类',
 					icon: '',
 					path: '',
 					subs: [
 						{
-							key: 'third1',
+							key: 'lev1.lev21.lev3',
 							name: '三级分类',
 							icon: '',
 							path: ''
@@ -258,9 +259,21 @@
 			return {
 				menus,
 				defaultOpenKeys: [],
-				defaultSelectedKeys: ['index'],
+				selectedKeys: ['index'],
 				openKeys: [],
 			};
+		},
+		created() {
+			const currentPath = localStorage.getItem('currentPath') || '';
+
+			const flatMenus = arr => arr.reduce((res, cur) => res.concat(cur.subs ? flatMenus(cur.subs) : cur), [])
+			const menusArr = flatMenus(menus);
+			const currentKey = menusArr.filter(item => item.path === currentPath)[0].key;
+			this.selectedKeys = [currentKey];
+
+			const openKeys = currentKey.split('.').reduce((res, key, index) => [...res, res[index - 1] ? `${res[index - 1]}.${key}` :  key], []);
+			openKeys.length--;
+			this.openKeys = openKeys;
 		},
 		mounted() {
 			// console.log('router info:', this.$route);
@@ -271,7 +284,7 @@
 			this.rootKeys = rootKeys;
 		},
 		methods: {
-			onOpenMenu (openKeys) {
+			onOpenMenu(openKeys) {
 				// console.log('openKeys', openKeys);
 				const latestOpenKey = openKeys.length && openKeys.find(key => this.openKeys.indexOf(key) === -1);
 				// console.log('latestOpenKey', latestOpenKey);
@@ -281,7 +294,7 @@
 					this.openKeys = [latestOpenKey] || [];
 				}
 			},
-			clickMenuItem ({ key }) {
+			clickMenuItem({ key }) {
 				// console.log('clickMenuItem', item, key, keyPath);
 				if (key == 'user.logout') {
 					this.$message.success('退出登陆', 1).then(() => {
@@ -290,6 +303,10 @@
 					});
 				}
 			},
+			selectKeys({ selectedKeys }) {
+				// console.log('selectKeys', { item, key, selectedKeys });
+				this.selectedKeys = selectedKeys;
+			}
 		},
 	};
 </script>

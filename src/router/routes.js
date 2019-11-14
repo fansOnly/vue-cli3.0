@@ -27,7 +27,6 @@ const InfoEdit = () => import('@/views/info/edit/index.vue');
 const InfoClass = () => import('@/views/info/class/index.vue');
 const InfoRecycle = () => import('@/views/info/recycle/index.vue');
 
-
 const MessageList = () => import('@/views/message/index.vue');
 
 const routes = [

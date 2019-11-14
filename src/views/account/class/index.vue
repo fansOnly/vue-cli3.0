@@ -180,7 +180,7 @@
                 this.visible = false;
             },
             handleSubmit () {
-                console.log('form.isFieldsTouched()', this.form.isFieldsTouched());
+                // console.log('form.isFieldsTouched()', this.form.isFieldsTouched());
                 this.form.validateFields((err, values) => {
                     if (!err) {
                         if (this.form.isFieldsTouched()) {

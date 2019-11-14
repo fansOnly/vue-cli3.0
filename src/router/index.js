@@ -57,6 +57,8 @@ router.beforeEach((to, from, next) => {
             }
         }
     }
+
+    localStorage.setItem('currentPath', to.path);
     
     next();
 })
@@ -77,7 +79,7 @@ const updateRoutes = to => {
             repeatIndex = index;
         }
     })
-	store.dispatch('breadcrumb/updateRoutes', { index: repeatIndex, route: {path: to.path, name: to.name, breadcrumbName: to.meta.breadcrumbName}})
+	store.dispatch('breadcrumb/updateRoutes', {index: repeatIndex, route: {path: to.path, name: to.name, breadcrumbName: to.meta.breadcrumbName}})
 }
 
 export default router;
