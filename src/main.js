@@ -14,6 +14,7 @@ import store from './store'
 // import messages from './lang/en'
 
 import CN from './lang/cn'
+import HK from './lang/hk'
 import EN from './lang/en'
 import JA from './lang/ja'
 
@@ -35,6 +36,7 @@ const i18n = new VueI18n({
     silentFallbackWarn: true,
     messages: {
         cn: CN,
+        hk: HK,
         en: EN,
         ja: JA,
     }

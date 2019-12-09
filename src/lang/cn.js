@@ -1,11 +1,13 @@
 export default {
     language: '简体中文 CN',
-    base: {
-        title: 'I18n 设置',
-        tooltip: '提示框',
-        desc: '描述文字'
+    baseLan: { // 全局基本文字配置
+        title: '西有蚂蚁智能信息管理平台',
+        logo: '西有蚂蚁',
+        copyright: '2019 西有蚂蚁体验技术部出品',
+        searchPlaceholder: '请输入搜索关键字',
+        home: '首页'
     },
-    menu: {
+    menu: { // 菜单栏语言配置
         'menu1': '站点首页',
         'menu2': '站点设置',
         'menu2-1': '基本设置',
@@ -28,5 +30,68 @@ export default {
         'menu8-1': '编辑资料',
         'menu8-2': '修改密码',
         'menu8-3': '退出登陆',
-    }
+    },
+    settingLan: {
+        'base-setting': '基本设置',
+        'advance-setting': '基本设置',
+        'seo-setting': 'SEO设置',
+        'hot-search': '搜索热词',
+    },
+    userLan: { // 用户文字配置
+        'edit-info': '编辑资料',
+        'edit-password': '修改密码',
+        'log-out': '退出登陆',
+        'nickname': '昵称',
+        'phone': '手机',
+        'email': '邮箱',
+        'note': '备注',
+        'old-pass': '原密码',
+        'new-pass': '新密码',
+        'confirm-pass': '确认密码',
+    },
+    buttonLan: { // 按钮文字配置
+        'save': '保存',
+        'reset': '重置',
+        'search': '搜索',
+        'filter': '筛选',
+        'add': '新增',
+        'delete': '删除',
+        'cancel': '取消',
+        'back': '返回',
+        'upload': '上传',
+        'download': '下载',
+    },
+    validateLan: {},
+    homeLan: { // 首页
+        homeSectionA: { // 统计版块
+            'total-sale': '总销售额',
+            'week-on-year': '周同比',
+            'day-on-year': '日同比',
+            'daily-sales': '日销售额',
+            'total-visit': '访问量',
+            'daily-visit': '日访问量',
+            'total-pay-times': '支付笔数',
+            'converion-rate': '转化率',
+            'activity-effects': '运营活动效果',
+        },
+        homeSectionB: { // 搜索统计
+            'hot-search': '热门搜索',
+            'search-users': '搜索用户数',
+            'search-per-person': '人均搜索次数',
+            'rank': '排名',
+            'search-word': '搜索关键词',
+            'users': '用户数',
+            'week-increase': '周增幅',
+        },
+        homeSectionC: { // 销售额类别占比
+            'sales-category-ratio': '销售额类别占比',
+            'total-sales': '销售额',
+        },
+        homeSectionD: { // 最新留言
+            'total-sales': '最新留言',
+        },
+        homeSectionE: { // 热门新闻
+            'hot-news': '热门新闻',
+        },
+    },
 };
