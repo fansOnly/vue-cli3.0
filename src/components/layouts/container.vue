@@ -15,5 +15,7 @@ export default {
 }
 </script>
 <style scoped>
-@import './index.css';
+    .ant-back-top-icon {
+		background-size: 100%!important;
+	}
 </style>

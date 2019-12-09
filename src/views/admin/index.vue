@@ -1,6 +1,6 @@
 <template>
 	<div class>
-		<div class="page" :style="{minHeight:getWindowHeight}">
+		<div class="page" :style="{minHeight: clientHeight}">
 		<!-- <div class="page"> -->
 			<a-layout-sider class="sidebar" v-model="collapsed">
 				<div class="logo-wrap">
@@ -45,7 +45,7 @@
 			};
 		},
 		computed: {
-			getWindowHeight: function() {
+			clientHeight: function() {
 				// return window.screen.availHeight + 'px';
 				return document.documentElement.clientHeight + 'px';
 			}

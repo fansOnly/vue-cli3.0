@@ -21,5 +21,13 @@ module.exports = {
         plugins: [
             new BundleAnalyzerPlugin(),
         ]
-    }
+    },
+    // pluginOptions: {
+    //     i18n: {
+    //         locale: 'ja',             // The locale of project localization
+    //         fallbackLocale: 'en',     // The fallback locale of project localization
+    //         localeDir: 'lang',     // The directory where store localization messages of project
+    //         enableInSFC: false        // Enable locale messages in Single file components
+    //     }
+    // }
 }

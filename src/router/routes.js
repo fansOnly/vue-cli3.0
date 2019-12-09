@@ -61,6 +61,11 @@ const routes = [
 		path: '/admin',
 		name: 'admin',
 		component: Admin,
+		meta: {
+			requireAuth: true,
+			breadcrumbName: '后台管理',
+			depth: 1,
+		},
 		children: [
 			{
 				path: '/admin/index',
@@ -244,11 +249,6 @@ const routes = [
 				},
 			},
 		],
-		meta: {
-			requireAuth: true,
-			breadcrumbName: '后台管理',
-			depth: 1,
-		},
 	},
 	{
 		path: '*',

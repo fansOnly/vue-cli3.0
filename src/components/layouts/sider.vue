@@ -69,182 +69,8 @@
 		</a-menu>
 	</div>
 </template>
-<script>
-	const menus = [
-		{
-			key: 'index',
-			name: '站点首页',
-			icon: 'home',
-			path: '/admin/index',
-		},
-		{
-			key: 'siteinfo',
-			name: '站点设置',
-			icon: 'setting',
-			path: '',
-			subs: [
-				{
-					key: 'siteinfo.site',
-					name: '基本设置',
-					icon: '',
-					path: '/admin/siteinfo/site'
-				},
-				{
-					key: 'siteinfo.banner',
-					name: '幻灯片管理',
-					icon: '',
-					path: '/admin/siteinfo/banner'
-				},
-				{
-					key: 'siteinfo.upload',
-					name: '上传设置',
-					icon: '',
-					path: '/admin/siteinfo/upload'
-				},
-			],
-		},
-		{
-			key: 'member',
-			name: '会员管理',
-			icon: 'user',
-			path: '',
-			subs: [
-				{
-					key: 'member.index',
-					name: '会员列表',
-					icon: '',
-					path: '/admin/member/index'
-				},
-			]
-		},
-		{
-			key: 'info',
-			name: '信息发布',
-			icon: 'table',
-			path: '',
-			subs: [
-				{
-					key: 'info.index',
-					name: '文章管理',
-					icon: '',
-					path: '/admin/info/index'
-				},
-				{
-					key: 'info.class',
-					name: '文章分类管理',
-					icon: '',
-					path: '/admin/info/class'
-				},
-				{
-					key: 'info.recycle',
-					name: '文章回收站',
-					icon: '',
-					path: '/admin/info/recycle'
-				},
-			]
-		},
-		{
-			key: 'message',
-			name: '留言管理',
-			icon: 'contacts',
-			path: '',
-			subs: [
-				{
-					key: 'message.index',
-					name: '全部留言',
-					icon: '',
-					path: '/admin/message/index'
-				},
-			]
-		},
-		{
-			key: 'lev1',
-			name: '一级分类',
-			icon: 'table',
-			path: '',
-			subs: [
-				{
-					key: 'lev1.lev2',
-					name: '二级分类',
-					icon: '',
-					path: ''
-				},
-				{
-					key: 'lev1.lev21',
-					name: '二级分类',
-					icon: '',
-					path: '',
-					subs: [
-						{
-							key: 'lev1.lev21.lev3',
-							name: '三级分类',
-							icon: '',
-							path: ''
-						}
-					]
-				}
-			]
-		},
-		{
-			key: 'assets',
-			name: '资源管理',
-			icon: 'file',
-			path: '/admin/assets/index',
-		},
-		{
-			key: 'account',
-			name: '账号管理',
-			icon: 'team',
-			path: '',
-			subs: [
-				{
-					key: 'account.index',
-					name: '管理员列表',
-					icon: '',
-					path: '/admin/account/index'
-				},
-				{
-					key: 'account.class',
-					name: '管理员分类',
-					icon: '',
-					path: '/admin/account/class'
-				},
-				{
-					key: 'account.permisson',
-					name: '管理员权限',
-					icon: '',
-					path: '/admin/account/permission'
-				},
-			]
-		},
-		{
-			key: 'user',
-			name: '个人设置',
-			icon: 'export',
-			path: '',
-			subs: [
-				{
-					key: 'user.userinfo',
-					name: '编辑资料',
-					icon: '',
-					path: '/admin/user/userinfo'
-				},
-				{
-					key: 'user.changepass',
-					name: '修改密码',
-					icon: '',
-					path: '/admin/user/changepass'
-				},
-				{
-					key: 'user.logout',
-					name: '退出登陆',
-					icon: '',
-					path: ''
-				},
-			]
-		},
-	];
 
+<script>
 	export default {
 		name: 'SiderComponent',
 		props: {
@@ -257,18 +83,18 @@
 		},
 		data() {
 			return {
-				menus,
+				menus: [],
 				defaultOpenKeys: [],
 				selectedKeys: ['index'],
 				openKeys: [],
 			};
 		},
 		created() {
-			const currentPath = localStorage.getItem('currentPath') || '';
+			this.menus = this.createMenu();
 
-			const flatMenus = arr => arr.reduce((res, cur) => res.concat(cur.subs ? flatMenus(cur.subs) : cur), [])
-			const menusArr = flatMenus(menus);
-			const currentKey = menusArr.filter(item => item.path === currentPath)[0].key;
+			const currentPath = localStorage.getItem('currentPath') || '';
+			const flatMenus = arr => arr.reduce((res, cur) => res.concat(cur.subs ? flatMenus(cur.subs) : cur), []);
+			const currentKey = flatMenus(this.menus).filter(item => item.path === currentPath)[0].key;
 			this.selectedKeys = [currentKey];
 
 			const openKeys = currentKey.split('.').reduce((res, key, index) => [...res, res[index - 1] ? `${res[index - 1]}.${key}` :  key], []);
@@ -276,26 +102,22 @@
 			this.openKeys = openKeys;
 		},
 		mounted() {
-			// console.log('router info:', this.$route);
-			let rootKeys = [];
-			this.menus.map(item => {
-				rootKeys.push(item.key)
-			})
-			this.rootKeys = rootKeys;
+			this.rootKeys = this.menus.map(item => item.key);
 		},
 		methods: {
 			onOpenMenu(openKeys) {
-				// console.log('openKeys', openKeys);
 				const latestOpenKey = openKeys.length && openKeys.find(key => this.openKeys.indexOf(key) === -1);
-				// console.log('latestOpenKey', latestOpenKey);
 				if (this.rootKeys.indexOf(latestOpenKey) == '-1') {
 					this.openKeys = openKeys;
 				} else {
 					this.openKeys = [latestOpenKey] || [];
 				}
 			},
-			clickMenuItem({ key }) {
+			clickMenuItem({ key, keyPath }) {
 				// console.log('clickMenuItem', item, key, keyPath);
+				if (keyPath.length == 1) {
+					this.openKeys = [];
+				}
 				if (key == 'user.logout') {
 					this.$message.success('退出登陆', 1).then(() => {
 						localStorage.clear();
@@ -306,6 +128,204 @@
 			selectKeys({ selectedKeys }) {
 				// console.log('selectKeys', { item, key, selectedKeys });
 				this.selectedKeys = selectedKeys;
+			},
+			createMenu() {
+				return [
+					{
+						key: 'index',
+						// name: '站点首页',
+						name: this.$t('menu.menu1'),
+						icon: 'home',
+						path: '/admin/index',
+					},
+					{
+						key: 'siteinfo',
+						// name: '站点设置',
+						name: this.$t('menu.menu2'),
+						icon: 'setting',
+						path: '',
+						subs: [
+							{
+								key: 'siteinfo.site',
+								// name: '基本设置',
+								name: this.$t('menu.menu2-1'),
+								icon: '',
+								path: '/admin/siteinfo/site'
+							},
+							{
+								key: 'siteinfo.banner',
+								// name: '幻灯片管理',
+								name: this.$t('menu.menu2-2'),
+								icon: '',
+								path: '/admin/siteinfo/banner'
+							},
+							{
+								key: 'siteinfo.upload',
+								// name: '上传设置',
+								name: this.$t('menu.menu2-3'),
+								icon: '',
+								path: '/admin/siteinfo/upload'
+							},
+						],
+					},
+					{
+						key: 'member',
+						// name: '会员管理',
+						name: this.$t('menu.menu3'),
+						icon: 'user',
+						path: '',
+						subs: [
+							{
+								key: 'member.index',
+								// name: '会员列表',
+								name: this.$t('menu.menu3-1'),
+								icon: '',
+								path: '/admin/member/index'
+							},
+						]
+					},
+					{
+						key: 'info',
+						// name: '信息发布',
+						name: this.$t('menu.menu4'),
+						icon: 'table',
+						path: '',
+						subs: [
+							{
+								key: 'info.index',
+								// name: '文章管理',
+								name: this.$t('menu.menu4-1'),
+								icon: '',
+								path: '/admin/info/index'
+							},
+							{
+								key: 'info.class',
+								// name: '文章分类管理',
+								name: this.$t('menu.menu4-2'),
+								icon: '',
+								path: '/admin/info/class'
+							},
+							{
+								key: 'info.recycle',
+								// name: '文章回收站',
+								name: this.$t('menu.menu4-3'),
+								icon: '',
+								path: '/admin/info/recycle'
+							},
+						]
+					},
+					{
+						key: 'message',
+						// name: '留言管理',
+						name: this.$t('menu.menu5'),
+						icon: 'contacts',
+						path: '',
+						subs: [
+							{
+								key: 'message.index',
+								// name: '全部留言',
+								name: this.$t('menu.menu5-1'),
+								icon: '',
+								path: '/admin/message/index'
+							},
+						]
+					},
+					{
+						key: 'assets',
+						// name: '资源管理',
+						name: this.$t('menu.menu6'),
+						icon: 'file',
+						path: '/admin/assets/index',
+					},
+					{
+						key: 'account',
+						// name: '账号管理',
+						name: this.$t('menu.menu7'),
+						icon: 'team',
+						path: '',
+						subs: [
+							{
+								key: 'account.index',
+								// name: '管理员列表',
+								name: this.$t('menu.menu7-1'),
+								icon: '',
+								path: '/admin/account/index'
+							},
+							{
+								key: 'account.class',
+								// name: '管理员分类',
+								name: this.$t('menu.menu7-2'),
+								icon: '',
+								path: '/admin/account/class'
+							},
+							{
+								key: 'account.permisson',
+								// name: '管理员权限',
+								name: this.$t('menu.menu7-3'),
+								icon: '',
+								path: '/admin/account/permission'
+							},
+						]
+					},
+					{
+						key: 'user',
+						// name: '个人设置',
+						name: this.$t('menu.menu8'),
+						icon: 'export',
+						path: '',
+						subs: [
+							{
+								key: 'user.userinfo',
+								// name: '编辑资料',
+								name: this.$t('menu.menu8-1'),
+								icon: '',
+								path: '/admin/user/userinfo'
+							},
+							{
+								key: 'user.changepass',
+								// name: '修改密码',
+								name: this.$t('menu.menu8-2'),
+								icon: '',
+								path: '/admin/user/changepass'
+							},
+							{
+								key: 'user.logout',
+								// name: '退出登陆',
+								name: this.$t('menu.menu8-3'),
+								icon: '',
+								path: ''
+							},
+						]
+					},
+					// {
+					// 	key: 'lev1',
+					// 	name: '一级分类',
+					// 	icon: 'table',
+					// 	path: '',
+					// 	subs: [
+					// 		{
+					// 			key: 'lev1.lev2',
+					// 			name: '二级分类',
+					// 			icon: '',
+					// 			path: ''
+					// 		},
+					// 		{
+					// 			key: 'lev1.lev21',
+					// 			name: '二级分类',
+					// 			icon: '',
+					// 			path: '',
+					// 			subs: [
+					// 				{
+					// 					key: 'lev1.lev21.lev3',
+					// 					name: '三级分类',
+					// 					icon: '',
+					// 					path: ''
+					// 				}
+					// 			]
+					// 		}
+					// 	]
+					// },
+				];
 			}
 		},
 	};
