@@ -74,28 +74,9 @@ const routes = [
 				alias: '/admin',
 				meta: {
 					requireAuth: true,
+					breadcrumbName: '首页',
 					depth: 2,
 				}
-			},
-			{
-				path: '/admin/user/userinfo',
-				name: 'userinfo',
-				component: UserInfo,
-				meta: {
-					requireAuth: true,
-					breadcrumbName: '修改资料',
-					depth: 2,
-				},
-			},
-			{
-				path: '/admin/user/changepass',
-				name: 'changepass',
-				component: ChangePass,
-				meta: {
-					requireAuth: true,
-					breadcrumbName: '修改密码',
-					depth: 2,
-				},
 			},
 			{
 				path: '/admin/siteinfo/site',
@@ -144,46 +125,6 @@ const routes = [
 				meta: {
 					requireAuth: true,
 					breadcrumbName: '会员管理',
-					depth: 2,
-				},
-			},
-			{
-				path: '/admin/account/index',
-				name: 'account',
-				component: Account,
-				meta: {
-					requireAuth: true,
-					breadcrumbName: '管理员列表',
-					depth: 2,
-				},
-			},
-			{
-				path: '/admin/account/class',
-				name: 'accountClass',
-				component: AccountClass,
-				meta: {
-					requireAuth: true,
-					breadcrumbName: '管理员分类',
-					depth: 2,
-				},
-			},
-			{
-				path: '/admin/account/permission',
-				name: 'permission',
-				component: Permission,
-				meta: {
-					requireAuth: true,
-					breadcrumbName: '管理员权限',
-					depth: 2,
-				},
-			},
-			{
-				path: '/admin/assets/index',
-				name: 'assets',
-				component: Assets,
-				meta: {
-					requireAuth: true,
-					breadcrumbName: '系统资源',
 					depth: 2,
 				},
 			},
@@ -245,6 +186,66 @@ const routes = [
 				meta: {
 					requireAuth: true,
 					breadcrumbName: '留言管理',
+					depth: 2,
+				},
+			},
+			{
+				path: '/admin/assets/index',
+				name: 'assets',
+				component: Assets,
+				meta: {
+					requireAuth: true,
+					breadcrumbName: '系统资源',
+					depth: 2,
+				},
+			},
+			{
+				path: '/admin/account/index',
+				name: 'account',
+				component: Account,
+				meta: {
+					requireAuth: true,
+					breadcrumbName: '管理员列表',
+					depth: 2,
+				},
+			},
+			{
+				path: '/admin/account/class',
+				name: 'accountClass',
+				component: AccountClass,
+				meta: {
+					requireAuth: true,
+					breadcrumbName: '管理员分类',
+					depth: 2,
+				},
+			},
+			{
+				path: '/admin/account/permission',
+				name: 'permission',
+				component: Permission,
+				meta: {
+					requireAuth: true,
+					breadcrumbName: '管理员权限',
+					depth: 2,
+				},
+			},
+			{
+				path: '/admin/user/userinfo',
+				name: 'userinfo',
+				component: UserInfo,
+				meta: {
+					requireAuth: true,
+					breadcrumbName: '修改资料',
+					depth: 2,
+				},
+			},
+			{
+				path: '/admin/user/changepass',
+				name: 'changepass',
+				component: ChangePass,
+				meta: {
+					requireAuth: true,
+					breadcrumbName: '修改密码',
 					depth: 2,
 				},
 			},

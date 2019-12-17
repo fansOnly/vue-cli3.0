@@ -1,5 +1,6 @@
 <template>
 	<div id="app">
+		<div class="progress" v-show="progress"><a-progress strokeColor="#1890ff" :showInfo="false" :strokeWidth="2" strokeLinecap="square" :percent="percent" /></div>
 		<a-locale-provider :locale="LAN">
 			<a-spin :spinning="spinning">
 				<a-back-top />
@@ -12,25 +13,21 @@
 	import { createNamespacedHelpers } from 'vuex'
 	const { mapState } = createNamespacedHelpers('locale')
 
-	// import moment from 'moment';
-	// import zh_CN from 'ant-design-vue/lib/locale-provider/zh_CN';
-	// import 'moment/locale/zh-cn';
-	// moment.locale('zh-cn');
+	import process from '@/mixins/process'
 
 	export default {
 		name: 'App',
 		data() {
 			return {
-				// zh_CN,
 				spinning: true,
+				progress: true,
+				percent: 0
 			};
 		},
 		computed: {
 			...mapState(['LAN'])
 		},
-		created() {
-			// console.log('store', this.$store)
-		},
+		mixins: [process],
 		mounted() {
 			this.spinning = false;
 		}
@@ -43,5 +40,14 @@
 		-moz-osx-font-smoothing: grayscale;
 		font-size: 14px;
 		color: #2c3e50;
+	}
+	.progress {
+		position: fixed;
+		left: 0;
+		right: 0;
+		top: 0;
+		height: 2px;
+		transform: translateY(-11px);
+		/* overflow: hidden; */
 	}
 </style>

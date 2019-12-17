@@ -22,6 +22,7 @@ const codeMessage = {
 	504: '网关超时。',
 };
 
+// 挡板数据开关
 const useMock = true;
 
 if (process.env.NODE_ENV == 'development') {

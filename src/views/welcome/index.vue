@@ -1,7 +1,7 @@
 <template src='./index.html'></template>
 <script>
-	import moment from 'moment';
-	import { parseTomoney } from '@/utils/util';
+	import dayjs from 'dayjs'
+	import { parseTomoney } from '@/utils/util'
 	import {
 		visitEchartOption,
 		payEchartOption,
@@ -9,7 +9,7 @@
 		searchAvgEchartOption,
 		salesEchartOption,
 		searchHotColumns
-	} from './config';
+	} from './config'
 	import {
 		getVisitsByWeek,
 		getPayByWeek,
@@ -17,7 +17,7 @@
 		getSearchAvgByWeek,
 		getSalesByWeek,
 		getSearchHot
-	} from '@/api/statics';
+	} from '@/api/statics'
 
 	let salesDataSource = {};
 	let salesEchart = null;
@@ -30,26 +30,26 @@
 				comments: [
 					{
 						id: 22234234,
-						actions: ['回复'],
+						actions: [this.$t('GLOBAL.BTN_REPLY')],
 						author: 'Han Solo',
 						avatar:
 							'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
 						content:
 							'We supply a series of design principles, practical patterns and .',
-						datetime: moment().subtract(1, 'days')
+						datetime: dayjs().subtract(1, 'days')
 					},
 					{
 						id: 2223423422222,
-						actions: ['回复'],
+						actions: [this.$t('GLOBAL.BTN_REPLY')],
 						author: 'Han Solo',
 						avatar:
 							'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
 						content:
 							'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-						datetime: moment().subtract(2, 'days')
+						datetime: dayjs().subtract(2, 'days')
 					}
 				],
-				moment,
+				dayjs,
 				news: [
 					{ title: 'Ant Design Title 1' },
 					{ title: 'Ant Design Title 2' },

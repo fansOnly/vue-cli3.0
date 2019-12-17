@@ -18,7 +18,7 @@ router.beforeEach((to, from, next) => {
     // console.log('beforeEach global', to, from);
 
     if (to.meta.requireAuth) {
-        if (!localStorage.getItem('token')) {
+        if (!sessionStorage.getItem('token')) {
             let secondsToGo = 5;
             const modal = Modal.warning({
                 title: '会话过期，请重新登陆',
@@ -58,7 +58,7 @@ router.beforeEach((to, from, next) => {
         }
     }
 
-    localStorage.setItem('currentPath', to.path);
+    sessionStorage.setItem('currentPath', to.path);
     
     next();
 })

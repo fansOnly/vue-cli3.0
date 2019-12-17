@@ -1,3 +1,8 @@
+import { message } from 'ant-design-vue'
+
+import i18n from '@/i18n'
+import menuLan from '@/i18n/lang/menu'
+
 import { SWITCH_LOCAL } from '../mutations'
 
 import zh_CN from '../../../node_modules/ant-design-vue/lib/locale-provider/zh_CN';
@@ -9,30 +14,208 @@ import 'moment/locale/zh-cn';
 import 'moment/locale/zh-tw';
 import 'moment/locale/en-gb';
 
+import { Spin } from 'ant-design-vue'
+
 const state = {
-    locale: '',
-    LAN: zh_CN
+    locale: 'cn',
+    LAN: zh_CN,
+    menus: [],
 }
 
 const getters = {
-    locale: () => {
-        return localStorage.getItem('locale') || 'zh_CN'
+    locale: state => {
+        return localStorage.getItem('locale') || state.locale
+    },
+    menus: state => {
+        return createMenu(state.locale) || state.menus
     }
 }
 
 const actions = {
-    switchLocale ({ commit }, payload) {
-        commit('SWITCH_LOCAL', payload)
+    switchLocale({ commit }, payload) {
+        localStorage.setItem('locale', payload);
+        message.loading('初始化语言...', 2, () => {
+            commit('SWITCH_LOCAL', payload)
+        });
     }
 }
 
 const mutations = {
-    [SWITCH_LOCAL] (state, locale) {
+    [SWITCH_LOCAL](state, locale) {
         state.locale = locale;
-        locale === 'zh_CN' && (state.LAN = zh_CN, moment.locale('zh-cn'));
-        locale === 'zh_TW' && (state.LAN = zh_TW, moment.locale('zh-tw'));
-        locale === 'en_US' && (state.LAN = en_US, moment.locale('en-gb'));
+        state.menus = createMenu(locale);
+        switch (locale) {
+            case 'cn':
+                state.LAN = zh_CN;
+                moment.locale('zh-cn');
+                i18n.locale = 'cn';
+                break;
+            case 'hk':
+                state.LAN = zh_TW;
+                moment.locale('zh-tw');
+                i18n.locale = 'hk';
+                break;
+            case 'en':
+                state.LAN = en_US;
+                moment.locale('en-gb');
+                i18n.locale = 'en';
+                break;
+            default:
+                state.LAN = zh_CN;
+                moment.locale('zh-cn');
+                i18n.locale = 'cn';
+                break;
+        }
     }
+}
+
+const createMenu = locale => {
+    return [
+        {
+            key: 'index',
+            name: menuLan.MENU1[locale],
+            icon: 'home',
+            path: '/admin/index',
+        },
+        {
+            key: 'siteinfo',
+            name: menuLan.MENU2[locale],
+            icon: 'setting',
+            path: '',
+            subs: [
+                {
+                    key: 'siteinfo.site',
+                    name: menuLan.MENU2_1[locale],
+                    icon: '',
+                    path: '/admin/siteinfo/site'
+                },
+                {
+                    key: 'siteinfo.banner',
+                    name: menuLan.MENU2_2[locale],
+                    icon: '',
+                    path: '/admin/siteinfo/banner'
+                },
+                {
+                    key: 'siteinfo.upload',
+                    name: menuLan.MENU2_3[locale],
+                    icon: '',
+                    path: '/admin/siteinfo/upload'
+                },
+            ],
+        },
+        {
+            key: 'member',
+            name: menuLan.MENU3[locale],
+            icon: 'user',
+            path: '',
+            subs: [
+                {
+                    key: 'member.index',
+                    name: menuLan.MENU3_1[locale],
+                    icon: '',
+                    path: '/admin/member/index'
+                },
+            ]
+        },
+        {
+            key: 'info',
+            name: menuLan.MENU4[locale],
+            icon: 'table',
+            path: '',
+            subs: [
+                {
+                    key: 'info.index',
+                    name: menuLan.MENU4_1[locale],
+                    icon: '',
+                    path: '/admin/info/index'
+                },
+                {
+                    key: 'info.class',
+                    name: menuLan.MENU4_2[locale],
+                    icon: '',
+                    path: '/admin/info/class'
+                },
+                {
+                    key: 'info.recycle',
+                    name: menuLan.MENU4_3[locale],
+                    icon: '',
+                    path: '/admin/info/recycle'
+                },
+            ]
+        },
+        {
+            key: 'message',
+            name: menuLan.MENU5[locale],
+            icon: 'contacts',
+            path: '',
+            subs: [
+                {
+                    key: 'message.index',
+                    name: menuLan.MENU5_1[locale],
+                    icon: '',
+                    path: '/admin/message/index'
+                },
+            ]
+        },
+        {
+            key: 'assets',
+            name: menuLan.MENU6[locale],
+            icon: 'file',
+            path: '/admin/assets/index',
+        },
+        {
+            key: 'account',
+            name: menuLan.MENU7[locale],
+            icon: 'team',
+            path: '',
+            subs: [
+                {
+                    key: 'account.index',
+                    name: menuLan.MENU7_1[locale],
+                    icon: '',
+                    path: '/admin/account/index'
+                },
+                {
+                    key: 'account.class',
+                    name: menuLan.MENU7_2[locale],
+                    icon: '',
+                    path: '/admin/account/class'
+                },
+                {
+                    key: 'account.permisson',
+                    name: menuLan.MENU7_3[locale],
+                    icon: '',
+                    path: '/admin/account/permission'
+                },
+            ]
+        },
+        {
+            key: 'user',
+            name: menuLan.MENU8[locale],
+            icon: 'export',
+            path: '',
+            subs: [
+                {
+                    key: 'user.userinfo',
+                    name: menuLan.MENU8_1[locale],
+                    icon: '',
+                    path: '/admin/user/userinfo'
+                },
+                {
+                    key: 'user.changepass',
+                    name: menuLan.MENU8_2[locale],
+                    icon: '',
+                    path: '/admin/user/changepass'
+                },
+                {
+                    key: 'user.logout',
+                    name: menuLan.MENU8_3[locale],
+                    icon: '',
+                    path: ''
+                },
+            ]
+        },
+    ];
 }
 
 export default {

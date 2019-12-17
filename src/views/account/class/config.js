@@ -1,4 +1,4 @@
-import { pagination, filters, ACCOUNT_CLASS_STATUS, BADGE_STATUS } from '@/utils/configSetting'
+import { pagination, filters, ACCOUNT_CLASS_STATUS, BADGE_STATUS } from '@/config/setting'
 
 export default {
     columns: [

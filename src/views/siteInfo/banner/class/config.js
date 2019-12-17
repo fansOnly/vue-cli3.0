@@ -1,5 +1,5 @@
 import { date2Timestamp } from '@/utils/util'
-import { pagination, filters, BANNER_CLASS_STATUS, BADGE_STATUS } from '@/utils/configSetting'
+import { pagination, filters, BANNER_CLASS_STATUS, BADGE_STATUS } from '@/config/setting'
 
 export default {
     columns: [
@@ -32,7 +32,7 @@ export default {
 			title: '操作',
 			dataIndex: 'action',
 			scopedSlots: { customRender: 'actionSlot' },
-			width: '185px'
+			width: '200px'
 		}
 	],
 	pagination: {

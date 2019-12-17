@@ -14,7 +14,7 @@ const deepCopy = (obj, cache = []) => {
 	}
 
 	// if obj is hit, it is in circular structure
-	const hit = find(cache, c => c.original === obj)
+	const hit = cache.filter(c => c.original === obj)[0];
 	if (hit) {
 		return hit.copy
 	}
@@ -105,7 +105,7 @@ const randString = size => {
 };
 
 /**
-* 格式化数字 1234,4568,9
+* 格式化数字 1234,4568,9.00
 * @param  {Number} num
 * @param  {String} str
 * @return {String}
@@ -114,7 +114,7 @@ const parseTomoney = (num, str = ',') => {
 	num = parseFloat(num.toString().replace(/(\d+)(\.\d{2})(\d+)/g, '$1$2'));
 	let [integer, decimal] = String.prototype.split.call(num, '.');
 	integer = integer.replace(/\d(?=(\d{3})+$)/g, `$&${str}`);
-	return integer + (decimal ?  '.' + decimal : '');
+	return integer + (decimal ?  '.' + decimal : '.00');
 };
 
 export {

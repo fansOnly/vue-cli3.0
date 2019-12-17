@@ -41,11 +41,20 @@ export default {
 <style scoped>
 .modal-header {
     position: relative;
-    top: -7px;
+    top: -24px;
     text-align: center;
+}
+.modal-header::after {
+    content: "";
+    position: absolute;
+    left: -24px;
+    right: -24px;
+    bottom: 0;
+    height: 0;
+    border-bottom: 1px solid #e8e8e8;
 }
 .modal-header_title {
     font-size: 18px;
-    line-height: 2;
+    line-height: 54px;
 }
 </style>

@@ -3,13 +3,13 @@
 	<div class="container">
 		<a-form :form="form" layout="vertical" @submit="handleSubmit">
 			<a-tabs type="card" @change="handleTabChange">
-				<a-tab-pane tab="基本设置" key="base_info">
+				<a-tab-pane :tab="$t('GLOBAL.BASE_SETTING')" key="base_info">
 					<a-row :gutter="24">
 						<a-col :span="16">
-							<a-form-item label="站点名称">
+							<a-form-item :label="$t('GLOBAL.SITE_NAME')">
 								<a-input v-decorator="['name',{rules: [{required: true, force: true}], initialValue: base_info.name}]" />
 							</a-form-item>
-							<a-form-item label="联系方式">
+							<a-form-item :label="$t('GLOBAL.SITE_PHONE')">
 								<a-input v-decorator="['phone',{rules: [{required: true, pattern: /^1[3456789]\d{9}$/, message: '错误的手机号码', force: true}], initialValue: base_info.phone}]">
 									<a-select slot="addonBefore" v-decorator="[ 'prefix', { initialValue: '86' }]"
 										style="width: 70px">
@@ -18,38 +18,38 @@
 									</a-select>
 								</a-input>
 							</a-form-item>
-							<a-form-item label="联系邮箱">
+							<a-form-item :label="$t('GLOBAL.SITE_EMAIL')">
 								<a-input v-decorator="['email',{rules: [{type: 'email', message: '错误的邮箱格式'}], initialValue: base_info.email}]" />
 							</a-form-item>
-							<a-form-item label="版权信息">
+							<a-form-item :label="$t('GLOBAL.COPY_RIGHT')">
 								<a-input v-decorator="['copyright',{initialValue: base_info.copyright}]" />
 							</a-form-item>
-							<a-form-item label="站点备注">
+							<a-form-item :label="$t('GLOBAL.SITE_NOTE')">
 								<a-textarea v-decorator="['content',{initialValue: base_info.content}]" :rows="4" />
 							</a-form-item>
-							<a-button type='primary' html-type='submit'>保存</a-button>
+							<a-button type='primary' html-type='submit'>{{$t('GLOBAL.BTN_SAVE')}}</a-button>
 						</a-col>
 					</a-row>
 				</a-tab-pane>
-				<a-tab-pane tab="高级设置" key="advance_info">
+				<a-tab-pane :tab="$t('GLOBAL.ADVANCE_SETTING')" key="advance_info">
 				</a-tab-pane>
-				<a-tab-pane tab="SEO设置" key="seo_info">
+				<a-tab-pane :tab="$t('GLOBAL.SEO_SETTING')" key="seo_info">
 					<a-row :gutter="24">
 						<a-col :span="16">
-							<a-form-item label="SEO标题">
+							<a-form-item :label="$t('GLOBAL.SEO_TITLE')">
 								<a-textarea v-decorator="['seo_title',{initialValue: seo_info.seo_title}]" :rows="2" />
 							</a-form-item>
-							<a-form-item label="SEO关键字">
+							<a-form-item :label="$t('GLOBAL.SEO_KEYWORD')">
 								<a-textarea v-decorator="['seo_keyword',{initialValue: seo_info.seo_keyword}]" :rows="2" />
 							</a-form-item>
-							<a-form-item label="SEO描述">
+							<a-form-item :label="$t('GLOBAL.SEO_DESCRIPTION')">
 								<a-textarea v-decorator="['seo_description',{initialValue: seo_info.seo_description}]" :rows="4" />
 							</a-form-item>
-							<a-button type='primary' html-type='submit'>保存</a-button>
+							<a-button type='primary' html-type='submit'>{{$t('GLOBAL.BTN_SAVE')}}</a-button>
 						</a-col>
 					</a-row>
 				</a-tab-pane>
-				<a-tab-pane tab="搜索热词" key="hotwords_info">
+				<a-tab-pane :tab="$t('GLOBAL.HOT_SEARCH')" key="hotwords_info">
 					<template v-for="(tag, index) in hotwords_info">
 						<a-tag :key="tag" closable :afterClose="() => handleClose(tag)" :style="{height: '26px',lineHeight:'26px'}">
 							{{tag}}
@@ -59,7 +59,7 @@
 						:value="inputValue" @change="handleInputChange" @blur="handleInputCancel"
 						@keyup.enter="handleInputConfirm" />
 					<a-tag v-else @click="showInput" :style="{height: '26px',lineHeight:'26px',background: '#fff', borderStyle: 'dashed'}">
-						<a-icon type="plus" />热词
+						<a-icon type="plus" />{{$t('GLOBAL.HOT_WORD')}}
 					</a-tag>
 				</a-tab-pane>
 			</a-tabs>

@@ -25,18 +25,18 @@
 					<a-menu slot="overlay" @click="switchUserOption">
 						<a-menu-item key="user.userinfo">
 							<router-link to='/admin/user/userinfo'>
-								<a-icon type="user" style="margin-right:5px;" />修改资料
+								<a-icon type="user" style="margin-right:5px;" />{{$t('GLOBAL.USER_MODI_INFO')}}
 							</router-link>
 						</a-menu-item>
 						<a-menu-item key="user.changepass">
 							<router-link to='/admin/user/changepass'>
-								<a-icon type="setting" style="margin-right:5px;" />修改密码
+								<a-icon type="setting" style="margin-right:5px;" />{{$t('GLOBAL.USER_MODI_PASS')}}
 							</router-link>
 						</a-menu-item>
 						<a-menu-divider />
 						<a-menu-item key="user.logout">
 							<a href="javascript:;">
-								<a-icon type="poweroff" style="margin-right:5px;" />退出登录
+								<a-icon type="poweroff" style="margin-right:5px;" />{{$t('GLOBAL.USER_LOG_OUT')}}
 							</a>
 						</a-menu-item>
 					</a-menu>
@@ -50,10 +50,10 @@
 							style="color:#777;font-size:20px;vertical-align:middle;cursor:pointer;"
 						/>
 					</div>
-					<a-menu slot="overlay" :selectedKeys="selectedKeys" @click="switchLocale">
-						<template v-for="item in locales">
+					<a-menu slot="overlay" :selectedKeys="[currentLocale]" @click="switchLocale">
+						<template v-for="(item, index) in locales">
 							<a-menu-item :key="item">
-								<a href="javascript:;">{{languageIcons[item]}} {{languageLabels[item]}}</a>
+								<a href="javascript:;">{{languageIcons[item]}} {{languageLabels[currentLocale][index]}}</a>
 							</a-menu-item>
 						</template>
 					</a-menu>
@@ -64,21 +64,6 @@
 </template>
 
 <script>
-	import { createNamespacedHelpers } from 'vuex'
-	const { mapGetters } = createNamespacedHelpers('locale')
-
-	const locales = ['zh_CN', 'zh_TW', 'en_US'];
-	const languageLabels = {
-		zh_CN: '简体中文',
-		zh_TW: '繁体中文',
-		en_US: 'English'
-	};
-	const languageIcons = {
-		zh_CN: '🇨🇳',
-		zh_TW: '🇭🇰',
-		en_US: '🇬🇧'
-	};
-
 	export default {
 		name: 'HeaderComponent',
 		props: {
@@ -91,18 +76,24 @@
 		},
 		data() {
 			return {
-				locales,
-				languageLabels,
-				languageIcons,
-				selectedKeys: [],
+				locales: ['cn', 'hk', 'en'],
+				languageLabels: {
+					'cn': ['简体中文', '繁体中文', '英文'],
+					'hk': ['簡體中文', '繁體中文', '英文'],
+					'en': ['Chinese', 'Chinese2', 'English'],
+				},
+				languageIcons: {
+					'cn': '🇨🇳',
+					'hk': '🇭🇰',
+					'en': '🇬🇧'
+				},
+				currentLocale: ''
 			};
 		},
-		computed: {
-			...mapGetters(['locale'])
-		},
 		created () {
-			this.selectedKeys = [this.locale];
-			this.$store.dispatch('locale/switchLocale', this.locale);
+			const locale = localStorage.getItem('locale') || 'cn';
+			this.currentLocale = locale;
+			this.$store.dispatch('locale/switchLocale', locale);
 		},
 		methods: {
 			// ...mapActions(['switchLocale']),
@@ -115,22 +106,21 @@
 			switchUserOption(item) {
 				if (item.key == 'user.logout') {
 					this.$message.success('退出登陆', 1).then(() => {
-						localStorage.clear();
+						sessionStorage.clear();
 						this.$router.push('/login');
 					});
 				}
 			},
 			switchLocale(item) {
 				// console.log('switchLocale', item);
-				console.log(`当前选择语言为: ${item.key} ${languageLabels[item.key]}`);
-				localStorage.setItem('locale', item.key);
-				this.selectedKeys = [item.key];
+				console.log(`当前选择语言为: ${item.key} - ${this.languageLabels[item.key][this.locales.indexOf(item.key)]}`);
+				this.currentLocale = item.key;
 				this.$store.dispatch('locale/switchLocale', item.key);
 			}
 		}
 	};
 </script>
-<style>
+<style scoped>
 	.header {
 		position: relative;
 		padding: 0 24px;
@@ -149,6 +139,8 @@
 	}
 
 	.search {
+		display: flex;
+		align-items: center;
 		margin-right: 15px;
 	}
 

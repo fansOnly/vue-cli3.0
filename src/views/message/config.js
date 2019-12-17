@@ -1,5 +1,5 @@
 import { date2Timestamp } from '@/utils/util'
-import { pagination, filters, MESSAGE_STATUS, BADGE_STATUS } from '@/utils/configSetting'
+import { pagination, filters, MESSAGE_STATUS, BADGE_STATUS } from '@/config/setting'
 
 export default {
     columns: [

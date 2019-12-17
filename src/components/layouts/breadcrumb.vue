@@ -11,7 +11,7 @@
                 </router-link>
             </template>
         </a-breadcrumb>
-        <a class="back" href="javascript: history.back(-1);">后退</a>
+        <a class="back" href="javascript: history.back(-1);">{{$t('GLOBAL.BTN_BACK')}}</a>
     </div>
 </template>
 <script>

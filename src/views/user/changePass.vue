@@ -5,16 +5,16 @@
 			<a-form :form="form" layout="vertical" @submit="handleSubmit">
 				<a-row :gutter="50">
 					<a-col :span="12">
-						<a-form-item label="原密码" hasFeedback>
+						<a-form-item :label="$t('GLOBAL.USER_OLD_PASS')" hasFeedback>
 							<a-input v-decorator="['oldPass',{rules: [{validator: validateOldPass, trigger: ['blur']}]}]" type="password" />
 						</a-form-item>
-						<a-form-item label="新密码" hasFeedback>
+						<a-form-item :label="$t('GLOBAL.USER_NEW_PASS')" hasFeedback>
 							<a-input v-decorator="['newPass',{rules: [{validator: compareOldAndNew, trigger: ['change', 'blur']}]}]" type="password" />
 						</a-form-item>
-                        <a-form-item label="确认密码" hasFeedback>
+                        <a-form-item :label="$t('GLOBAL.USER_CONFIRM_PASS')" hasFeedback>
 							<a-input v-decorator="['newPass2',{rules: [{validator: compareNewAndNew2, trigger: ['change', 'blur']}]}]" type="password" />
 						</a-form-item>
-                        <a-button type='primary' html-type='submit'>保存</a-button>
+                        <a-button type='primary' html-type='submit'>{{$t('GLOBAL.BTN_SAVE')}}</a-button>
 					</a-col>
 				</a-row>
 			</a-form>

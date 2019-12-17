@@ -8,45 +8,45 @@
             <a-form v-if="withFilter" ref="filterForm" class="ant-advanced-search-form" :form="form" @submit.prevent="handleFilter">
                 <a-row :gutter="24">
                     <a-col v-if="filters.hasID" :span="6">
-                        <a-form-item label="数据编号">
+                        <a-form-item :label="$t('GLOBAL.DATA_FILTER_ID')">
                             <a-input v-decorator="['fid', {rules: [{message: '请输入数据ID',}], initialValue: ''}]"
                                 placeholder="请输入数据ID" />
                         </a-form-item>
                     </a-col>
                     <slot name="filterBeforeSlot"></slot>
                     <a-col v-if="filters.hasTitle" :span="6">
-                        <a-form-item label="数据标题">
+                        <a-form-item :label="$t('GLOBAL.DATA_FILTER_TITLE')">
                             <a-input v-decorator="['ftitle', {rules: [{message: '请输入数据标题',}], initialValue: ''}]"
                                 placeholder="请输入数据标题" />
                         </a-form-item>
                     </a-col>
                     <a-col v-if="filters.hasName" :span="6">
-                        <a-form-item label="数据名称" >
+                        <a-form-item :label="$t('GLOBAL.DATA_FILTER_NAME')">
                             <a-input v-decorator="['fname', {rules: [{message: '请输入数据名称',}], initialValue: ''}]"
                                 placeholder="请输入数据名称" />
                         </a-form-item>
                     </a-col>
                     <slot name="filterAfterSlot"></slot>
                     <a-col v-if="filters.hasPhone" :span="6">
-                        <a-form-item label="手机号码" >
+                        <a-form-item :label="$t('GLOBAL.DATA_FILTER_PHONE')">
                             <a-input v-decorator="['fphone', {rules: [{message: '请输入手机号码',}], initialValue: ''}]"
                                 placeholder="请输入手机号码" />
                         </a-form-item>
                     </a-col>
                     <a-col v-if="filters.hasAdmin" :span="6">
-                        <a-form-item label="发布人员" >
+                        <a-form-item :label="$t('GLOBAL.DATA_FILTER_ADMIN')">
                             <a-input v-decorator="['fadmin', {rules: [{message: '请输入发布人',}], initialValue: ''}]"
                                 placeholder="请输入发布人" />
                         </a-form-item>
                     </a-col>
                     <a-col v-if="filters.hasCreateTime" :span="6">
-                        <a-form-item label="发布日期" >
+                        <a-form-item :label="$t('GLOBAL.DATA_FILTER_PUBLISHDATE')">
                             <a-date-picker v-decorator="['fcreate_time', {rules: [{type: 'object',message: '请选择发布日期',}]}]"
                                 placeholder="请选择发布日期" style="width: 100%" />
                         </a-form-item>
                     </a-col>
                     <a-col v-if="filters.hasState" :span="6">
-                        <a-form-item label="数据状态" >
+                        <a-form-item :label="$t('GLOBAL.DATA_FILTER_STATE')">
                             <a-select v-decorator="['fstate', {rules: [{message: '请选择数据状态',}], initialValue: ''}]"
                                 placeholder="请选择数据状态">
                                 <a-select-option value="">全部</a-select-option>
@@ -60,21 +60,21 @@
                 <a-row>
                     <a-col :span="24">
                         <a-form-item style="margin-bottom:0;text-align: right;">
-                            <a-button type="primary" html-type="submit">搜索</a-button>
-                            <a-button :style="{ marginLeft: '8px' }" @click="handleReset">重置</a-button>
+                            <a-button type="primary" html-type="submit">{{$t('GLOBAL.BTN_SEARCH')}}</a-button>
+                            <a-button :style="{ marginLeft: '8px' }" @click="handleReset">{{$t('GLOBAL.BTN_RESET')}}</a-button>
                         </a-form-item>
                     </a-col>
                 </a-row>
             </a-form>
             <div v-if="withOptionBar" class="option-bar">
                 <!-- 内容操作区域 -->
-                <a-button v-if="allowAdd" style="margin-right:10px;" type="primary" @click="showModal('add')">新增</a-button>
+                <a-button v-if="allowAdd" style="margin-right:10px;" type="primary" @click="showModal('add')">{{$t('GLOBAL.BTN_ADD')}}</a-button>
                 <template v-if="selectedRowKeys.length">
-                    <a-button style="margin-right:10px;" type="danger" @click="delMultiItems">批量删除</a-button>
+                    <a-button style="margin-right:10px;" type="danger" @click="delMultiItems">{{$t('GLOBAL.BTN_BATCH_DELETE')}}</a-button>
                     <slot name="optionSlot"></slot>
-                    <div>
-                        当前共选择
-                        <strong style="color:#1890ff;">{{selectedRowKeys.length}}</strong> 条信息
+                    <div v-html="$t('GLOBAL.DATA_CURRENTLY_SELECT', [selectedRowKeys.length])">
+                        <!-- 当前共选择
+                        <strong style="color:#1890ff;">{{selectedRowKeys.length}}</strong> 条信息 -->
                     </div>
                 </template>
             </div>
@@ -97,7 +97,7 @@
 </template>
 
 <script>
-    import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue';
+    import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue'
 
     export default {
         name: 'PageSkeleton',
@@ -244,11 +244,20 @@
 <style scoped>
 .modal-header {
     position: relative;
-    top: -7px;
+    top: -24px;
     text-align: center;
+}
+.modal-header::after {
+    content: "";
+    position: absolute;
+    left: -24px;
+    right: -24px;
+    bottom: 0;
+    height: 0;
+    border-bottom: 1px solid #e8e8e8;
 }
 .modal-header_title {
     font-size: 18px;
-    line-height: 2;
+    line-height: 54px;
 }
 </style>

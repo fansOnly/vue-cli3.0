@@ -23,7 +23,7 @@
                     <a-badge :status="BADGE_STATUS(action)" :text="BANNER_CLASS_STATUS[action]" />
                 </span>
                 <span slot="actionSlot" slot-scope="action, record">
-                    <a-button size="small" @click="showPages(record)">管理</a-button>
+                    <a-button size="small" @click="redirectPage(record)">管理</a-button>
                     <span>&nbsp;</span>
                     <a-button size="small" @click="showModal('edit', record.id)">{{allowEdit ? '编辑' : '查看'}}</a-button>
                     <span>&nbsp;</span>
@@ -51,10 +51,9 @@
 </template>
 
 <script>
+    import PageSkeleton from '@/components/skeleton/index.vue'
 
-    import PageSkeleton from '@/components/skeleton/index.vue';
-
-    import { getBannerClassList, addBannerClass, getBannerClassDetail, updateBannerClass, deleteBannerClass } from '@/api/banner';
+    import { getBannerClassList, addBannerClass, getBannerClassDetail, updateBannerClass, deleteBannerClass } from '@/api/banner'
     import config from './config'
 
     import { pluck } from '@/utils/util'
@@ -103,7 +102,7 @@
         },
         methods: {
             checkItems(selectedRowKeys) {
-				console.log('selectedRowKeys', selectedRowKeys);
+				// console.log('selectedRowKeys', selectedRowKeys);
 				this.selectedRowKeys = selectedRowKeys;
 			},
 			delItem(id) {
@@ -131,7 +130,7 @@
                 config.pagination.pageSize = pagination.pageSize;
                 this.getBannerClassListFn();
 			},
-            showPages (record) {
+            redirectPage (record) {
                 this.$router.push({name: 'bannerList', params: {classid: record.id}})
             },
             showModal (action, editId) {

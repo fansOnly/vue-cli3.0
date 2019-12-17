@@ -5,7 +5,7 @@
 			<a-layout-sider class="sidebar" v-model="collapsed">
 				<div class="logo-wrap">
 					<img class="logo" src="../../assets/images/antd.svg" alt />
-					<h1>W T F</h1>
+					<h1>{{$t('GLOBAL.LOGO')}}</h1>
 				</div>
 				<SiderComponent />
 			</a-layout-sider>

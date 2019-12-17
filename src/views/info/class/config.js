@@ -18,7 +18,7 @@ export default {
 			title: '操作',
 			dataIndex: 'action',
 			scopedSlots: { customRender: 'actionSlot' },
-			width: '185px'
+			width: '200px'
 		}
 	],
 	actionList: ['编辑','删除'],
