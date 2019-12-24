@@ -83,7 +83,7 @@
 </template>
 
 <script>
-    import PageSkeleton from '@/components/skeleton/index.vue'
+    import PageSkeleton from '@/components/PageSkeleton.vue'
 
     import { getInfoClassList, addInfoClass, getInfoClassDetail, updateInfoClass, deleteInfoClass, getInfoClassTree } from '@/api/info'
     import config from './config'

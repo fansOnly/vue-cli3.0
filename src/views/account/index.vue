@@ -1,6 +1,9 @@
 <template>
 	<PageSkeleton
+        :dataList="accountList"
         :selectedRowKeys="selectedRowKeys"
+        :showAllSelect="showAllSelect"
+        :excelConfig="excelConfig"
         :filters="filters"
         :withModal="withModal"
         :allowAdd="allowAdd"
@@ -17,7 +20,7 @@
     >
         <!-- 渲染筛选条件 -->
         <template v-slot:filterAfterSlot="{ filterForm }">
-            <!-- <a-col v-if="filters.hasName" :span="6">
+            <!-- <a-col v-if="filters.filterName" :span="6">
                 <a-form-item label="数据名称" >
                     <a-input v-decorator="['name', {rules: [{message: '请输入数据名称',}], initialValue: ''}]"
                         placeholder="请输入数据名称" />
@@ -96,7 +99,7 @@
 </template>
 
 <script>
-    import PageSkeleton from '@/components/skeleton/index.vue';
+    import PageSkeleton from '@/components/PageSkeleton.vue';
 
     import { getAccountList, addAccount, getAccountDetail, updateAccount, deleteAccount } from '@/api/account';
     import config from './config'
@@ -123,6 +126,8 @@
                 modalTitle: '',
                 okBtnDisabled: false,
                 filters: config.filters,
+                showAllSelect: false, // 是否显示全选按钮
+                excelConfig: config.excelConfig,
                 // ***************************
                 action: '',
                 initialAccount: {},
@@ -155,6 +160,9 @@
 			delItem(id) {
                 this.deleteAccountFn([id]);
 			},
+            checkAllItems(allChecked) {
+                this.selectedRowKeys = allChecked ? pluck(this.accountList, 'id') : [];
+            },
 			delMultiItems() {
 				const deleteList = this.accountList.filter(
                     item => this.selectedRowKeys.includes(item.id)

@@ -1,6 +1,9 @@
 <template>
     <PageSkeleton
+        :dataList="bannerClassList"
         :selectedRowKeys="selectedRowKeys"
+        :showAllSelect="showAllSelect"
+        :excelConfig="excelConfig"
         :filters="filters"
         :visible="visible"
         :modalTitle="modalTitle"
@@ -51,7 +54,7 @@
 </template>
 
 <script>
-    import PageSkeleton from '@/components/skeleton/index.vue'
+    import PageSkeleton from '@/components/PageSkeleton.vue'
 
     import { getBannerClassList, addBannerClass, getBannerClassDetail, updateBannerClass, deleteBannerClass } from '@/api/banner'
     import config from './config'
@@ -80,6 +83,8 @@
                 modalTitle: '',
                 okBtnDisabled: false,
                 filters: config.filters,
+                showAllSelect: false, // 是否显示全选按钮
+                excelConfig: config.excelConfig,
                 // ***************************
                 action: '',
                 initialBannerClass: {},
@@ -105,6 +110,9 @@
 				// console.log('selectedRowKeys', selectedRowKeys);
 				this.selectedRowKeys = selectedRowKeys;
 			},
+            checkAllItems(allChecked) {
+                this.selectedRowKeys = allChecked ? pluck(this.bannerClassList, 'id') : [];
+            },
 			delItem(id) {
                 this.deleteBannerClassFn([id]);
 			},

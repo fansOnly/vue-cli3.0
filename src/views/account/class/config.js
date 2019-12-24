@@ -1,4 +1,5 @@
-import { pagination, filters, ACCOUNT_CLASS_STATUS, BADGE_STATUS } from '@/config/setting'
+import dayjs from 'dayjs'
+import { PAGINATION, FILTER_ITEMS, ACCOUNT_CLASS_STATUS, BADGE_STATUS } from '@/config/setting'
 
 export default {
     columns: [
@@ -30,13 +31,20 @@ export default {
 		}
 	],
 	pagination: {
-		...pagination
+		...PAGINATION
 	},
 	filters: {
-		...filters,
+		...FILTER_ITEMS,
 		STATUS: ACCOUNT_CLASS_STATUS,
-		hasTitle: false,
-		hasName: true,
+		filterTtile: false,
+		filterName: true,
+	},
+	excelConfig: {
+		showExportBtn: false,
+		excelFields: {
+			'ID': 'id',
+		},
+		excelName: '留言导出-'+ dayjs().format('YYYY-MM-DD HH:mm:ss')
 	},
 	ACCOUNT_CLASS_STATUS,
 	BADGE_STATUS,

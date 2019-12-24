@@ -7,45 +7,45 @@
             <!-- 筛选区域 -->
             <a-form v-if="withFilter" ref="filterForm" class="ant-advanced-search-form" :form="form" @submit.prevent="handleFilter">
                 <a-row :gutter="24">
-                    <a-col v-if="filters.hasID" :span="6">
+                    <a-col v-if="filters.filterID" :span="6">
                         <a-form-item :label="$t('GLOBAL.DATA_FILTER_ID')">
                             <a-input v-decorator="['fid', {rules: [{message: '请输入数据ID',}], initialValue: ''}]"
                                 placeholder="请输入数据ID" />
                         </a-form-item>
                     </a-col>
                     <slot name="filterBeforeSlot"></slot>
-                    <a-col v-if="filters.hasTitle" :span="6">
+                    <a-col v-if="filters.filterTtile" :span="6">
                         <a-form-item :label="$t('GLOBAL.DATA_FILTER_TITLE')">
                             <a-input v-decorator="['ftitle', {rules: [{message: '请输入数据标题',}], initialValue: ''}]"
                                 placeholder="请输入数据标题" />
                         </a-form-item>
                     </a-col>
-                    <a-col v-if="filters.hasName" :span="6">
+                    <a-col v-if="filters.filterName" :span="6">
                         <a-form-item :label="$t('GLOBAL.DATA_FILTER_NAME')">
                             <a-input v-decorator="['fname', {rules: [{message: '请输入数据名称',}], initialValue: ''}]"
                                 placeholder="请输入数据名称" />
                         </a-form-item>
                     </a-col>
                     <slot name="filterAfterSlot"></slot>
-                    <a-col v-if="filters.hasPhone" :span="6">
+                    <a-col v-if="filters.filterPhone" :span="6">
                         <a-form-item :label="$t('GLOBAL.DATA_FILTER_PHONE')">
                             <a-input v-decorator="['fphone', {rules: [{message: '请输入手机号码',}], initialValue: ''}]"
                                 placeholder="请输入手机号码" />
                         </a-form-item>
                     </a-col>
-                    <a-col v-if="filters.hasAdmin" :span="6">
+                    <a-col v-if="filters.filterAdmin" :span="6">
                         <a-form-item :label="$t('GLOBAL.DATA_FILTER_ADMIN')">
                             <a-input v-decorator="['fadmin', {rules: [{message: '请输入发布人',}], initialValue: ''}]"
                                 placeholder="请输入发布人" />
                         </a-form-item>
                     </a-col>
-                    <a-col v-if="filters.hasCreateTime" :span="6">
+                    <a-col v-if="filters.filterCreateTime" :span="6">
                         <a-form-item :label="$t('GLOBAL.DATA_FILTER_PUBLISHDATE')">
                             <a-date-picker v-decorator="['fcreate_time', {rules: [{type: 'object',message: '请选择发布日期',}]}]"
                                 placeholder="请选择发布日期" style="width: 100%" />
                         </a-form-item>
                     </a-col>
-                    <a-col v-if="filters.hasState" :span="6">
+                    <a-col v-if="filters.filterState" :span="6">
                         <a-form-item :label="$t('GLOBAL.DATA_FILTER_STATE')">
                             <a-select v-decorator="['fstate', {rules: [{message: '请选择数据状态',}], initialValue: ''}]"
                                 placeholder="请选择数据状态">
@@ -69,7 +69,11 @@
             <div v-if="withOptionBar" class="option-bar">
                 <!-- 内容操作区域 -->
                 <a-button v-if="allowAdd" style="margin-right:10px;" type="primary" @click="showModal('add')">{{$t('GLOBAL.BTN_ADD')}}</a-button>
+                <a-button v-if="showAllSelect" style="margin-right:10px;" @click="checkAllItems">{{allChecked ? $t('GLOBAL.BTN_UNSELECT_ALL') : $t('GLOBAL.BTN_SELECT_ALL')}}</a-button>
                 <template v-if="selectedRowKeys.length">
+                    <div v-if="excelConfig.showExportBtn" style="margin-right:10px;">
+                        <ExportExcel :excelFields="excelConfig.excelFields" :excelData="excelData" :excelName='excelConfig.excelName' :btnName="$t('GLOBAL.BTN_EXPORT') + ' Excel'" @exportExcel="exportExcel" />
+                    </div>
                     <a-button style="margin-right:10px;" type="danger" @click="delMultiItems">{{$t('GLOBAL.BTN_BATCH_DELETE')}}</a-button>
                     <slot name="optionSlot"></slot>
                     <div v-html="$t('GLOBAL.DATA_CURRENTLY_SELECT', [selectedRowKeys.length])">
@@ -98,11 +102,13 @@
 
 <script>
     import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue'
+    import ExportExcel from '@/components/ExportExcel.vue'
 
     export default {
         name: 'PageSkeleton',
         components: {
             BreadCrumbComponent,
+            ExportExcel
         },
         props: {
             withBreadcrumb: {
@@ -133,6 +139,18 @@
                 type: Boolean,
                 default: function () {
                     return true
+                }
+            },
+            showAllSelect: {
+                type: Boolean,
+                default: function() {
+                    return false
+                }
+            },
+            dataList: {
+                type: Array,
+                default: function () {
+                    return []
                 }
             },
             selectedRowKeys: {
@@ -177,14 +195,39 @@
                     return false
                 }
             },
+            excelConfig: {
+                type: Object,
+                default: function() {
+                    return {}
+                }
+            }
+        },
+        data() {
+            return {
+                allChecked: false,
+                excelData: [],
+            }
         },
         beforeCreate () {
             this.form = this.$form.createForm(this);
         },
         methods: {
+            exportExcel() {
+                let exportList = this.dataList.filter(item => this.selectedRowKeys.includes(item.id));
+                console.log('导出的数据列表', exportList);
+                this.excelData = exportList;
+                if (!this.excelData.length) {
+                    this.$message.info('没有选中数据');
+                    return;
+                }
+            },
 			delItem(index) {
-                this.$emit('delItem', index)
-			},
+                this.$emit('delItem', index);
+            },
+            checkAllItems() {
+                this.allChecked = !this.allChecked;
+                this.$emit('checkAllItems', this.allChecked);
+            },
 			delMultiItems() {
 				const that = this;
 				this.$confirm({

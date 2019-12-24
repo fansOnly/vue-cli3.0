@@ -11,15 +11,23 @@
                 </router-link>
             </template>
         </a-breadcrumb>
-        <a class="back" href="javascript: history.back(-1);">{{$t('GLOBAL.BTN_BACK')}}</a>
+        <a v-if="showBack" class="back" href="javascript: history.back(-1);">{{$t('GLOBAL.BTN_BACK')}}</a>
     </div>
 </template>
 <script>
-import { createNamespacedHelpers } from 'vuex';
-const { mapState } = createNamespacedHelpers('breadcrumb');
+import { createNamespacedHelpers } from 'vuex'
+const { mapState } = createNamespacedHelpers('breadcrumb')
 
 export default {
     name: 'BreadCrumbComponent',
+    props: {
+        showBack: {
+            type: Boolean,
+            default: function() {
+                return false;
+            }
+        }
+    },
     data () {
         return {
             // routes: [{

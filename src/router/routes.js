@@ -1,6 +1,6 @@
 // 基础页面加载
 const Login = () => import('@/views/login/index.vue');
-const Admin = () => import('@/views/admin/index.vue');
+const Admin = () => import('@/views/index/index.vue');
 const NotFound = () => import('@/components/notFound/404.vue');
 
 // 通用页面加载
@@ -23,11 +23,17 @@ const Permission = () => import('@/views/account/permission/index.vue');
 const Assets = () => import('@/views/assets/index.vue');
 
 const InfoList = () => import('@/views/info/index.vue');
-const InfoEdit = () => import('@/views/info/edit/index.vue');
+const InfoView = () => import('@/views/info/view.vue');
 const InfoClass = () => import('@/views/info/class/index.vue');
 const InfoRecycle = () => import('@/views/info/recycle/index.vue');
 
 const MessageList = () => import('@/views/message/index.vue');
+const MessageView = () => import('@/views/message/view.vue');
+
+const Process = () => import('@/views/test/process.vue');
+const Countdown = () => import('@/views/test/countdown.vue');
+const Calendar = () => import('@/views/test/calendar.vue');
+const Tabs = () => import('@/views/test/tabs.vue');
 
 const routes = [
 	{
@@ -151,7 +157,7 @@ const routes = [
 			{
 				path: '/admin/info/edit/:id',
 				name: 'infoEdit',
-				component: InfoEdit,
+				component: InfoView,
 				meta: {
 					requireAuth: true,
 					breadcrumbName: '编辑文章',
@@ -160,9 +166,8 @@ const routes = [
 			},
 			{
 				path: '/admin/info/add',
-				alias: '/admin/info/edit/0',
 				name: 'infoAdd',
-				component: InfoEdit,
+				component: InfoView,
 				meta: {
 					requireAuth: true,
 					breadcrumbName: '新增文章',
@@ -187,6 +192,16 @@ const routes = [
 					requireAuth: true,
 					breadcrumbName: '留言管理',
 					depth: 2,
+				},
+			},
+			{
+				path: '/admin/message/:action/:id',
+				name: 'MessageView',
+				component: MessageView,
+				meta: {
+					requireAuth: true,
+					breadcrumbName: '留言详情',
+					depth: 3,
 				},
 			},
 			{
@@ -246,6 +261,46 @@ const routes = [
 				meta: {
 					requireAuth: true,
 					breadcrumbName: '修改密码',
+					depth: 2,
+				},
+			},
+			{
+				path: '/admin/test/process',
+				name: 'process',
+				component: Process,
+				meta: {
+					requireAuth: true,
+					breadcrumbName: '流程操作',
+					depth: 2,
+				},
+			},
+			{
+				path: '/admin/test/countdown',
+				name: 'countdown',
+				component: Countdown,
+				meta: {
+					requireAuth: true,
+					breadcrumbName: '倒计时',
+					depth: 2,
+				},
+			},
+			{
+				path: '/admin/test/calendar',
+				name: 'calendar',
+				component: Calendar,
+				meta: {
+					requireAuth: true,
+					breadcrumbName: '日历',
+					depth: 2,
+				},
+			},
+			{
+				path: '/admin/test/tabs',
+				name: 'tabs',
+				component: Tabs,
+				meta: {
+					requireAuth: true,
+					breadcrumbName: '标签页',
 					depth: 2,
 				},
 			},

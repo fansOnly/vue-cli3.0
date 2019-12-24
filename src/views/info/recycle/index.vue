@@ -11,7 +11,7 @@
     >
         <!-- 渲染筛选条件 -->
         <template v-slot:filterAfterSlot="{ filterForm }">
-            <a-col v-if="filters.hasCreateTime" :span="6">
+            <a-col v-if="filters.filterCreateTime" :span="6">
                 <a-form-item label="删除日期" >
                     <a-date-picker v-decorator="['delete_time', {rules: [{type: 'object',message: '请选择删除日期',}]}]"
                         placeholder="请选择删除日期" style="width: 100%" />
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-	import PageSkeleton from '@/components/skeleton/index.vue'
+	import PageSkeleton from '@/components/PageSkeleton.vue'
 
 	import { getInfoList, restoreInfo, clearInfo } from '@/api/info'
 

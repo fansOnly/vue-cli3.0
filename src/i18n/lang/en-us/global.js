@@ -53,6 +53,10 @@ export default {
     BTN_REPLY: 'reply',
     BTN_UPLOAD: 'upload',
     BTN_DOWNLOAD: 'download',
+    BTN_SELECT_ALL: 'select all',
+    BTN_UNSELECT_ALL: 'unselect all',
+    BTN_EXPORT: 'export',
+    BTN_IMPORT: 'import',
     // 用户相关文案
     USER_MODI_INFO: 'Edit information',
     USER_MODI_PASS: 'Change password',

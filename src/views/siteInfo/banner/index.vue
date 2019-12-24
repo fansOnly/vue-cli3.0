@@ -1,6 +1,9 @@
 <template>
     <PageSkeleton
+        :dataList="bannerList"
         :selectedRowKeys="selectedRowKeys"
+        :showAllSelect="showAllSelect"
+        :excelConfig="excelConfig"
         :filters="filters"
         :visible="visible"
         :modalTitle="modalTitle"
@@ -8,6 +11,7 @@
         :photoPreviewVisible="photoPreviewVisible"
         :previewPhoto="previewPhoto"
         @delItem="delItem"
+        @checkAllItems="checkAllItems"
         @delMultiItems="delMultiItems"
         @handlePhotopreviewCancel="handlePhotopreviewCancel"
         @handleFilter="handleFilter"
@@ -73,7 +77,7 @@
 </template>
 
 <script>
-    import PageSkeleton from '@/components/skeleton/index.vue';
+    import PageSkeleton from '@/components/PageSkeleton.vue';
 
     import { getBannerList, addBanner, getBannerDetail, updateBanner, deleteBanner } from '@/api/banner';
 
@@ -103,6 +107,8 @@
                 modalTitle: '',
                 okBtnDisabled: false,
                 filters: config.filters,
+                showAllSelect: false, // 是否显示全选按钮
+                excelConfig: config.excelConfig,
                 // ***************************
                 action: '',
                 initialBanner: {},
@@ -133,6 +139,9 @@
 				console.log('selectedRowKeys', selectedRowKeys);
 				this.selectedRowKeys = selectedRowKeys;
 			},
+            checkAllItems(allChecked) {
+                this.selectedRowKeys = allChecked ? pluck(this.bannerList, 'id') : [];
+            },
 			delItem(id) {
                 this.deleteBannerFn([id]);
 			},

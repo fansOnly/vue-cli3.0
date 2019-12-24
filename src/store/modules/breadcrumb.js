@@ -5,7 +5,7 @@ const state = {
         {
             path: '/admin/index',
             name: 'admin',
-            breadcrumbName: '首页'
+            breadcrumbName: '首页',
         },
     ]
 }
@@ -30,7 +30,7 @@ const mutations = {
         state.routes.push(route);
     },
     [ADD_BREADCRUMB] (state, {name, route}) {
-        if (name && name.toLowerCase().indexOf('add') != '-1') {
+        if (name && ['add', 'edit', 'view'].includes(name.toLowerCase())) {
             state.routes.pop();
         }
         state.routes.push(route);

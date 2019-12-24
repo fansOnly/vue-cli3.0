@@ -2,7 +2,7 @@
 /**
  * 表单布局配置
  */
-export const formLayout = {
+export const FORM_LAYOUT = {
     formItemLayout: {
         labelCol: {
             xs: { span: 24 },
@@ -30,7 +30,7 @@ export const formLayout = {
 /**
  * 页码布局配置
  */
-export const pagination = {
+export const PAGINATION = {
     page: 1,
     pageSize: 10,
     pageSizeOptions: ['10', '20', '30', '40', '50'],
@@ -42,14 +42,14 @@ export const pagination = {
 /**
  * 数据默认筛选条件配置
  */
-export const filters = {
-    hasID: true,
-    hasTitle: true,
-    hasCreateTime: true,
-    hasState: true,
-    hasAdmin: false,
-    hasPhone: false,
-    hasName: false,
+export const FILTER_ITEMS = {
+    filterID: true,
+    filterTtile: true,
+    filterCreateTime: true,
+    filterState: true,
+    filterAdmin: false,
+    filterPhone: false,
+    filterName: false,
 }
 
 /**
@@ -68,13 +68,13 @@ export const BANNER_STATUS = ['禁用', '正常'];
 // 幻灯片分类状态管理  info
 export const BANNER_CLASS_STATUS = ['禁用', '正常'];
 
-// 前台会员状态管理 member
+// 用户状态管理 member
 export const MEMBER_STATUS = ['已冻结', '待审核', '已审核'];
 
 // 文章状态管理  info
 export const INFO_STATUS = ['已下架', '待审核', '已审核', '已置顶'];
 
-// 文章状态管理  info
+// 留言状态管理  info
 export const MESSAGE_STATUS = ['未查看', '已查看', '已回复', '已置顶'];
 
 export const BADGE_STATUS = state => {

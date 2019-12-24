@@ -58,7 +58,11 @@ router.beforeEach((to, from, next) => {
         }
     }
 
-    sessionStorage.setItem('currentPath', to.path);
+    const flatMenus = arr => arr.reduce((res, cur) => res.concat(cur.subs ? flatMenus(cur.subs) : cur), []);
+    const currentMenu = flatMenus(store.state.locale.menus).filter(item => item.path === to.path);
+    if (currentMenu.length) {
+        sessionStorage.setItem('currentPath', to.path);
+    }
     
     next();
 })

@@ -76,7 +76,7 @@ Mock.mock(/\/message\/index/, /get|post/i, getMessageList);
  * 获取留言详情
  * @param {String} id 
  */
-const getMessageDetail = config => {
+const getMessageView = config => {
     const params = getUrlParams(config.url);
     const { id } = params;
     const success = id;
@@ -125,7 +125,7 @@ const getMessageDetail = config => {
     })
 }
 
-Mock.mock(/\/message\/detail/, /get|post/i, getMessageDetail);
+Mock.mock(/\/message\/detail/, /get|post/i, getMessageView);
 
 /**
  * 回复留言

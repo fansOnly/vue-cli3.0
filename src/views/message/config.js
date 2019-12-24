@@ -1,5 +1,5 @@
-import { date2Timestamp } from '@/utils/util'
-import { pagination, filters, MESSAGE_STATUS, BADGE_STATUS } from '@/config/setting'
+import dayjs from 'dayjs'
+import { PAGINATION, FILTER_ITEMS, MESSAGE_STATUS, BADGE_STATUS } from '@/config/setting'
 
 export default {
     columns: [
@@ -23,7 +23,7 @@ export default {
         {
 			title: '留言时间',
 			dataIndex: 'create_time',
-            sorter: (a, b) => date2Timestamp(a.create_time) - date2Timestamp(b.create_time),
+			sorter: (a, b) => dayjs(a.create_time).unix() - dayjs(b.create_time).unix(),
             width: '200px',
 		},
 		{
@@ -40,15 +40,25 @@ export default {
 		}
 	],
 	pagination: {
-		...pagination
+		...PAGINATION
 	},
 	filters: {
-		...filters,
+		...FILTER_ITEMS,
 		STATUS: MESSAGE_STATUS,
-		hasID: false,
-		hasTitle: false,
-		hasName: true,
-		hasPhone: true,
+		filterID: false,
+		filterTtile: false,
+		filterName: true,
+		filterPhone: true,
+	},
+	excelConfig: {
+		showExportBtn: true,
+		excelFields: {
+			'ID': 'id',
+			'姓名': 'name',
+			'手机号': 'phone',
+			'邮箱': 'email',
+		},
+		excelName: '留言导出-'+ dayjs().format('YYYY-MM-DD HH:mm:ss')
 	},
 	MESSAGE_STATUS,
 	BADGE_STATUS,

@@ -1,5 +1,5 @@
-import { date2Timestamp } from '@/utils/util'
-import { pagination, filters, ACCOUNT_STATUS, BADGE_STATUS } from '@/config/setting'
+import dayjs from 'dayjs'
+import { PAGINATION, FILTER_ITEMS, ACCOUNT_STATUS, BADGE_STATUS } from '@/config/setting'
 
 export default {
     columns: [
@@ -29,13 +29,13 @@ export default {
         {
 			title: '创建时间',
 			dataIndex: 'create_time',
-            sorter: (a, b) => date2Timestamp(a.create_time) - date2Timestamp(b.create_time),
+			sorter: (a, b) => dayjs(a.create_time).unix() - dayjs(b.create_time).unix(),
             width: '200px',
 		},
         {
 			title: '最近登陆',
             dataIndex: 'last_login_time',
-            sorter: (a, b) => date2Timestamp(a.last_login_time) - date2Timestamp(b.last_login_time),
+			sorter: (a, b) => dayjs(a.last_login_time).unix() - dayjs(b.last_login_time).unix(),
             width: '200px'
         },
 		{
@@ -52,14 +52,21 @@ export default {
 		}
 	],
 	pagination: {
-		...pagination
+		...PAGINATION
 	},
 	filters: {
-		...filters,
+		...FILTER_ITEMS,
 		STATUS: ACCOUNT_STATUS,
-		hasTitle: false,
-		hasName: true,
-		hasPhone: true,
+		filterTtile: false,
+		filterName: true,
+		filterPhone: true,
+	},
+	excelConfig: {
+		showExportBtn: false,
+		excelFields: {
+			'ID': 'id',
+		},
+		excelName: '导出-'+ dayjs().format('YYYY-MM-DD HH:mm:ss')
 	},
 	ACCOUNT_STATUS,
 	BADGE_STATUS,

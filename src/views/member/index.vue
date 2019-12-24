@@ -1,6 +1,9 @@
 <template>
 	<PageSkeleton
+        :dataList="memberList"
         :selectedRowKeys="selectedRowKeys"
+        :showAllSelect="showAllSelect"
+        :excelConfig="excelConfig"
         :filters="filters"
         :withModal="withModal"
         :allowAdd="allowAdd"
@@ -119,7 +122,7 @@
 </template>
 
 <script>
-    import PageSkeleton from '@/components/skeleton/index.vue';
+    import PageSkeleton from '@/components/PageSkeleton.vue';
 
     import { getMemberList, addMember, getMemberDetail, updateMember, deleteMember } from '@/api/member';
     import config from './config'
@@ -147,6 +150,8 @@
                 modalTitle: '',
                 okBtnDisabled: false,
                 filters: config.filters,
+                showAllSelect: false, // 是否显示全选按钮
+                excelConfig: config.excelConfig,
                 // ***************************
                 action: '',
                 initialMember: {},
@@ -175,6 +180,9 @@
 				console.log('selectedRowKeys', selectedRowKeys);
 				this.selectedRowKeys = selectedRowKeys;
 			},
+            checkAllItems(allChecked) {
+                this.selectedRowKeys = allChecked ? pluck(this.memberList, 'id') : [];
+            },
 			delItem(id) {
                 this.deleteMemberFn([id]);
 			},

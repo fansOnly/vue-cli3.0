@@ -114,7 +114,7 @@ const parseTomoney = (num, str = ',') => {
 	num = parseFloat(num.toString().replace(/(\d+)(\.\d{2})(\d+)/g, '$1$2'));
 	let [integer, decimal] = String.prototype.split.call(num, '.');
 	integer = integer.replace(/\d(?=(\d{3})+$)/g, `$&${str}`);
-	return integer + (decimal ?  '.' + decimal : '.00');
+	return integer + (decimal ?  '.' + decimal : '');
 };
 
 export {

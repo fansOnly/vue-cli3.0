@@ -109,4 +109,29 @@ export default {
         'hk': '退出登陸',
         'en': 'Log Out'
     },
+    MENU9: {
+        'cn': '功能测试',
+        'hk': '功能測試',
+        'en': 'Function Test'
+    },
+    MENU9_1: {
+        'cn': '流程操作',
+        'hk': '流程操作',
+        'en': 'Process'
+    },
+    MENU9_2: {
+        'cn': '倒计时',
+        'hk': '倒計時',
+        'en': 'Countdown'
+    },
+    MENU9_3: {
+        'cn': '日历',
+        'hk': '日歷',
+        'en': 'Calendar'
+    },
+    MENU9_4: {
+        'cn': '标签页',
+        'hk': '標簽頁',
+        'en': 'Bookmark'
+    },
 }

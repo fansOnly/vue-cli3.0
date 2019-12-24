@@ -1,6 +1,9 @@
 <template>
 	<PageSkeleton
+        :dataList="infoList"
         :selectedRowKeys="selectedRowKeys"
+        :showAllSelect="showAllSelect"
+        :excelConfig="excelConfig"
         :filters="filters"
         :withModal="withModal"
         :photoPreviewVisible="photoPreviewVisible"
@@ -10,7 +13,7 @@
         @handleFilter="handleFilter"
         @handleFilterReset="handleFilterReset"
         @handlePhotopreviewCancel="handlePhotopreviewCancel"
-        @showModal="showModal"
+        @showModal="routeTo"
     >
         <!-- 渲染筛选条件 -->
         <template v-slot:filterAfterSlot="{ filterForm }">
@@ -26,7 +29,7 @@
                     <a-badge :status="BADGE_STATUS(action)" :text="INFO_STATUS[action]" />
                 </span>
                 <span slot="actionSlot" slot-scope="action, record">
-                    <a-button size="small" @click="showModal('edit', record.id)">{{allowEdit ? '编辑' : '查看'}}</a-button>
+                    <a-button size="small" @click="routeTo('edit', record.id)">{{allowEdit ? '编辑' : '查看'}}</a-button>
                     <span>&nbsp;</span>
                     <a-popconfirm title='确认删除当前信息吗?' @confirm="() => delItem(record.id)">
                         <a-button size="small" type="danger" >删除</a-button>
@@ -41,7 +44,7 @@
 </template>
 
 <script>
-	import PageSkeleton from '@/components/skeleton/index.vue';
+	import PageSkeleton from '@/components/PageSkeleton.vue';
 
 	import { getInfoList, deleteInfo } from '@/api/info';
 
@@ -66,6 +69,8 @@
                 // 传递给PageSkeleton组件的props
                 selectedRowKeys: [],
                 filters: config.filters,
+                showAllSelect: false, // 是否显示全选按钮
+                excelConfig: config.excelConfig,
                 // ***************************
                 action: '',
                 photoPreviewVisible: false,
@@ -93,6 +98,9 @@
 				console.log('selectedRowKeys', selectedRowKeys);
 				this.selectedRowKeys = selectedRowKeys;
 			},
+            checkAllItems(allChecked) {
+                this.selectedRowKeys = allChecked ? pluck(this.infoList, 'id') : [];
+            },
 			delItem(id) {
                 this.deleteInfoFn([id]);
 			},
@@ -130,7 +138,7 @@
                 }
 				this.photoPreviewVisible = true;
 			},
-			showModal (action, editId) {
+			routeTo (action, editId) {
                 if (action == 'add') {
 					// this.$router.push({name: 'infoEdit', params: {id: 0}});
 					this.$router.push({name: 'infoAdd'});

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<BreadCrumbComponent />
+		<BreadCrumbComponent showBack />
 		<div class="container">
 			<a-form :form="form" @submit="handleSubmit">
 				<a-row>
@@ -276,7 +276,7 @@
 				const data = await updateInfo(params);
 				if (data.code == '200') {
 					this.$message.success(data.msg, 1, () => {
-						this.$router.replace({name: 'infoEdit', params:{id: Math.floor(Math.random() * 99999999)}});
+						this.$router.replace({name: 'InfoView', params:{id: Math.floor(Math.random() * 99999999)}});
 					})
 				}
 			},
@@ -285,7 +285,7 @@
 				const data = await addInfo(params);
 				if (data.code == '200') {
 					this.$message.success(data.msg, 1, () => {
-						this.$router.replace({name: 'infoEdit', params:{id: parseInt(Math.random() * 9999999)}});
+						this.$router.replace({name: 'InfoView', params:{id: parseInt(Math.random() * 9999999)}});
 					})
 				}
 			},

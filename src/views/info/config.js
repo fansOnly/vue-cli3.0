@@ -1,5 +1,5 @@
-import { date2Timestamp } from '@/utils/util';
-import { pagination, filters, INFO_STATUS, BADGE_STATUS } from '@/config/setting';
+import dayjs from 'dayjs'
+import { PAGINATION, FILTER_ITEMS, INFO_STATUS, BADGE_STATUS } from '@/config/setting'
 
 export default {
     columns: [
@@ -27,7 +27,7 @@ export default {
 			title: '发布时间',
 			dataIndex: 'create_time',
 			width: '200px',
-			sorter: (a, b) => date2Timestamp(a.create_time) - date2Timestamp(b.create_time)
+			sorter: (a, b) => dayjs(a.create_time).unix() - dayjs(b.create_time).unix(),
 		},
 		{
 			title: '状态',
@@ -43,13 +43,21 @@ export default {
 		}
 	],
 	pagination: {
-		...pagination
+		...PAGINATION
 	},
 	filters: {
-		...filters,
+		...FILTER_ITEMS,
 		delete_time: 0,
 		STATUS: INFO_STATUS,
-		hasAdmin: false
+		filterAdmin: false
+	},
+	excelConfig: {
+		showExportBtn: true,
+		excelFields: {
+			'ID': 'id',
+			'标题': 'title',
+		},
+		excelName: '文章导出-'+ dayjs().format('YYYY-MM-DD HH:mm:ss')
 	},
 	INFO_STATUS,
 	BADGE_STATUS,

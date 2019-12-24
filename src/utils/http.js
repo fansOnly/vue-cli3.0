@@ -3,6 +3,7 @@ import axios from 'axios'
 import qs from 'qs'
 import router from '../router/index'
 import { message } from 'ant-design-vue'
+import baseUrl from '@/config/baseUrl'
 
 const codeMessage = {
 	200: '服务器成功返回请求的数据。',
@@ -25,18 +26,12 @@ const codeMessage = {
 // 挡板数据开关
 const useMock = true;
 
-if (process.env.NODE_ENV == 'development') {
-	// easy-mock
-	axios.defaults.baseURL = 'https://www.easy-mock.com/mock/5d5902cebbb1323e7792375d/snowe/vue';
-} else if (process.env.NODE_ENV == 'debug') {
-	// axios.defaults.baseURL = 'https://www.ceshi.com';
-} else if (process.env.NODE_ENV == 'production') {
-	axios.defaults.baseURL = 'https://www.easy-mock.com/mock/5d5902cebbb1323e7792375d/snowe/vue';
-}
+// 设置请求url
+axios.defaults.baseURL = baseUrl[process.env.NODE_ENV].apiUrl;
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 // axios.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8';
-axios.defaults.timeout = 5000;
+axios.defaults.timeout = 10000;
 
 // 添加请求拦截器
 axios.interceptors.request.use(config => {

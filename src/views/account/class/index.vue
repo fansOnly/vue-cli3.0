@@ -1,6 +1,9 @@
 <template>
 	<PageSkeleton
+        :dataList="accountClassList"
         :selectedRowKeys="selectedRowKeys"
+        :showAllSelect="showAllSelect"
+        :excelConfig="excelConfig"
         :filters="filters"
         :withModal="withModal"
         :allowAdd="allowAdd"
@@ -71,7 +74,7 @@
 </template>
 
 <script>
-    import PageSkeleton from '@/components/skeleton/index.vue';
+    import PageSkeleton from '@/components/PageSkeleton.vue';
 
     import { getAccountClassList, addAccountClass, getAccountClassDetail, updateAccountClass, getPermissionList, deleteAccountClass } from '@/api/account';
     import config from './config'
@@ -102,6 +105,8 @@
                 modalTitle: '',
                 okBtnDisabled: false,
                 filters: config.filters,
+                showAllSelect: false, // 是否显示全选按钮
+                excelConfig: config.excelConfig,
                 // ***************************
                 action: '',
                 initialAccountClass: {},
@@ -136,6 +141,9 @@
 				console.log('selectedRowKeys', selectedRowKeys);
 				this.selectedRowKeys = selectedRowKeys;
 			},
+            checkAllItems(allChecked) {
+                this.selectedRowKeys = allChecked ? pluck(this.accountClassList, 'id') : [];
+            },
 			delItem(id) {
                 this.deleteAccountClassFn([id]);
 			},

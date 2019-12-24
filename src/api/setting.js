@@ -13,4 +13,4 @@ export const getAssetsList = params => get('/assets/index', params)
 export const deleteAssets = params => post('/assets/delete', params)
 
 
-// ***********************************echart相关数据**********************************************
+// ***********************************菜单栏**********************************************

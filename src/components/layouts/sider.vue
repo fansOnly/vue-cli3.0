@@ -72,7 +72,9 @@
 
 <script>
 	import { createNamespacedHelpers } from 'vuex'
-	const { mapGetters } = createNamespacedHelpers('locale')
+	// const { mapGetters } = createNamespacedHelpers('locale')
+	const localeStore = createNamespacedHelpers('locale')
+	const stateStore = createNamespacedHelpers('state')
 
 	export default {
 		name: 'SiderComponent',
@@ -82,7 +84,7 @@
 				default: function () {
 					return false
 				}
-			}
+			},
 		},
 		data() {
 			return {
@@ -93,19 +95,20 @@
 			};
 		},
 		computed: {
-			...mapGetters(['menus'])
+			...localeStore.mapGetters(['menus']),
+			...stateStore.mapGetters(['currentPath']),
 		},
 		created() {
 			// console.log('menus', this.menus)
 
-			const currentPath = sessionStorage.getItem('currentPath') || '';
+			// const currentPath = sessionStorage.getItem('currentPath') || '';
+			const openKeys = sessionStorage.getItem('openKeys') || '';
+			
 			const flatMenus = arr => arr.reduce((res, cur) => res.concat(cur.subs ? flatMenus(cur.subs) : cur), []);
-			const currentKey = flatMenus(this.menus).filter(item => item.path === currentPath)[0].key;
-			this.selectedKeys = [currentKey];
+			const currentMenu = flatMenus(this.menus).filter(item => item.path === this.currentPath);
+			this.selectedKeys = currentMenu.length ? [currentMenu[0].key] : [];
 
-			const openKeys = currentKey.split('.').reduce((res, key, index) => [...res, res[index - 1] ? `${res[index - 1]}.${key}` :  key], []);
-			openKeys.length--;
-			this.openKeys = openKeys;
+			this.openKeys = openKeys ? [openKeys] : [];
 		},
 		mounted() {
 			this.rootKeys = this.menus.map(item => item.key);
@@ -118,6 +121,7 @@
 				} else {
 					this.openKeys = [latestOpenKey] || [];
 				}
+				sessionStorage.setItem('openKeys', this.openKeys[0]);
 			},
 			clickMenuItem({ key, keyPath }) {
 				// console.log('clickMenuItem', item, key, keyPath);

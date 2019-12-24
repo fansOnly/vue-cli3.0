@@ -49,6 +49,10 @@ export default {
     BTN_REPLY: '回复',
     BTN_UPLOAD: '上传',
     BTN_DOWNLOAD: '下载',
+    BTN_SELECT_ALL: '全选',
+    BTN_UNSELECT_ALL: '反选',
+    BTN_EXPORT: '导出',
+    BTN_IMPORT: '导入',
     // 用户相关文案
     USER_MODI_INFO: '编辑资料',
     USER_MODI_PASS: '修改密码',

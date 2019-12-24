@@ -14,8 +14,6 @@ import 'moment/locale/zh-cn';
 import 'moment/locale/zh-tw';
 import 'moment/locale/en-gb';
 
-import { Spin } from 'ant-design-vue'
-
 const state = {
     locale: 'cn',
     LAN: zh_CN,
@@ -34,7 +32,7 @@ const getters = {
 const actions = {
     switchLocale({ commit }, payload) {
         localStorage.setItem('locale', payload);
-        message.loading('初始化语言...', 2, () => {
+        message.loading('正在初始化语言...', 2, () => {
             commit('SWITCH_LOCAL', payload)
         });
     }
@@ -160,7 +158,7 @@ const createMenu = locale => {
         {
             key: 'assets',
             name: menuLan.MENU6[locale],
-            icon: 'file',
+            icon: 'file-search',
             path: '/admin/assets/index',
         },
         {
@@ -212,6 +210,38 @@ const createMenu = locale => {
                     name: menuLan.MENU8_3[locale],
                     icon: '',
                     path: ''
+                },
+            ]
+        },
+        {
+            key: 'test',
+            name: menuLan.MENU9[locale],
+            icon: 'tool',
+            path: '',
+            subs: [
+                {
+                    key: 'test.process',
+                    name: menuLan.MENU9_1[locale],
+                    icon: 'paper-clip',
+                    path: '/admin/test/process'
+                },
+                {
+                    key: 'test.countdown',
+                    name: menuLan.MENU9_2[locale],
+                    icon: 'clock-circle',
+                    path: '/admin/test/countdown'
+                },
+                {
+                    key: 'test.calendar',
+                    name: menuLan.MENU9_3[locale],
+                    icon: 'calendar',
+                    path: '/admin/test/calendar'
+                },
+                {
+                    key: 'test.tabs',
+                    name: menuLan.MENU9_4[locale],
+                    icon: 'inbox',
+                    path: '/admin/test/tabs'
                 },
             ]
         },

@@ -1,12 +1,16 @@
 <template>
     <PageSkeleton
+        :dataList="assetsList"
         :selectedRowKeys="selectedRowKeys"
+        :excelConfig="excelConfig"
         :filters="filters"
         :withModal="withModal"
         :allowAdd="allowAdd"
         :photoPreviewVisible="photoPreviewVisible"
         :previewPhoto="previewPhoto"
+        :showAllSelect="showAllSelect"
         @delItem="delItem"
+        @checkAllItems="checkAllItems"
         @delMultiItems="delMultiItems"
         @handleFilter="handleFilter"
         @handleFilterReset="handleFilterReset"
@@ -14,7 +18,7 @@
     >
         <!-- 渲染筛选条件 -->
         <template v-slot:filterBeforeSlot="{ filterForm }">
-            <a-col v-if="filters.hasObjectId" :span="6">
+            <a-col v-if="filters.filterObjectId" :span="6">
                 <a-form-item label="关联ID">
                     <a-input v-decorator="['object_id', {rules: [{message: '请输入关联ID',}], initialValue: ''}]"
                         placeholder="请输入关联ID" />
@@ -43,7 +47,7 @@
 </template>
 
 <script>
-    import PageSkeleton from '@/components/skeleton/index.vue';
+    import PageSkeleton from '@/components/PageSkeleton.vue';
 
     import { getAssetsList, deleteAssets } from '@/api/setting';
     import config from './config'
@@ -66,11 +70,13 @@
                 pagination: {},
                 loading: true,
                 // 传递给PageSkeleton组件的props
-                selectedRowKeys: [],
-                filters: config.filters,
-                // ***************************
+                selectedRowKeys: [],  // 选择的数据ID组
+                filters: config.filters,  // 筛选条件组
+                showAllSelect: false, // 是否显示全选按钮
                 photoPreviewVisible: false,
                 previewPhoto: '',
+                excelConfig: config.excelConfig,
+                // ***************************
             }
         },
         computed: {
@@ -89,7 +95,10 @@
             checkItems(selectedRowKeys) {
 				console.log('selectedRowKeys', selectedRowKeys);
 				this.selectedRowKeys = selectedRowKeys;
-			},
+            },
+            checkAllItems(allChecked) {
+                this.selectedRowKeys = allChecked ? pluck(this.assetsList, 'id') : [];
+            },
 			delItem(id) {
                 this.deleteAssetsFn([id]);
 			},
@@ -135,6 +144,7 @@
                 this.loading = false;
 				this.assetsList = data.data;
                 this.currentPage = data.current;
+                this.showAllSelect = data.length > 0;
 				this.pagination = {
 					total: data.total,
 					...config.pagination
