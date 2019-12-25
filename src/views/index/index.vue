@@ -79,11 +79,9 @@
 	display: flex;
 	
 }
-
 .sidebar {
 	overflow-y: auto;
 }
-
 .logo-wrap {
 	width: 100%;
 	height: 60px;
@@ -91,12 +89,10 @@
 	text-align: center;
 	overflow: hidden;
 }
-
 .logo {
 	width: 32px;
 	vertical-align: middle;
 }
-
 .logo-wrap h1 {
 	display: inline-block;
 	margin: 0 0 0 5px;
@@ -111,19 +107,16 @@
 	overflow: auto;
     transition: all ease .2s;
 }
-
-
 /* antd style reset */
 .ant-layout-header {
 	padding: 0;
 }
-
 .fix-setting {
 	position: absolute;
 	right: 256px;
 	top: 130px;
-	width: 50px;
-	height: 50px;
+	width: 45px;
+	height: 45px;
 	background: #1890ff;
 	border-radius: 3px;
 	z-index: 8888;
@@ -132,10 +125,8 @@
 	justify-content: center;
 	cursor: pointer;
 }
-
 .icon-setting {
 	color: #fff;
-	font-size: 24px;
-	line-height: 1;
+	font-size: 20px;
 }
 </style>

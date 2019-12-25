@@ -1,4 +1,4 @@
-import variables from '@/skins/variables.scss'
+import variables from '@/assets/styles/variables.scss'
 
 const state = {
     theme: variables.theme,

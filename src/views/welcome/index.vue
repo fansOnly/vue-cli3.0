@@ -1,7 +1,6 @@
 <template src='./index.html'></template>
 <script>
 	import dayjs from 'dayjs'
-	import { parseTomoney } from '@/utils/util'
 	import {
 		visitEchartOption,
 		payEchartOption,
@@ -119,15 +118,15 @@
 
 				payEchartOption.dataset.source = payByWeekdata.data;
 				payEchart.setOption(payEchartOption);
-				that.payTotal = parseTomoney(payByWeekdata.total);
+				that.payTotal = payByWeekdata.total;
 
 				searchTotalEchartOption.dataset.source = searchTotalByWeekdata.data;
 				searchTotalEchart.setOption(searchTotalEchartOption);
-				that.searchTotal = parseTomoney(searchTotalByWeekdata.total);
+				that.searchTotal = searchTotalByWeekdata.total;
 
 				searchAvgEchartOption.dataset.source = searchAvgByWeekdata.data;
 				searchAvgEchart.setOption(searchAvgEchartOption);
-				that.searchAvg = parseTomoney(searchAvgByWeekdata.total);
+				that.searchAvg = searchAvgByWeekdata.total;
 
 				salesEchartOption.dataset.source = salesByWeekdata.data.allData;
 				salesEchart.setOption(salesEchartOption);
@@ -150,7 +149,7 @@
 				this.salesCurrentDataSource = salesCurrentDataSourceInit;
 			},
 			calcSaleTotal(data) {
-				return parseTomoney(Number(data.reduce((sum, salesPerData) => sum + Number(salesPerData[1]),0)));
+				return Number(data.reduce((sum, salesPerData) => sum + Number(salesPerData[1]),0));
 			},
 			handleChange (pagination) {
                 if (!this.searchHot.length) return;

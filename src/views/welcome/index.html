@@ -42,7 +42,7 @@
                         <a-icon type="info-circle" />
                     </a-tooltip>
                 </div>
-                <div class="echart-card_total">{{payTotal}}</div>
+                <div class="echart-card_total">{{payTotal | toThousandFilter}}</div>
                 <div id='payEchart' class="echart-card_data"></div>
                 <div class="echart-card_footer flex">{{$t('WELCOME.AREA_A.CONVERSION_RATE')}}<span class="number">60%</span></div>
             </div>
@@ -89,7 +89,7 @@
                                     </a-tooltip>
                                 </div>
                                 <div class="search-card_total flex">
-                                    <div class="search-card_total_number">{{searchTotal}}</div>
+                                    <div class="search-card_total_number">{{searchTotal | toThousandFilter}}</div>
                                     <div class="search-card_total_yoy">
                                         <span class="number">12.1</span>
                                         <a-icon type="caret-up" class="increase" />
@@ -107,7 +107,7 @@
                                         </a-tooltip>
                                     </div>
                                     <div class="search-card_total flex">
-                                        <div class="search-card_total_number">{{searchAvg}}</div>
+                                        <div class="search-card_total_number">{{searchAvg | toThousandFilter}}</div>
                                         <div class="search-card_total_yoy">
                                             <span class="number">26.2</span>
                                             <a-icon type="caret-down" class="increase" />
@@ -146,7 +146,7 @@
                             <div id='salesEchart' class="sales-data_echart_canvas"></div>
                             <div class="sales-data_total">
                                 <div class="sales-data_total_label">{{$t('WELCOME.AREA_C.SALES_SUM')}}</div>
-                                <div class="sales-data_total_money">¥ {{totalSales}}</div>
+                                <div class="sales-data_total_money">¥ {{totalSales | toThousandFilter}}</div>
                             </div>
                         </div>
                         <div class="sales-data_list">
