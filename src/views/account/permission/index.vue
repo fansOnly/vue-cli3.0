@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<BreadCrumbComponent />
+		<!-- <BreadCrumbComponent /> -->
 		<div class="container">
             <!-- 内容展示区域 -->
             <a-row :gutter="12">
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue';
+    // import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue';
 
     import { getPermissionTree, getPermissionDetail, updatePermissionDetail } from '@/api/account';
     import Editor from './editor.vue'
@@ -29,7 +29,7 @@
     export default {
         name: 'Permission',
         components: {
-            BreadCrumbComponent,
+            // BreadCrumbComponent,
             Editor,
         },
         data () {

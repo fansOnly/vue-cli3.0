@@ -1,55 +1,28 @@
+#app {
+    height: 100%;
+}
+
 .flex {
     display: flex;
     align-items: center;
 }
 
 /* ant-design-reset */
-.ant-calendar-picker,
-.ant-input-number {
-    width: 100% !important;
-}
-
-.ant-form-item {
-    text-align: left;
-}
-
-.ant-form-explain {
-    text-align: left;
-}
-
-.label-tip {
-    margin-left: 5px;
-    color: rgba(0, 0, 0, 0.35);
-}
-
-.flex-form {
+/* .flex-form {
     display: flex;
-}
+} */
 
-.flex-form .ant-form-item-label {
+/* .flex-form .ant-form-item-label {
     min-width: 120px;
-}
+} */
 
 /* 表单项上下结构布局 */
-.ant-form-item_style2 {
-    margin-bottom: 0 !important;
-}
-
-.ant-form-item_style2 .ant-form-item-label {
+/* .ant-form-item_style2 .ant-form-item-label {
     float: none;
     display: block;
     width: 100%;
     text-align: left;
-}
-
-.container {
-    min-height: 670px;
-    margin: 24px 24px 0;
-    padding: 24px;
-    background: #fff;
-    border-radius: 3px;
-    box-shadow: 0 0 8px rgba(0,0,0,0.02);
-}
+} */
 
 .box {
     padding: 24px;
@@ -62,65 +35,4 @@
     padding-bottom: 15px;
     display: flex;
     align-items: center;
-}
-
-.ant-advanced-search-form {
-    margin-bottom: 15px;
-    padding: 15px;
-    background: #fbfbfb;
-    border: 1px solid #d9d9d9;
-    border-radius: 3px;
-}
-
-.hidden {
-    display: none!important;
-}
-
-
-/* ************************************************************************************************************** */
-/* ************************************************************************************************************** */
-/* 垂直表单样式重置 */
-.ant-form-vertical .ant-form-item {
-    margin-bottom: 0;
-}
-
-.ant-form-vertical .ant-btn {
-    margin-top: 20px;
-}
-
-
-/* 筛选栏目样式重置 */
-.ant-advanced-search-form .ant-form-item {
-    display: flex;
-    margin-bottom: 12px;
-}
-
-.ant-advanced-search-form .ant-form-item-label {
-    min-width: 100px;
-    width: 100px;
-    white-space: nowrap;
-}
-
-.ant-advanced-search-form .ant-form-item-control-wrapper {
-    flex: 1;
-    width: 100%;
-}
-
-.ant-list-item .ant-comment-inner {
-    padding: 0;
-}
-
-.ant-card-head .ant-card-extra {
-    padding: 0;
-}
-
-.ant-radio-button-wrapper-checked.ant-radio-button-wrapper-disabled {
-    background: #1890ff;
-    border-color: #1890ff;
-    color: #fff;
-    box-shadow: -1px 0 0 0 #1890ff;
-}
-
-.form-label_top .ant-form-item-label  {
-    line-height: 1.5;
 }

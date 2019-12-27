@@ -1,6 +1,6 @@
 <template>
     <div>
-        <BreadCrumbComponent />
+        <!-- <BreadCrumbComponent /> -->
         <div class="container">
             <a-form :form="form" layout="vertical" @submit="handleSubmit">
                 <a-row :gutter="24">
@@ -123,12 +123,12 @@
 </template>
 
 <script>
-import BreadCrumbComponent from "@/components/layouts/breadcrumb.vue";
+// import BreadCrumbComponent from "@/components/layouts/breadcrumb.vue";
 
 export default {
     name: "UploadSetting",
     components: {
-        BreadCrumbComponent
+        // BreadCrumbComponent
     },
     beforeCreate() {
         this.form = this.$form.createForm(this);

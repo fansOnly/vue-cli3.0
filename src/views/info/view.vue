@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<BreadCrumbComponent showBack />
+		<!-- <BreadCrumbComponent showBack /> -->
 		<div class="container">
 			<a-form :form="form" @submit="handleSubmit">
 				<a-row>
@@ -150,7 +150,7 @@
 	</div>
 </template>
 <script>
-	import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue';
+	// import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue';
 	import moment from 'moment';
 
 	import { getInfoDetail, addInfo, updateInfo, getInfoClassTree } from '@/api/info';
@@ -165,7 +165,7 @@
 	export default {
 		name: 'listEditPage',
 		components: {
-			BreadCrumbComponent,
+			// BreadCrumbComponent,
 		},
 		data() {
 			return {

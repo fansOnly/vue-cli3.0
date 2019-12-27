@@ -1,7 +1,9 @@
-import variables from '@/assets/styles/variables.scss'
+import variables from '@/assets/styles/theme.less'
+
+const ORIGINAL_THEME = "#1890ff"; // default color
 
 const state = {
-    theme: variables.theme,
+    theme: localStorage.getItem('theme') || ORIGINAL_THEME,
 }
 
 const mutations = {

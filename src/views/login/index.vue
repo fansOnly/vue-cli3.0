@@ -58,8 +58,6 @@
 </template>
 
 <script>
-import { message } from "ant-design-vue";
-// import LoadingComponent from '@/components/loading/index.vue'
 import { randString } from "@/utils/util";
 
 export default {
@@ -79,17 +77,17 @@ export default {
             e.preventDefault();
             this.form.validateFields((err, values) => {
                 if (!err) {
-                    console.log("Received values of form: ", values);
+                    console.log("login data: ", values);
                     const { username, password } = values;
                     if (username === "test" && password === "123456") {
-                        message.success("登陆成功", 1).then(() => {
+                        this.$message.success("登陆成功").then(() => {
                             const user = { id: 1, name: "test" };
                             sessionStorage.setItem("user", JSON.stringify(user));
                             sessionStorage.setItem("token", randString(32));
                             this.$router.push("/admin/index");
                         });
                     } else {
-                        message.error("账号密码不匹配").then(() => {});
+                        this.$message.error("账号密码不匹配");
                     }
                 }
             });
@@ -98,5 +96,31 @@ export default {
 };
 </script>
 <style scoped>
-@import "./index.css";
+.login-page {
+    background: url('../../assets/images/loginbg.svg') 0 0 no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-form {
+    width: 350px;
+    transform: translateY(-100px);
+}
+
+.login-form_item {
+    margin-top: 15px;
+    margin-bottom: 0;
+}
+
+.login-form_rem {
+	display: flex;
+	justify-content: space-between;
+}
+
+.login-button {
+	width: 100%;
+}
 </style>

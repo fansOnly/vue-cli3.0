@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<BreadCrumbComponent />
+		<!-- <BreadCrumbComponent /> -->
 		<div class="container">
 			<a-form :form="form" layout="vertical" @submit="handleSubmit">
 				<a-row :gutter="50">
@@ -34,12 +34,12 @@
 </template>
 
 <script>
-    import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue';
+    // import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue';
 
 	export default {
 		name: 'UserInfo',
 		components: {
-			BreadCrumbComponent,
+			// BreadCrumbComponent,
 		},
 		data() {
 			return {};

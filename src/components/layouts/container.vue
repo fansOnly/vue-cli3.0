@@ -5,7 +5,7 @@
 </template>
 <script>
 export default {
-    name: 'ContainerComponent',
+    name: 'Container',
     computed: {
         getContainerHeight: function() {
             // return window.screen.availHeight - 64 - 48 - 69 + 'px';

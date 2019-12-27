@@ -1,6 +1,6 @@
 <template>
     <div>
-        <BreadCrumbComponent />
+        <!-- <BreadCrumbComponent /> -->
         <div class="container">
             <a-steps :current="current" :status="status">
                 <a-step
@@ -20,12 +20,12 @@
     </div>
 </template>
 <script>
-import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue'
+// import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue'
 
 export default {
     name: 'Process',
     components: {
-        BreadCrumbComponent
+        // BreadCrumbComponent
     },
     data() {
         return {

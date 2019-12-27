@@ -1,0 +1,42 @@
+@import "./theme.less";
+
+.colorBtn(@color) {
+    background: @color;
+
+    &:hover {
+        color: @color;
+
+        &:before,
+        &:after {
+            background: @color;
+        }
+    }
+}
+
+// .blue-btn {
+//     .colorBtn(@blue);
+// }
+
+// .light-blue-btn {
+//     .colorBtn(@light-blue);
+// }
+
+// .red-btn {
+//     .colorBtn(@red);
+// }
+
+// .pink-btn {
+//     .colorBtn(@pink);
+// }
+
+// .green-btn {
+//     .colorBtn(@green);
+// }
+
+// .tiffany-btn {
+//     .colorBtn(@tiffany);
+// }
+
+// .yellow-btn {
+//     .colorBtn(@yellow);
+// }

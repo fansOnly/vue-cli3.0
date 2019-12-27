@@ -1,6 +1,6 @@
 <template>
     <div>
-        <BreadCrumbComponent />
+        <!-- <BreadCrumbComponent /> -->
         <div class="container">
             <div :style="{ marginBottom: '16px' }">
                 <a-button @click="add">ADD</a-button>
@@ -20,11 +20,11 @@
     </div>
 </template>
 <script>
-import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue'
+// import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue'
 
 export default {
     components: {
-        BreadCrumbComponent
+        // BreadCrumbComponent
     },
     data() {
         const panes = [

@@ -1,13 +1,13 @@
 <template src="./site.html"> </template>
 
 <script>
-import BreadCrumbComponent from "@/components/layouts/breadcrumb.vue";
+// import BreadCrumbComponent from "@/components/layouts/breadcrumb.vue";
 import { getSiteInfo, updateSiteInfo } from "@/api/setting";
 
 export default {
     name: "SiteSetting",
     components: {
-        BreadCrumbComponent
+        // BreadCrumbComponent
     },
     data() {
         return {

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <BreadCrumbComponent />
+        <!-- <BreadCrumbComponent /> -->
         <div class="container">
             <a-calendar>
                 <ul class="events" slot="dateCellRender" slot-scope="value">
@@ -19,11 +19,11 @@
     </div>
 </template>
 <script>
-import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue'
+// import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue'
 
 export default {
     components: {
-        BreadCrumbComponent
+        // BreadCrumbComponent
     },
     methods: {
         getListData(value) {

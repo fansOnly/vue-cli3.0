@@ -9,8 +9,9 @@ module.exports = {
     publicPath: './',
     outputDir: 'dist',
     assetsDir: 'static',
-    productionSourceMap: false,
+    productionSourceMap: process.env.NODE_ENV === 'development',
     devServer: {
+        port: 8088,
         overlay: {
             warnings: false,
             errors: true
@@ -24,6 +25,17 @@ module.exports = {
                     '^api': '/'
                 }
             }
+        }
+    },
+    css: {
+        loaderOptions: {
+            less: {
+                // modifyVars: {
+                //     'primary-color': '#000000',
+                //     'link-color': '#000000',
+                // },
+                javascriptEnabled: true
+            },
         }
     },
     configureWebpack: {
@@ -40,10 +52,10 @@ module.exports = {
                 options[0].title = 'Rare Ant Technology Co., Ltd'
                 return options
             })
-        config
-            .when(process.env.NODE_ENV === 'development',
-                config => config.devtool('cheap-source-map')
-            )
+        // config
+        //     .when(process.env.NODE_ENV === 'development',
+        //         config => config.devtool('source-map')
+        //     )
         config
             .when(process.env.NODE_ENV === 'production',
                 config => {

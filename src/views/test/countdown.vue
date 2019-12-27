@@ -1,6 +1,6 @@
 <template>
     <div>
-        <BreadCrumbComponent />
+        <!-- <BreadCrumbComponent /> -->
         <div class="container">
             <a-row :gutter="16">
                 <a-col :span="12">
@@ -29,11 +29,11 @@
     </div>
 </template>
 <script>
-import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue'
+// import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue'
 
 export default {
     components: {
-        BreadCrumbComponent
+        // BreadCrumbComponent
     },
     data() {
         return {

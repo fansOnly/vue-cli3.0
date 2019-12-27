@@ -72,12 +72,11 @@
 
 <script>
 	import { createNamespacedHelpers } from 'vuex'
-	// const { mapGetters } = createNamespacedHelpers('locale')
 	const localeStore = createNamespacedHelpers('locale')
 	const stateStore = createNamespacedHelpers('state')
 
 	export default {
-		name: 'SiderComponent',
+		name: 'Sider',
 		props: {
 			collapsed: {
 				type: Boolean,
@@ -100,6 +99,8 @@
 		},
 		created() {
 			// console.log('menus', this.menus)
+
+			// console.log('this.currentPath', this.currentPath)
 
 			// const currentPath = sessionStorage.getItem('currentPath') || '';
 			const openKeys = sessionStorage.getItem('openKeys') || '';

@@ -50,7 +50,7 @@
 							style="color:#777;font-size:20px;vertical-align:middle;cursor:pointer;"
 						/>
 					</div>
-					<a-menu slot="overlay" :selectedKeys="[currentLocale]" @click="switchLocale">
+					<a-menu slot="overlay" :selectedKeys="[currentLocale]" @click="selectLocale">
 						<template v-for="(item, index) in locales">
 							<a-menu-item :key="item">
 								<a href="javascript:;">{{languageIcons[item]}} {{languageLabels[currentLocale][index]}}</a>
@@ -64,8 +64,11 @@
 </template>
 
 <script>
+	import { createNamespacedHelpers } from 'vuex'
+	const { mapGetters, mapActions } = createNamespacedHelpers('locale')
+	
 	export default {
-		name: 'HeaderComponent',
+		name: 'Header',
 		props: {
 			collapsed: {
 				type: Boolean,
@@ -90,17 +93,31 @@
 				currentLocale: ''
 			};
 		},
-		created () {
-			const locale = localStorage.getItem('locale') || 'cn';
-			this.currentLocale = locale;
-			this.$store.dispatch('locale/switchLocale', locale);
+		computed: {
+			...mapGetters(['locale']),
+			defaultLocale() {
+				return this.locale
+			}
+		},
+		watch: {
+			defaultLocale: {
+				handler: function(val, oldVal) {
+					this.currentLocale = val;
+				},
+				immediate: true
+			},
+			currentLocale(val) {
+				this.switchLocale(val)
+			}
 		},
 		methods: {
-			// ...mapActions(['switchLocale']),
 			onToggleCollapsed() {
 				this.$emit('onToggleCollapsed', !this.collapsed);
 			},
 			handleSearch(value) {
+				if (!value) {
+					this.$message.warn('请输入搜索关键字');
+				}
 				console.log(`search for ${value}`);
 			},
 			switchUserOption(item) {
@@ -111,12 +128,12 @@
 					});
 				}
 			},
-			switchLocale(item) {
-				// console.log('switchLocale', item);
+			selectLocale(item) {
+				// console.log('selectLocale', item);
 				console.log(`当前选择语言为: ${item.key} - ${this.languageLabels[item.key][this.locales.indexOf(item.key)]}`);
 				this.currentLocale = item.key;
-				this.$store.dispatch('locale/switchLocale', item.key);
-			}
+			},
+			...mapActions(["switchLocale"])
 		}
 	};
 </script>

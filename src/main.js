@@ -10,8 +10,9 @@ import store from './store'
 import i18n from './i18n'
 import * as filters from './filters'
 
-import 'ant-design-vue/dist/antd.css'
-import './assets/styles/index.scss'
+import 'nprogress/nprogress.css'
+import 'ant-design-vue/dist/antd.less'
+import './assets/styles/index.less'
 import './app.css'
 
 Vue.config.productionTip = false

@@ -9,61 +9,76 @@ import zh_CN from '../../../node_modules/ant-design-vue/lib/locale-provider/zh_C
 import zh_TW from '../../../node_modules/ant-design-vue/lib/locale-provider/zh_TW';
 import en_US from '../../../node_modules/ant-design-vue/lib/locale-provider/default';
 
+const ANTD_LOCALE = {
+    'cn': zh_CN,
+    'hk': zh_TW,
+    'en': en_US,
+};
+
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 import 'moment/locale/zh-tw';
 import 'moment/locale/en-gb';
 
+const ORIGINAL_LOCALE = 'cn';  // 默认语言
+
 const state = {
-    locale: 'cn',
-    LAN: zh_CN,
+    locale: '',
+    LAN: {},
     menus: [],
 }
 
 const getters = {
-    locale: state => {
-        return localStorage.getItem('locale') || state.locale
+    locale: () => {
+        const CURRENT_LOCALE = localStorage.getItem('locale') || ORIGINAL_LOCALE
+        i18n.locale = CURRENT_LOCALE;
+        return CURRENT_LOCALE
+    },
+    LAN: () => {
+        const CURRENT_LOCALE = localStorage.getItem('locale') || ORIGINAL_LOCALE
+        return ANTD_LOCALE[CURRENT_LOCALE]
     },
     menus: state => {
-        return createMenu(state.locale) || state.menus
+        const CURRENT_LOCALE = state.locale || localStorage.getItem('locale') || ORIGINAL_LOCALE
+        return createMenu(CURRENT_LOCALE) || []
     }
 }
 
 const actions = {
     switchLocale({ commit }, payload) {
-        localStorage.setItem('locale', payload);
-        message.loading('正在初始化语言...', 2, () => {
-            commit('SWITCH_LOCAL', payload)
+        message.loading('正在初始化语言...', 1, () => {
+            commit(`${SWITCH_LOCAL}`, payload)
         });
     }
 }
 
 const mutations = {
     [SWITCH_LOCAL](state, locale) {
+        localStorage.setItem('locale', locale);
         state.locale = locale;
         state.menus = createMenu(locale);
-        switch (locale) {
-            case 'cn':
-                state.LAN = zh_CN;
-                moment.locale('zh-cn');
-                i18n.locale = 'cn';
-                break;
-            case 'hk':
-                state.LAN = zh_TW;
-                moment.locale('zh-tw');
-                i18n.locale = 'hk';
-                break;
-            case 'en':
-                state.LAN = en_US;
-                moment.locale('en-gb');
-                i18n.locale = 'en';
-                break;
-            default:
-                state.LAN = zh_CN;
-                moment.locale('zh-cn');
-                i18n.locale = 'cn';
-                break;
-        }
+        i18n.locale = locale;
+        state.LAN = ANTD_LOCALE[locale];
+        updateLAN(locale);
+    }
+}
+
+const updateLAN = locale => {
+    switch (locale) {
+        case 'cn':
+            moment.locale('zh-cn');
+            break;
+        case 'hk':
+            moment.locale('zh-tw');
+            break;
+        case 'en':
+            moment.locale('en-gb');
+            break;
+        default:
+            state.LAN = ANTD_LOCALE['cn'];
+            moment.locale('zh-cn');
+            i18n.locale = 'cn';
+            break;
     }
 }
 
@@ -91,7 +106,7 @@ const createMenu = locale => {
                     key: 'siteinfo.banner',
                     name: menuLan.MENU2_2[locale],
                     icon: '',
-                    path: '/admin/siteinfo/banner'
+                    path: '/admin/siteinfo/banner/class'
                 },
                 {
                     key: 'siteinfo.upload',
@@ -156,10 +171,10 @@ const createMenu = locale => {
             ]
         },
         {
-            key: 'assets',
+            key: 'resources',
             name: menuLan.MENU6[locale],
             icon: 'file-search',
-            path: '/admin/assets/index',
+            path: '/admin/resources/index',
         },
         {
             key: 'account',

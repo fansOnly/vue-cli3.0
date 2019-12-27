@@ -1,8 +1,8 @@
 <template>
 	<div>
-        <template v-if="withBreadcrumb">
+        <!-- <template v-if="withBreadcrumb">
             <BreadCrumbComponent />
-        </template>
+        </template> -->
         <div class="container">
             <!-- 筛选区域 -->
             <a-form v-if="withFilter" ref="filterForm" class="ant-advanced-search-form" :form="form" @submit.prevent="handleFilter">
@@ -101,22 +101,22 @@
 </template>
 
 <script>
-    import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue'
+    // import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue'
     import ExportExcel from '@/components/ExportExcel.vue'
 
     export default {
         name: 'PageSkeleton',
         components: {
-            BreadCrumbComponent,
+            // BreadCrumbComponent,
             ExportExcel
         },
         props: {
-            withBreadcrumb: {
-                type: Boolean,
-                default: function () {
-                    return true
-                }
-            },
+            // withBreadcrumb: {
+            //     type: Boolean,
+            //     default: function () {
+            //         return true
+            //     }
+            // },
             withFilter: {
                 type: Boolean,
                 default: function () {

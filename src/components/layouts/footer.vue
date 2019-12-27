@@ -7,7 +7,7 @@
 </template>
 <script>
 export default {
-    name: 'FooterComponent',
+    name: 'Footer',
 }
 </script>
 <style scoped>

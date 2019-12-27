@@ -1,6 +1,6 @@
 <template>
     <div>
-        <BreadCrumbComponent showBack />
+        <!-- <BreadCrumbComponent showBack /> -->
         <div class="container">
             <a-form :form="form" @submit="handleSubmit">
                 <a-row :gutter="16">
@@ -84,14 +84,14 @@
 </template>
 
 <script>
-import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue'
+// import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue'
 import { getMessageDetail, updateMessage } from '@/api/message'
 import config from './config'
 
 export default {
     name: 'MessageView',
     components: {
-        BreadCrumbComponent,
+        // BreadCrumbComponent,
     },
     data() {
         return {
