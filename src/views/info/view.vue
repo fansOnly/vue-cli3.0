@@ -4,7 +4,7 @@
 		<div class="container">
 			<a-form :form="form" @submit="handleSubmit">
 				<a-row>
-					<a-col :span="17">
+					<a-col :span="16">
 						<a-form-item class='hidden'>
 							<a-input v-decorator="['adminid',{initialValue: detail.adminid || 1}]" />
 						</a-form-item>
@@ -85,7 +85,7 @@
 							<a-button html-type="button" style="margin-left:10px;">保存</a-button>
 						</a-form-item>
 					</a-col>
-					<a-col :span="5" :offset="2">
+					<a-col :span="6" :offset="2">
 						<a-form-item v-bind="formItemLayout" label="缩略图" class="ant-form-item_style2">
 							<a-upload
 								v-decorator="['thumbnail',]"
@@ -173,10 +173,10 @@
 				detail: {},
 				formItemLayout: {
 					labelCol: {
-						sm: { span: 3 }
+						sm: { span: 4 }
 					},
 					wrapperCol: {
-						sm: { span: 21 }
+						sm: { span: 20 }
 					}
 				},
 				hasErrors,
@@ -246,9 +246,9 @@
 							...fieldsValue,
 							classid: fieldsValue['parent_id'].slice(),
 							tags: fieldsValue['tags'].slice(),
-							file: this.detail.file.slice(),
-							photos: this.detail.photos.slice(),
-							thumbnail: this.detail.thumbnail.slice(),
+							file: this.detail.file && this.detail.file.slice(),
+							photos: this.detail.photos && this.detail.photos.slice(),
+							thumbnail: this.detail.thumbnail && this.detail.thumbnail.slice(),
                             create_time:
                                 fieldsValue['create_time'] &&
 								fieldsValue['create_time'].format('YYYY-MM-DD hh:mm:ss'),
@@ -276,7 +276,7 @@
 				const data = await updateInfo(params);
 				if (data.code == '200') {
 					this.$message.success(data.msg, 1, () => {
-						this.$router.replace({name: 'InfoView', params:{id: Math.floor(Math.random() * 99999999)}});
+						this.$router.replace({name: 'infoEdit', params:{id: Math.floor(Math.random() * 99999999)}});
 					})
 				}
 			},
@@ -285,7 +285,7 @@
 				const data = await addInfo(params);
 				if (data.code == '200') {
 					this.$message.success(data.msg, 1, () => {
-						this.$router.replace({name: 'InfoView', params:{id: parseInt(Math.random() * 9999999)}});
+						this.$router.replace({name: 'infoEdit', params:{id: parseInt(Math.random() * 9999999)}});
 					})
 				}
 			},

@@ -1,7 +1,7 @@
 // 基础页面加载
 const Login = () => import('@/views/login/index.vue');
 const Admin = () => import('@/views/index/index.vue');
-const NotFound = () => import('@/components/notFound/404.vue');
+const NotFound = () => import('@/components/exception/404.vue');
 
 import viewRoutes from './views'
 
@@ -10,7 +10,7 @@ const routes = [
 		path: '/',
 		name: 'index',
 		beforeEnter: (to, from ,next) => {
-			if (!localStorage.getItem('token')) {
+			if (!sessionStorage.getItem('token')) {
 				next({
 					path: '/login'
 				})
@@ -30,16 +30,17 @@ const routes = [
 			depth: 1,
 		},
 		beforeEnter: (to, from ,next) => {
-			next(!localStorage.getItem('token'));
+			next(!sessionStorage.getItem('token'));
 		}
 	},
 	{
-		path: '/admin',
+		path: '/admin/index',
 		name: 'admin',
 		component: Admin,
 		meta: {
-			breadcrumbName: '后台管理',
-			depth: 1,
+			// breadcrumbName: '首页',
+			breadcrumbName: 'MENU.MENU1',
+			depth: 0,
 		},
 		children: [...viewRoutes],
 	},

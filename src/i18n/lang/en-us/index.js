@@ -1,5 +1,6 @@
 import GLOBAL from './global'
 import VALIDATE from './validate'
+import MENU from './menu'
 import WELCOME from './pages/welcome'
 
 export default {
@@ -7,4 +8,5 @@ export default {
     GLOBAL,
     VALIDATE,
     WELCOME,
+    MENU
 };

@@ -2,7 +2,6 @@
 	<div>
 		<a-menu
 			:selectedKeys="selectedKeys"
-			:defaultOpenKeys="defaultOpenKeys"
 			:openKeys="openKeys"
 			mode="inline"
 			theme="dark"
@@ -12,58 +11,66 @@
 			@click="clickMenuItem"
 		>
 			<template v-for="item in menus">
-				<template v-if="!item.subs">
-					<a-menu-item :key="item.key">
-						<router-link v-if="item.path" :to="item.path">
-							<a-icon v-if="item.icon" :type="item.icon" />
-							<span>{{item.name}}</span>
-						</router-link>
-						<a v-else href="javascript:;">
-							<a-icon v-if="item.icon" :type="item.icon" />
-							<span>{{item.name}}</span>
-						</a>
-					</a-menu-item>
-				</template>
+				<template v-if="!item.meta.hidden">
+					<template v-if="!item.children || item.meta.hiddenChildren">
+						<a-menu-item :key="item.meta.key">
+							<router-link v-if="item.path" :to="item.path">
+								<a-icon v-if="item.meta.icon" :type="item.meta.icon" />
+								<span>{{$t(item.meta.breadcrumbName)}}</span>
+							</router-link>
+							<a v-else href="javascript:;">
+								<a-icon v-if="item.meta.icon" :type="item.meta.icon" />
+								<span>{{$t(item.meta.breadcrumbName)}}</span>
+							</a>
+						</a-menu-item>
+					</template>
 
-				<template v-else>
-					<!-- 包含二级分类 -->
-					<a-sub-menu :key="item.key">
-						<span slot="title">
-							<a-icon v-if="item.icon" :type="item.icon" />
-							<span>{{item.name}}</span>
-						</span>
-						<template v-for="second in item.subs">
-							<template v-if="!second.subs">
-								<a-menu-item :key="second.key">
-									<router-link v-if="second.path" :to="second.path">
-										<a-icon v-if="second.icon" :type="second.icon" />
-										<span>{{second.name}}</span>
-									</router-link>
-									<a v-else href="javascript:;">
-										<a-icon v-if="second.icon" :type="second.icon" />
-										<span>{{second.name}}</span>
-									</a>
-								</a-menu-item>
-							</template>
-							<!-- 包含三级分类 -->
-							<template v-else>
-								<a-sub-menu :key="second.key" :title="second.name">
-									<template v-for="third in second.subs">
-										<a-menu-item :key="third.key">
-											<router-link v-if="third.path" :to="third.path">
-												<a-icon v-if="third.icon" :type="third.icon" />
-												<span>{{third.name}}</span>
+					<template v-else>
+						<!-- 包含二级分类 -->
+						<a-sub-menu :key="item.meta.key">
+							<span slot="title">
+								<a-icon v-if="item.meta.icon" :type="item.meta.icon" />
+								<span>{{$t(item.meta.breadcrumbName)}}</span>
+							</span>
+							<template v-for="second in item.children">
+								<template v-if="!second.meta.hidden">
+									<template v-if="!second.children || second.meta.hiddenChildren">
+										<a-menu-item :key="second.meta.key">
+											<router-link v-if="second.path" :to="second.path">
+												<a-icon v-if="second.meta.icon" :type="second.meta.icon" />
+												<span>{{$t(second.meta.breadcrumbName)}}</span>
 											</router-link>
 											<a v-else href="javascript:;">
-												<a-icon v-if="third.icon" :type="third.icon" />
-												<span>{{third.name}}</span>
+												<a-icon v-if="second.meta.icon" :type="second.meta.icon" />
+												<span>{{$t(second.meta.breadcrumbName)}}</span>
 											</a>
 										</a-menu-item>
 									</template>
-								</a-sub-menu>
+									<!-- 包含三级分类 -->
+									<template v-else>
+										<a-sub-menu :key="second.meta.key" :title="second.meta.breadcrumbName">
+											<template v-for="third in second.children">
+												<template v-if="!third.meta.hidden">
+													<template v-if="!third.children || third.meta.hiddenChildren">
+														<a-menu-item :key="third.meta.key">
+															<router-link v-if="third.path" :to="third.path">
+																<a-icon v-if="third.meta.icon" :type="third.meta.icon" />
+																<span>{{$t(third.meta.breadcrumbName)}}</span>
+															</router-link>
+															<a v-else href="javascript:;">
+																<a-icon v-if="third.meta.icon" :type="third.meta.icon" />
+																<span>{{$t(third.meta.breadcrumbName)}}</span>
+															</a>
+														</a-menu-item>
+													</template>
+												</template>
+											</template>
+										</a-sub-menu>
+									</template>
+								</template>
 							</template>
-						</template>
-					</a-sub-menu>
+						</a-sub-menu>
+					</template>
 				</template>
 			</template>
 		</a-menu>
@@ -71,9 +78,7 @@
 </template>
 
 <script>
-	import { createNamespacedHelpers } from 'vuex'
-	const localeStore = createNamespacedHelpers('locale')
-	const stateStore = createNamespacedHelpers('state')
+	import viewRoutes from '@/router/views'
 
 	export default {
 		name: 'Sider',
@@ -84,35 +89,54 @@
 					return false
 				}
 			},
+			selectedKey: {
+				type: String,
+				default: function () {
+					return ''
+				}
+			},
+			openKey: {
+				type: String,
+				default: function () {
+					return ''
+				}
+			},
 		},
 		data() {
 			return {
-				// menus: [],
-				defaultOpenKeys: [],
-				selectedKeys: ['index'],
+				menus: viewRoutes,
 				openKeys: [],
 			};
 		},
 		computed: {
-			...localeStore.mapGetters(['menus']),
-			...stateStore.mapGetters(['currentPath']),
+			selectedKeys: {
+				get() {
+					return [this.selectedKey]
+				},
+				set(val) {
+					this.selectedKeys = val
+				}
+			},
+			defaultOpenKey() {
+				return this.openKey
+			},
+			rootKeys() {
+				return this.menus.map(item => item.meta.key)
+			},
 		},
-		created() {
-			// console.log('menus', this.menus)
-
-			// console.log('this.currentPath', this.currentPath)
-
-			// const currentPath = sessionStorage.getItem('currentPath') || '';
-			const openKeys = sessionStorage.getItem('openKeys') || '';
-			
-			const flatMenus = arr => arr.reduce((res, cur) => res.concat(cur.subs ? flatMenus(cur.subs) : cur), []);
-			const currentMenu = flatMenus(this.menus).filter(item => item.path === this.currentPath);
-			this.selectedKeys = currentMenu.length ? [currentMenu[0].key] : [];
-
-			this.openKeys = openKeys ? [openKeys] : [];
-		},
-		mounted() {
-			this.rootKeys = this.menus.map(item => item.key);
+		watch: {
+			defaultOpenKey: {
+				handler(val) {
+					this.openKeys = [this.openKey]
+				},
+				immediate: true,
+			},
+			openKeys: {
+				handler(val, oldVal) {
+					this.openKeys = val
+				},
+				deep: true
+			},
 		},
 		methods: {
 			onOpenMenu(openKeys) {
@@ -122,16 +146,15 @@
 				} else {
 					this.openKeys = [latestOpenKey] || [];
 				}
-				sessionStorage.setItem('openKeys', this.openKeys[0]);
 			},
 			clickMenuItem({ key, keyPath }) {
 				// console.log('clickMenuItem', item, key, keyPath);
 				if (keyPath.length == 1) {
 					this.openKeys = [];
 				}
-				if (key == 'user.logout') {
+				if (key === 'user.logout') {
 					this.$message.success('退出登陆', 1).then(() => {
-						localStorage.clear();
+						sessionStorage.clear();
 						this.$router.push('/login');
 					});
 				}

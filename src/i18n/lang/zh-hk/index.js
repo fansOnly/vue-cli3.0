@@ -1,8 +1,12 @@
+import GLOBAL from './global'
+import VALIDATE from './validate'
+import MENU from './menu'
+import WELCOME from './pages/welcome'
+
 export default {
-    language: '繁体中文 HK',
-    base: {
-        title: 'I18n 设置',
-        tooltip: '提示框',
-        desc: '描述文字'
-    }
+    language: '繁体中文 ZH-HK',
+    GLOBAL,
+    VALIDATE,
+    WELCOME,
+    MENU
 };

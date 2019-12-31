@@ -37,9 +37,6 @@
                 </span>
             </a-table>
         </template>
-        <!-- 渲染编辑框 -->
-        <template slot="formSlot">
-        </template>
     </PageSkeleton>
 </template>
 

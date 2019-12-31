@@ -25,27 +25,6 @@ router.beforeEach((to, from, next) => {
         routeAuth();
     }
 
-    if (to.meta.breadcrumbName) {
-        if (from.meta.depth == to.meta.depth) {
-            updateRoutes(to);
-        } else {
-            if (to.meta.depth == 2) {
-                resetRoutes(to);
-            }
-            if (to.meta.depth == 3) {
-                addRoutes(to, from);
-            }
-        }
-    }
-
-    // const flatMenus = arr => arr.reduce((res, cur) => res.concat(cur.subs ? flatMenus(cur.subs) : cur), []);
-
-    // // console.log('to.path', to.path)
-    // const currentMenu = flatMenus(store.state.locale.menus).filter(item => item.path === to.path);
-    // if (currentMenu.length) {
-        sessionStorage.setItem('currentPath', to.path);
-    // }
-
     if (to.path !== from.path) {
         NProgress.start();
     }
@@ -57,25 +36,6 @@ router.afterEach(() => {
     NProgress.done();
     document.documentElement.scrollTop = 0;
 })
-
-const resetRoutes = to => {
-	store.dispatch('breadcrumb/resetRoutes', {path: to.path, name: to.name, breadcrumbName: to.meta.breadcrumbName})
-}
-
-const addRoutes = (to, from) => {
-	store.dispatch('breadcrumb/addRoutes', {name: from.name, route: {path: to.path, name: to.name, breadcrumbName: to.meta.breadcrumbName}})
-}
-
-const updateRoutes = to => {
-    const routes = store.state.breadcrumb.routes;
-    let repeatIndex = 0;
-    routes.map((route, index) => {
-        if (to.depth == route.depth) {
-            repeatIndex = index;
-        }
-    })
-	store.dispatch('breadcrumb/updateRoutes', {index: repeatIndex, route: {path: to.path, name: to.name, breadcrumbName: to.meta.breadcrumbName}})
-}
 
 const routeAuth = () => {
     if (!sessionStorage.getItem('token')) {

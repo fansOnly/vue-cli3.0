@@ -1,25 +1,23 @@
 <template>
-    <div>
-        <download-excel
-            :fields="excelFields"
-            :data="excelData"
-            :before-generate="startDownload"
-            :before-finish="finishDownload"
-            :name="excelName"
-            type="xls"
-        >
-            <a-button>{{ btnName }}</a-button>
-        </download-excel>
-    </div>
+    <export-excel
+        :fields="excelFields"
+        :data="excelData"
+        :before-generate="startDownload"
+        :before-finish="finishDownload"
+        :name="excelName"
+        type="xls"
+    >
+        <a-button>{{ btnName }}</a-button>
+    </export-excel>
 </template>
 
 <script>
-import JsonExcel from "vue-json-excel";
+import JsonExcel from "vue-json-excel"
 
 export default {
     name: "ExportExcel",
     components: {
-        "download-excel": JsonExcel
+        "export-excel": JsonExcel
     },
     props: {
         excelFields: {

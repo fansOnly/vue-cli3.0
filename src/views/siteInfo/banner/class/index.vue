@@ -26,8 +26,8 @@
                     <a-badge :status="BADGE_STATUS(action)" :text="BANNER_CLASS_STATUS[action]" />
                 </span>
                 <span slot="actionSlot" slot-scope="action, record">
-                    <a-button size="small" @click="redirectPage(record)">管理</a-button>
-                    <span>&nbsp;</span>
+                    <!-- <a-button size="small" @click="redirectPage(record)">管理</a-button> -->
+                    <!-- <span>&nbsp;</span> -->
                     <a-button size="small" @click="showModal('edit', record.id)">{{allowEdit ? '编辑' : '查看'}}</a-button>
                     <span>&nbsp;</span>
                     <a-popconfirm title='确认删除当前信息吗?' @confirm="() => delItem(record.id)">

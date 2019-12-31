@@ -1,38 +1,27 @@
 <template>
     <div v-if="showBreadcrumb" class="breadcrumb">
-        <a-breadcrumb :routes="routesx" separator="/">
-            <!-- <transition-group name="breadcrumb"> -->
-                <template
-                    slot="itemRender"
-                    slot-scope="{ route, params, routes }"
-                >
-                    <span v-if="routes.indexOf(route) === routes.length - 1">
-                        {{ route.breadcrumbName }}
-                    </span>
-                    <!-- <router-link v-else :to="`${paths.join('/')}`"> -->
-                    <router-link v-else :to="`${route.path}`">
-                        {{ route.breadcrumbName }}
-                    </router-link>
-                </template>
-            <!-- </transition-group> -->
+        <a-breadcrumb :routes="routes" separator="/">
+            <template slot="itemRender" slot-scope="{ route, params, routes }">
+                <span v-if="routes.indexOf(route) === routes.length - 1 || route.meta.depth == 1">
+                    {{ $t(route.meta.breadcrumbName) }}
+                </span>
+                <!-- <router-link v-else :to="`${paths.join('/')}`"> -->
+                <router-link v-else :to="`${route.path}`">
+                    {{ $t(route.meta.breadcrumbName) }}
+                </router-link>
+            </template>
         </a-breadcrumb>
-        <a v-if="showBackbtn" class="back" href="javascript: history.back(-1);">{{
-            $t("GLOBAL.BTN_BACK")
-        }}</a>
+        <a v-if="showBackbtn" class="back" href="javascript: history.back(-1);" >{{ $t("GLOBAL.BTN_BACK") }}</a>
     </div>
 </template>
 <script>
-
-// import { createNamespacedHelpers } from "vuex"
-// const { mapState } = createNamespacedHelpers("breadcrumb")
-
 export default {
     name: "BreadCrumb",
     props: {
         routes: {
             type: Array,
             default: function() {
-                return [{path: '/',breadcrumbName: '首页'}]
+                return [];
             }
         },
         showBreadcrumb: {
@@ -46,30 +35,7 @@ export default {
             default: function() {
                 return false;
             }
-        },
-    },
-    data() {
-        return {
-            routesx: [{
-                path: '/',
-                breadcrumbName: '首页'
-            }, {
-                path: '/admin/table/1',
-                breadcrumbName: '一级面包屑'
-            }, {
-                path: '/ss/2',
-                breadcrumbName: '二级面包屑'
-            }, {
-                path: '',
-                breadcrumbName: '当前页面'
-            }],
-        };
-    },
-    computed: {
-        // ...mapState(["routes"])
-    },
-    created() {
-        // console.log("route", this.$route);
+        }
     }
 };
 </script>

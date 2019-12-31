@@ -32,7 +32,7 @@ export default {
 			title: '操作',
 			dataIndex: 'action',
 			scopedSlots: { customRender: 'actionSlot' },
-			width: '200px'
+			width: '150px'
 		}
 	],
 	pagination: {

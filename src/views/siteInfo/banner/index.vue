@@ -131,7 +131,7 @@
             this.form = this.$form.createForm(this);
         },
         created () {
-            this.classid = this.$route.params.classid;
+            this.classid = this.$route.params.classid || '12311';
             this.getBannerListFn();
         },
         methods: {

@@ -65,7 +65,7 @@
 
 <script>
 	import { createNamespacedHelpers } from 'vuex'
-	const { mapGetters, mapActions } = createNamespacedHelpers('locale')
+	const { mapGetters, mapActions } = createNamespacedHelpers('lang')
 	
 	export default {
 		name: 'Header',
