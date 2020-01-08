@@ -1,13 +1,11 @@
 <template>
-    <div>
-        <a-modal :visible="visible" :width="width" :okButtonProps="{props: {disabled: okBtnDisabled}}" :maskClosable="false" @ok="() => {$emit('ok')}" @cancel="() => {$emit('cancel')}">
-            <div class="modal-header">
-                <div class="modal-header_title">{{modalTitle}}</div>
-            </div>
-            <!-- 节点插槽 -->
-            <slot></slot>
-        </a-modal>
-    </div>
+    <a-modal :visible="visible" :width="width" :okButtonProps="{props: {disabled: okBtnDisabled}}" :maskClosable="false" @ok="() => {$emit('ok')}" @cancel="() => {$emit('cancel')}">
+        <div class="modal-header">
+            <div class="modal-header_title">{{modalTitle}}</div>
+        </div>
+        <!-- 节点插槽 -->
+        <slot></slot>
+    </a-modal>
 </template>
 
 <script>

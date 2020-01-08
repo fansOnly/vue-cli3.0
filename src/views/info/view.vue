@@ -15,8 +15,7 @@
 							<span slot="label">
 								<a-tooltip title="this is a tooltip.">标题<a-icon type="info-circle" class="label-tip" /></a-tooltip>
 							</span>
-							<a-input v-decorator="['title',{rules: [{required: true, message: '请输入标题！',}],initialValue: detail.title}]"
-								placeholder="请输入标题" />
+							<a-input v-decorator="['title',{rules: [{required: true, message: '请输入标题！',}],initialValue: detail.title}]" placeholder="请输入标题" />
 						</a-form-item>
 						<a-form-item v-bind="formItemLayout" label="栏目分类" hasFeedback>
 							<a-tree-select
@@ -39,8 +38,8 @@
 								show-time
 								format="YYYY-MM-DD HH:mm:ss"
 								placeholder="请选择发布时间"
-								class="ant-form-item_style2"
 								readonly
+								style="width:100%"
 							/>
 						</a-form-item>
 						<a-form-item label="简介" v-bind="formItemLayout" class="form-label_top">
@@ -150,10 +149,9 @@
 	</div>
 </template>
 <script>
-	// import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue';
-	import moment from 'moment';
+	import moment from 'moment'
 
-	import { getInfoDetail, addInfo, updateInfo, getInfoClassTree } from '@/api/info';
+	import { getInfoDetail, addInfo, updateInfo, getInfoClassTree } from '@/api/info'
 
 	import { TreeSelect } from 'ant-design-vue'
 	const SHOW_PARENT = TreeSelect.SHOW_PARENT
@@ -164,9 +162,6 @@
 
 	export default {
 		name: 'listEditPage',
-		components: {
-			// BreadCrumbComponent,
-		},
 		data() {
 			return {
 				id: 0,

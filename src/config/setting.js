@@ -43,13 +43,13 @@ export const PAGINATION = {
  * 数据默认筛选条件配置
  */
 export const FILTER_ITEMS = {
-    filterID: true,
-    filterTtile: true,
-    filterCreateTime: true,
-    filterState: true,
-    filterAdmin: false,
-    filterPhone: false,
-    filterName: false,
+    filterID: true,  // 根据ID筛选
+    filterTtile: true,  // 根据标题筛选
+    filterCreateTime: true,  // 根据创建时间按筛选
+    filterState: true, // 根据数据状态筛选
+    filterAdmin: false, // 根据发布管理员筛选
+    filterPhone: false, // 根据手机号筛选
+    filterName: false,  // 根据用户名称筛选
 }
 
 /**

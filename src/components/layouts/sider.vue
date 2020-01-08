@@ -1,80 +1,79 @@
 <template>
-	<div>
-		<a-menu
-			:selectedKeys="selectedKeys"
-			:openKeys="openKeys"
-			mode="inline"
-			theme="dark"
-			:inlineCollapsed="collapsed"
-			@openChange="onOpenMenu"
-			@select="selectKeys"
-			@click="clickMenuItem"
-		>
-			<template v-for="item in menus">
-				<template v-if="!item.meta.hidden">
-					<template v-if="!item.children || item.meta.hiddenChildren">
-						<a-menu-item :key="item.meta.key">
-							<router-link v-if="item.path" :to="item.path">
-								<a-icon v-if="item.meta.icon" :type="item.meta.icon" />
-								<span>{{$t(item.meta.breadcrumbName)}}</span>
-							</router-link>
-							<a v-else href="javascript:;">
-								<a-icon v-if="item.meta.icon" :type="item.meta.icon" />
-								<span>{{$t(item.meta.breadcrumbName)}}</span>
-							</a>
-						</a-menu-item>
-					</template>
+	<a-menu
+		:selectedKeys="selectedKeys"
+		:openKeys="openKeys"
+		:mode="menuMode"
+		:theme="menuTheme"
+		:inlineCollapsed="collapsed"
+		@openChange="onOpenMenu"
+		@select="selectKeys"
+		@click="clickMenuItem"
+		style="padding: 8px 0;border-right-color:transparent;"
+	>
+		<template v-for="item in menus">
+			<template v-if="!item.meta.hidden">
+				<template v-if="!item.children || item.meta.hiddenChildren">
+					<a-menu-item :key="item.meta.key">
+						<router-link v-if="item.path" :to="item.path">
+							<a-icon v-if="item.meta.icon" :type="item.meta.icon" />
+							<span>{{$t(item.meta.breadcrumbName)}}</span>
+						</router-link>
+						<a v-else href="javascript:;">
+							<a-icon v-if="item.meta.icon" :type="item.meta.icon" />
+							<span>{{$t(item.meta.breadcrumbName)}}</span>
+						</a>
+					</a-menu-item>
+				</template>
 
-					<template v-else>
-						<!-- 包含二级分类 -->
-						<a-sub-menu :key="item.meta.key">
-							<span slot="title">
-								<a-icon v-if="item.meta.icon" :type="item.meta.icon" />
-								<span>{{$t(item.meta.breadcrumbName)}}</span>
-							</span>
-							<template v-for="second in item.children">
-								<template v-if="!second.meta.hidden">
-									<template v-if="!second.children || second.meta.hiddenChildren">
-										<a-menu-item :key="second.meta.key">
-											<router-link v-if="second.path" :to="second.path">
-												<a-icon v-if="second.meta.icon" :type="second.meta.icon" />
-												<span>{{$t(second.meta.breadcrumbName)}}</span>
-											</router-link>
-											<a v-else href="javascript:;">
-												<a-icon v-if="second.meta.icon" :type="second.meta.icon" />
-												<span>{{$t(second.meta.breadcrumbName)}}</span>
-											</a>
-										</a-menu-item>
-									</template>
-									<!-- 包含三级分类 -->
-									<template v-else>
-										<a-sub-menu :key="second.meta.key" :title="second.meta.breadcrumbName">
-											<template v-for="third in second.children">
-												<template v-if="!third.meta.hidden">
-													<template v-if="!third.children || third.meta.hiddenChildren">
-														<a-menu-item :key="third.meta.key">
-															<router-link v-if="third.path" :to="third.path">
-																<a-icon v-if="third.meta.icon" :type="third.meta.icon" />
-																<span>{{$t(third.meta.breadcrumbName)}}</span>
-															</router-link>
-															<a v-else href="javascript:;">
-																<a-icon v-if="third.meta.icon" :type="third.meta.icon" />
-																<span>{{$t(third.meta.breadcrumbName)}}</span>
-															</a>
-														</a-menu-item>
-													</template>
+				<template v-else>
+					<!-- 包含二级分类 -->
+					<a-sub-menu :key="item.meta.key">
+						<span slot="title">
+							<a-icon v-if="item.meta.icon" :type="item.meta.icon" />
+							<span>{{$t(item.meta.breadcrumbName)}}</span>
+						</span>
+						<template v-for="second in item.children">
+							<template v-if="!second.meta.hidden">
+								<template v-if="!second.children || second.meta.hiddenChildren">
+									<a-menu-item :key="second.meta.key">
+										<router-link v-if="second.path" :to="second.path">
+											<a-icon v-if="second.meta.icon" :type="second.meta.icon" />
+											<span>{{$t(second.meta.breadcrumbName)}}</span>
+										</router-link>
+										<a v-else href="javascript:;">
+											<a-icon v-if="second.meta.icon" :type="second.meta.icon" />
+											<span>{{$t(second.meta.breadcrumbName)}}</span>
+										</a>
+									</a-menu-item>
+								</template>
+								<!-- 包含三级分类 -->
+								<template v-else>
+									<a-sub-menu :key="second.meta.key" :title="second.meta.breadcrumbName">
+										<template v-for="third in second.children">
+											<template v-if="!third.meta.hidden">
+												<template v-if="!third.children || third.meta.hiddenChildren">
+													<a-menu-item :key="third.meta.key">
+														<router-link v-if="third.path" :to="third.path">
+															<a-icon v-if="third.meta.icon" :type="third.meta.icon" />
+															<span>{{$t(third.meta.breadcrumbName)}}</span>
+														</router-link>
+														<a v-else href="javascript:;">
+															<a-icon v-if="third.meta.icon" :type="third.meta.icon" />
+															<span>{{$t(third.meta.breadcrumbName)}}</span>
+														</a>
+													</a-menu-item>
 												</template>
 											</template>
-										</a-sub-menu>
-									</template>
+										</template>
+									</a-sub-menu>
 								</template>
 							</template>
-						</a-sub-menu>
-					</template>
+						</template>
+					</a-sub-menu>
 				</template>
 			</template>
-		</a-menu>
-	</div>
+		</template>
+	</a-menu>
 </template>
 
 <script>
@@ -87,6 +86,18 @@
 				type: Boolean,
 				default: function () {
 					return false
+				}
+			},
+			menuMode: {
+				type: String,
+				default: function() {
+					return 'inline'
+				}
+			},
+			menuTheme: {
+				type: String,
+				default: function() {
+					return 'dark'
 				}
 			},
 			selectedKey: {
@@ -166,9 +177,3 @@
 		},
 	};
 </script>
-<style scoped>
-	.ant-menu-submenu,
-	.ant-menu-item {
-		text-align: left;
-	}
-</style>

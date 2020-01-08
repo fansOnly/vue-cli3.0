@@ -31,4 +31,5 @@ export default {
     MENU9_2: '倒计时',
     MENU9_3: '日历',
     MENU9_4: '标签页',
+    MENU9_5: '其他',
 }

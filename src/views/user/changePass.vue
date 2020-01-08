@@ -1,38 +1,27 @@
 <template>
-	<div>
-		<!-- <BreadCrumbComponent /> -->
-		<div class="container">
-			<a-form :form="form" layout="vertical" @submit="handleSubmit">
-				<a-row :gutter="50">
-					<a-col :span="12">
-						<a-form-item :label="$t('GLOBAL.USER_OLD_PASS')" hasFeedback>
-							<a-input v-decorator="['oldPass',{rules: [{validator: validateOldPass, trigger: ['blur']}]}]" type="password" />
-						</a-form-item>
-						<a-form-item :label="$t('GLOBAL.USER_NEW_PASS')" hasFeedback>
-							<a-input v-decorator="['newPass',{rules: [{validator: compareOldAndNew, trigger: ['change', 'blur']}]}]" type="password" />
-						</a-form-item>
-                        <a-form-item :label="$t('GLOBAL.USER_CONFIRM_PASS')" hasFeedback>
-							<a-input v-decorator="['newPass2',{rules: [{validator: compareNewAndNew2, trigger: ['change', 'blur']}]}]" type="password" />
-						</a-form-item>
-                        <a-button type='primary' html-type='submit'>{{$t('GLOBAL.BTN_SAVE')}}</a-button>
-					</a-col>
-				</a-row>
-			</a-form>
-		</div>
+    <div class="container">
+        <a-form :form="form" layout="vertical" @submit="handleSubmit">
+            <a-row :gutter="50">
+                <a-col :span="12">
+                    <a-form-item class="input-password" :label="$t('GLOBAL.USER_OLD_PASS')" hasFeedback>
+                        <a-input-password v-decorator="['oldPass',{rules: [{validator: validateOldPass, trigger: ['blur']}]}]" type="password" placeholder="original password" />
+                    </a-form-item>
+                    <a-form-item class="input-password" :label="$t('GLOBAL.USER_NEW_PASS')" hasFeedback>
+                        <a-input-password v-decorator="['newPass',{rules: [{validator: compareOldAndNew, trigger: ['change', 'blur']}]}]" type="password" placeholder="new password" />
+                    </a-form-item>
+                    <a-form-item class="input-password" :label="$t('GLOBAL.USER_CONFIRM_PASS')" hasFeedback>
+                        <a-input-password v-decorator="['newPass2',{rules: [{validator: compareNewAndNew2, trigger: ['change', 'blur']}]}]" type="password" placeholder="confirm new password" />
+                    </a-form-item>
+                    <a-button type='primary' html-type='submit'>{{$t('GLOBAL.BTN_SAVE')}}</a-button>
+                </a-col>
+            </a-row>
+        </a-form>
 	</div>
 </template>
 
 <script>
-    // import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue';
-
 	export default {
 		name: 'ChangePass',
-		components: {
-			// BreadCrumbComponent,
-		},
-		data() {
-			return {};
-		},
 		beforeCreate() {
 			this.form = this.$form.createForm(this);
         },

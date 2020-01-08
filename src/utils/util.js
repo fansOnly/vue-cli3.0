@@ -4,24 +4,20 @@
  * If it detects circular structure, use cached copy to avoid infinite loop.
  *
  * @param {*} obj
- * @param {Array<Object>} cache
+ * @param {array<object>} cache
  * @return {*}
  */
 const deepCopy = (obj, cache = []) => {
-	// just return if obj is immutable value
 	if (obj === null || typeof obj !== 'object') {
 		return obj
 	}
 
-	// if obj is hit, it is in circular structure
 	const hit = cache.filter(c => c.original === obj)[0];
 	if (hit) {
 		return hit.copy
 	}
 
 	const copy = Array.isArray(obj) ? [] : {}
-	// put the copy into cache at first
-	// because we want to refer it in recursive deepCopy
 	cache.push({
 		original: obj,
 		copy
@@ -36,8 +32,8 @@ const deepCopy = (obj, cache = []) => {
 
 /**
 * 时间转换时间戳
-* @param  {String} time '2019-08-01 12:12:12'
-* @return {Number}
+* @param  {string} time '2019-08-01 12:12:12'
+* @return {number}
 */
 const date2Timestamp = date => {
 	if (typeof date !== 'string') {
@@ -48,8 +44,8 @@ const date2Timestamp = date => {
 
 /**
 * 获取url参数
-* @param {String}
-* @return {Obejct}
+* @param {string}
+* @return {obejct}
 */
 const getUrlParams = (url, name) => {
 	const pattern = /(\w+)=(\w+)/ig;
@@ -62,9 +58,9 @@ const getUrlParams = (url, name) => {
 
 /**
 * 返回一个新数组，数组中的元素为指定属性的值
-* @param  {Array} arr
-* @param  {String} key
-* @return {Array}
+* @param  {array} arr
+* @param  {string} key
+* @return {array}
 */
 const pluck = (arr, key) => {
 	if (typeof arr !== 'object' || arr.length === 0) {
@@ -78,9 +74,9 @@ const pluck = (arr, key) => {
 
 /**
  * 返回指定范围内的一个整数
- * @param  {Number} min
- * @param  {Number} max
- * @return {String}
+ * @param  {number} min
+ * @param  {number} max
+ * @return {string}
  */
 const rand = (min, max) => {
 	return Math.floor(Math.random() * (max - min + 1) + min)
@@ -88,8 +84,8 @@ const rand = (min, max) => {
 
 /**
 * 生成字符串组合
-* @param  {Number} size
-* @return {String}
+* @param  {number} size
+* @return {string}
 */
 const randString = size => {
 	let result = ''
@@ -106,9 +102,9 @@ const randString = size => {
 
 /**
 * 格式化数字 1234,4568,9.00
-* @param  {Number} num
-* @param  {String} str
-* @return {String}
+* @param  {number} num
+* @param  {string}
+* @return {string}
 */
 const parseTomoney = (num, str = ',') => {
 	num = parseFloat(num.toString().replace(/(\d+)(\.\d{2})(\d+)/g, '$1$2'));
@@ -117,6 +113,41 @@ const parseTomoney = (num, str = ',') => {
 	return integer + (decimal ?  '.' + decimal : '');
 };
 
+/**
+ * JS 拷贝实现
+ * @param {string} text
+ * @param {function}
+ */
+const copy = (text, callback) => {
+	var textarea = document.createElement('textarea');
+	textarea.id = 'copyBoard';
+	textarea.value = text;
+	textarea.style.opacity = 0;
+	document.body.appendChild(textarea);
+	textarea.select();
+	try {
+		document.execCommand('copy');
+		console.log('复制成功', text);
+	} catch (err) {
+		console.log('复制失败:', err);
+	}
+	document.body.removeChild(textarea);
+	typeof callback === 'function' && callback();
+}
+
+/**
+ * JS 下载实现
+ * @param {string} url
+ */
+const download = (url, filename) => {
+	var downlink = document.createElement('a');
+	downlink.setAttribute('href', url);
+	downlink.setAttribute('download', filename);
+
+	var clickEvent = new MouseEvent('click');
+	downlink.dispatchEvent(clickEvent);
+}
+
 export {
 	deepCopy,
 	date2Timestamp,
@@ -124,4 +155,6 @@ export {
 	pluck,
 	randString,
 	parseTomoney,
+	copy,
+	download,
 }

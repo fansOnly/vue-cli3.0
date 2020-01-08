@@ -1,31 +1,39 @@
 <template>
     <div id="app">
-        <a-locale-provider :locale="LAN">
-            <a-spin :spinning="spinning">
+        <!-- <a-locale-provider :locale="LAN"> -->
+            <!-- <a-spin :spinning="spinning" size="large" tip=""> -->
+                <!-- <Loading :spinning="spinning" /> -->
                 <a-back-top />
                 <router-view />
-            </a-spin>
-        </a-locale-provider>
+            <!-- </a-spin> -->
+        <!-- </a-locale-provider> -->
     </div>
 </template>
 <script>
-import { createNamespacedHelpers } from "vuex";
-const { mapGetters } = createNamespacedHelpers("lang");
+// import { createNamespacedHelpers } from "vuex";
+// const { mapGetters } = createNamespacedHelpers("lang");
+// import loading from '@/mixins/loading'
+// import Loading from '@/components/Loading.vue'
 
 export default {
     name: "App",
-    data() {
-        return {
-            spinning: true
-        };
-    },
-    computed: {
-        ...mapGetters(["LAN"])
-    },
-    // mixins: [],
-    mounted() {
-        this.spinning = false;
-    }
+    // components: {
+    //     Loading
+    // },
+    // data() {
+    //     return {
+    //         spinning: true
+    //     };
+    // },
+    // computed: {
+    //     ...mapGetters(["LAN"])
+    // },
+    // mixins: [loading],
+    // mounted() {
+    //     setTimeout(() => {
+    //         this.spinning = false;
+    //     }, 3000)
+    // }
 };
 </script>
 <style scoped>
@@ -34,6 +42,6 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-size: 14px;
-    color: #2c3e50;
+    color: rgba(0, 0, 0, 0.85);
 }
 </style>

@@ -1,6 +1,10 @@
 <template src='./index.html'></template>
 <script>
 	import dayjs from 'dayjs'
+	import relativeTime from 'dayjs/plugin/relativeTime'
+
+	dayjs.extend(relativeTime)
+
 	import {
 		visitEchartOption,
 		payEchartOption,
@@ -45,7 +49,7 @@
 							'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
 						content:
 							'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-						datetime: dayjs().subtract(2, 'days')
+						datetime: dayjs().subtract(2, 'hours')
 					}
 				],
 				dayjs,

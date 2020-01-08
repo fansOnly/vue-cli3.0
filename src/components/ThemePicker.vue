@@ -31,6 +31,7 @@ const themes = [
 
 const version = require("ant-design-vue/package.json").version; // version
 const ORIGINAL_THEME = "#1890ff"; // default color
+const ORIGINAL_CLUSTER = ['#1890ff', '#40a9ff', '#096dd9', '#91d5ff', 'rgba(24,144,255,.2)'];
 
 export default {
     data() {
@@ -57,11 +58,22 @@ export default {
             handler: async function(val, oldValx) {
                 const oldVal = this.chalk ? oldValx : ORIGINAL_THEME
                 if (typeof val !== "string") return;
-                const themeCluster = this.getThemeCluster(val.replace("#", ""));
-                const originalCluster = this.getThemeCluster(
-                    oldVal.replace("#", "")
-                );
+                const originalCluster = this.chalk ? JSON.parse(localStorage.getItem('themeCluster')) : ORIGINAL_CLUSTER;
+                const originRGB = this.Hex2RGB(oldVal.replace("#", ""));
+                const themeRGB = this.Hex2RGB(val.replace("#", ""));
+                let themeCluster = [];
+                let last = originalCluster.pop();
+                last = last.replace(new RegExp(originRGB), themeRGB);
+                originalCluster.forEach(item => {
+                    themeCluster.push(this.tintColor(originRGB, themeRGB, item.replace('#', '')))
+                })
+                themeCluster.push(last);
+                localStorage.setItem('themeCluster', JSON.stringify(themeCluster));
                 // console.log(themeCluster, originalCluster);
+                // rgba => 24,144,255  64,169,255  9,109,217  145,213,255
+                // const themeCluster = ['#f5222d', '#B93B2D', '#E64507', '#7C672D', 'rgba(245,34,45,.2)'];
+                // f5222d  B93B2D  E64507 7C672D
+                // rgba => 245,34,45   205,59,45   230,69,7  124,103,45
                 const getHandler = (variable, id) => {
                     return () => {
                         this.chalk = this.updateStyle(
@@ -76,41 +88,53 @@ export default {
                             styleTag.setAttribute("id", id);
                             document.head.appendChild(styleTag);
                         }
-                        styleTag.innerText = this.chalk;
+                        // 处理加载进度条样式
+                        const nprogressStyle = `#nprogress .bar {background: ${val}!important;}`;
+                        // 处理disabled样式
+                        const disabledStyle = `.ant-radio-button-wrapper-checked.ant-radio-button-wrapper-disabled {background: ${val}!important;border-color: ${val}!important;}`
+                        styleTag.innerText = this.chalk + nprogressStyle + disabledStyle;
                     };
                 };
                 if (!this.chalk) {
                     const url = `https://unpkg.com/ant-design-vue@${version}/dist/antd.min.css`;
                     await this.getCSSString(url, "chalk");
                 }
-                // console.log('this.chalk', oldValx, val, this.chalk)
+                // var res = this.chalk.match(/#[0-9A-Fa-f]{6}/g);
                 const chalkHandler = getHandler("chalk", "chalk-style");
                 chalkHandler();
-                // const styles = [].slice
-                //     .call(document.querySelectorAll("style"))
-                //     .filter(style => {
-                //         const text = style.innerText;
-                //         return (
-                //             new RegExp(oldVal, "i").test(text) &&
-                //             !/Chalk Variables/.test(text)
-                //         );
-                //     });
-                // console.log("styles", styles);
-                // styles.forEach(style => {
-                //     const { innerText } = style;
-                //     if (typeof innerText !== "string") return;
-                //     style.innerText = this.updateStyle(
-                //         innerText,
-                //         originalCluster,
-                //         themeCluster
-                //     );
-                // });
-                // this.$emit('change', val);
             },
             immediate: true
         }
     },
     methods: {
+        Hex2RGB: color => {
+            let red = parseInt(color.slice(0, 2), 16);
+            let green = parseInt(color.slice(2, 4), 16);
+            let blue = parseInt(color.slice(4, 6), 16);
+
+            return [red, green, blue];
+        },
+        tintColor: (origin, theme, color) => {
+            let red = parseInt(color.slice(0, 2), 16);
+            let green = parseInt(color.slice(2, 4), 16);
+            let blue = parseInt(color.slice(4, 6), 16);
+
+            const diff = [red - origin[0], green - origin[1], blue - origin[2]];
+
+            const compare255 = (num1, num2) => {
+                return num1 + num2 > 255 || num1 + num2 < 0 
+            }
+
+            red = compare255(theme[0], diff[0]) ? theme[0] - diff[0] : theme[0] + diff[0];
+            green = compare255(theme[1], diff[1]) ? theme[1] - diff[1] : theme[1] + diff[1];
+            blue = compare255(theme[2], diff[2]) ? theme[2] - diff[2] : theme[2] + diff[2];
+
+            red = red.toString(16);
+            green = green.toString(16);
+            blue = blue.toString(16);
+
+            return `#${red}${green}${blue}`;
+        },
         colorPicker(e) {
             const themeColor = e.target.dataset.color;
             if (!themeColor) return;
@@ -133,61 +157,13 @@ export default {
                 const xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = () => {
                     if (xhr.readyState === 4 && xhr.status === 200) {
-                        this[variable] = xhr.responseText.replace(
-                            /@font-face{[^}]+}/,
-                            ""
-                        );
+                        this[variable] = xhr.responseText.replace(/@font-face{[^}]+}/, "");
                         resolve();
                     }
                 };
                 xhr.open("GET", url);
                 xhr.send();
             });
-        },
-        getThemeCluster(theme) {
-            const tintColor = (color, tint) => {
-                let red = parseInt(color.slice(0, 2), 16);
-                let green = parseInt(color.slice(2, 4), 16);
-                let blue = parseInt(color.slice(4, 6), 16);
-
-                if (tint === 0) {
-                    // when primary color is in its rgb space
-                    return [red, green, blue].join(",");
-                } else {
-                    red += Math.round(tint * (255 - red));
-                    green += Math.round(tint * (255 - green));
-                    blue += Math.round(tint * (255 - blue));
-
-                    red = red.toString(16);
-                    green = green.toString(16);
-                    blue = blue.toString(16);
-
-                    return `#${red}${green}${blue}`;
-                }
-            };
-
-            const shadeColor = (color, shade) => {
-                let red = parseInt(color.slice(0, 2), 16);
-                let green = parseInt(color.slice(2, 4), 16);
-                let blue = parseInt(color.slice(4, 6), 16);
-
-                red = Math.round((1 - shade) * red);
-                green = Math.round((1 - shade) * green);
-                blue = Math.round((1 - shade) * blue);
-
-                red = red.toString(16);
-                green = green.toString(16);
-                blue = blue.toString(16);
-
-                return `#${red}${green}${blue}`;
-            };
-
-            const clusters = [theme];
-            for (let i = 0; i <= 9; i++) {
-                clusters.push(tintColor(theme, Number((i / 10).toFixed(2))));
-            }
-            clusters.push(shadeColor(theme, 0.1));
-            return clusters;
         },
         ...mapActions(['changeSetting'])
     }

@@ -1,6 +1,10 @@
 <template>
     <div :style="{minHeight:getContainerHeight}">
-        <router-view />
+        <transition>
+            <keep-alive :max="10">
+                <router-view />
+            </keep-alive>
+        </transition>
     </div>
 </template>
 <script>
@@ -14,8 +18,3 @@ export default {
     },
 }
 </script>
-<style scoped>
-    .ant-back-top-icon {
-		background-size: 100%!important;
-	}
-</style>

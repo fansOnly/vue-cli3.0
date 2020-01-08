@@ -160,3 +160,7 @@
 .search-table .ant-table-pagination.ant-pagination {
     margin-bottom: 0;
 }
+
+.ant-comment-actions {
+    margin-bottom: 4px;
+}

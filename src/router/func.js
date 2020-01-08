@@ -59,6 +59,18 @@ const funcRoutes = [
                     depth: 2,
                 },
             },
+            {
+                path: '/admin/func/others',
+                name: 'others',
+                component: () => import('@/views/func/others.vue'),
+                meta: {
+                    key: 'func.others',
+                    icon: 'thunderbolt',
+                    // breadcrumbName: '其他',
+                    breadcrumbName: 'MENU.MENU9_5',
+                    depth: 2,
+                },
+            },
         ]
     },
 ]

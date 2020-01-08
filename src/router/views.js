@@ -21,7 +21,7 @@ import funcRoutes from './func'
  * @param {meta.breadcrumbName}
  *          面包屑名称，为空则不显示在面包屑导航
  * @param {meta.depth}
- *          路由层级，回显面包屑导航返回按钮
+ *          路由层级，回显面包屑导航返回按钮，depth > 2 时显示返回按钮
  * @param {meta.hidden}
  *          左侧菜单显示开关，为 true 则不显示
  * @param {meta.hiddenChildren}
@@ -205,7 +205,7 @@ const viewRoutes = [
                     key: 'info.recycle',
                     // breadcrumbName: '回收站',
                     breadcrumbName: 'MENU.MENU4_5',
-                    depth: 3,
+                    depth: 2,
                 },
             },
         ]
@@ -300,7 +300,7 @@ const viewRoutes = [
         },
         children: [
             {
-                path: '/admin/resources/list',
+                path: '/admin/account/list',
                 name: 'accountList',
                 component: () => import('@/views/account/index.vue'),
                 meta: {
@@ -311,7 +311,7 @@ const viewRoutes = [
                 },
             },
             {
-                path: '/admin/resources/class',
+                path: '/admin/account/class',
                 name: 'accountClass',
                 component: () => import('@/views/account/class/index.vue'),
                 meta: {
@@ -322,7 +322,7 @@ const viewRoutes = [
                 },
             },
             {
-                path: '/admin/resources/permission',
+                path: '/admin/account/permission',
                 name: 'permission',
                 component: () => import('@/views/account/permission/index.vue'),
                 meta: {
@@ -336,7 +336,7 @@ const viewRoutes = [
     },
     {
         path: '/admin/user',
-        name: 'userinfo',
+        name: 'user',
         component: () => import('@/views/siteInfo/index.vue'),
         meta: {
             key: 'user',
@@ -368,16 +368,16 @@ const viewRoutes = [
                     depth: 2,
                 },
             },
-            {
-                path: '/admin/user/logout',
-                name: 'logout',
-                meta: {
-                    key: 'user.logout',
-                    // breadcrumbName: '退出登录',
-                    breadcrumbName: 'MENU.MENU8_3',
-                    depth: 2,
-                },
-            },
+            // {
+            //     path: '/admin/user/logout',
+            //     name: 'logout',
+            //     meta: {
+            //         key: 'user.logout',
+            //         // breadcrumbName: '退出登录',
+            //         breadcrumbName: 'MENU.MENU8_3',
+            //         depth: 2,
+            //     },
+            // },
         ]
     },
     ...funcRoutes

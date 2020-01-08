@@ -1,20 +1,33 @@
 <template>
     <a-drawer
-        title="主题设置"
         placement="right"
         :closable="false"
         @close="onClose"
         :visible="visible"
     >
         <template slot="handle">
-            <div @click="toggleVisiable" class="fix-setting">
-                <a-icon
-                    :type="this.visible ? 'close' : 'setting'"
-                    class="icon-setting"
-                />
+            <div @click="toggleVisiable" class="ant-btn-primary fix-setting">
+                <a-icon :type="this.visible ? 'close' : 'setting'" class="icon-setting" />
             </div>
         </template>
+        <!-- 菜单风格 -->
+        <div class="side-title">菜单风格</div>
+        <a-radio-group :defaultValue="menuTheme" buttonStyle="solid" @change="changeMenuTheme">
+            <a-radio-button value="dark">暗黑</a-radio-button>
+            <a-radio-button value="light">亮色</a-radio-button>
+        </a-radio-group>
+        <a-divider />
+        <!-- 菜单样式 -->
+        <!-- <div class="side-title">菜单样式</div>
+        <a-radio-group :defaultValue="menuMode" buttonStyle="solid" @change="changeMenuMode">
+            <a-radio-button value="inline">垂直</a-radio-button>
+            <a-radio-button value="horizontal">水平</a-radio-button>
+        </a-radio-group>
+        <a-divider /> -->
+        <!-- 主题颜色 -->
+        <div class="side-title">主题颜色</div>
         <ThemePicker />
+        <a-divider />
     </a-drawer>
 </template>
 
@@ -32,7 +45,19 @@ export default {
             default: function() {
                 return false
             }
-        }
+        },
+        menuMode: {
+            type: String,
+            default: function() {
+                return 'inline'
+            }
+        },
+        menuTheme: {
+            type: String,
+            default: function() {
+                return 'dark'
+            }
+        },
     },
     methods: {
         toggleVisiable() {
@@ -40,7 +65,15 @@ export default {
         },
         onClose() {
             this.$emit('onClose');
-        }
+        },
+        changeMenuTheme(e) {
+            localStorage.setItem('menuTheme', e.target.value);
+            this.$emit('changeMenuTheme', e.target.value)
+        },
+        // changeMenuMode(e) {
+        //     localStorage.setItem('menuMode', e.target.value);
+        //     this.$emit('changeMenuMode', e.target.value)
+        // },
     }
 };
 </script>
@@ -51,9 +84,10 @@ export default {
     top: 130px;
     width: 45px;
     height: 45px;
-    background: #1890ff;
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
+    box-shadow: none;
+    text-shadow: none;
     z-index: 8888;
     display: flex;
     align-items: center;
@@ -63,5 +97,10 @@ export default {
 .icon-setting {
     color: #fff;
     font-size: 20px;
+}
+.side-title {
+    margin-bottom: .5em;
+    color: rgba(0,0,0,.85);
+    font-size: 16px;
 }
 </style>

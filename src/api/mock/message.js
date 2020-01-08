@@ -81,15 +81,25 @@ const getMessageView = config => {
     const { id } = params;
     const success = id;
 
+    let n = Math.random();
+
     let _data = {
         'id': '@id',
         'name': '@cname',
         'content': '@cparagraph(3)',
-        'reply': '@cparagraph(1)',
+        'reply': function() {
+            if (n > 0.5) {
+                return Mock.mock('@cparagraph(2)');
+            }
+        },
         'phone': /^1[3456789]\d{9}$/,
         'email': '@email',
         'create_time': '@datetime',
-        'reply_time': '@datetime',
+        'reply_time': function(){
+            if (n > 0.5) {
+                return Mock.mock('@datetime');
+            }
+        },
         'photos': [{
             'uid': '@id',
             'url': 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',

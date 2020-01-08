@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
-import messages from '@/lang/en'
+import messages from '@/i18n/lang/en-us'
 import axios from 'axios'
 
 Vue.use(VueI18n)
@@ -23,7 +23,7 @@ function setI18nLanguage (lang) {
 export function loadLanguageAsync (lang) {
   if (i18n.locale !== lang) {
     if (!loadedLanguages.includes(lang)) {
-      return import(/* webpackChunkName: "lang-[request]" */ `@/lang/${lang}`).then(msgs => {
+      return import(/* webpackChunkName: "lang-[request]" */ `@/i18n/lang/${lang}`).then(msgs => {
         i18n.setLocaleMessage(lang, msgs.default)
         loadedLanguages.push(lang)
         return setI18nLanguage(lang)
