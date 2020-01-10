@@ -10,7 +10,6 @@
 
 <script>
 import QRCode from "qrcode";
-
 import { copy, download } from '@/utils/util';
 
 export default {

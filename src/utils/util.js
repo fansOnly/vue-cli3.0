@@ -148,6 +148,18 @@ const download = (url, filename) => {
 	downlink.dispatchEvent(clickEvent);
 }
 
+/**
+ * 判断是否空对象
+ * @param {object} obj
+ * @returns {Boolean}
+ */
+const isEmptyObject = obj => {
+	if (Object.prototype.toString.call(obj) !== '[object Object]') {
+		throw new TypeError('object needed.')
+	}
+	return Object.keys(obj).length == 0;
+}
+
 export {
 	deepCopy,
 	date2Timestamp,
@@ -157,4 +169,5 @@ export {
 	parseTomoney,
 	copy,
 	download,
+	isEmptyObject
 }
