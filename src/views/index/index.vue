@@ -97,7 +97,7 @@ export default {
         }
         const notice = ['上午好，起这么早不困吗，要不再睡会吧', '中午好，阳光明媚的天气适合睡觉啊', '下午好，困了就睡会吧', '晚上好，夜深了，赶紧休息吧'];
         this.$notification.success({
-            message: '欢迎回来',
+            message: '尊敬的主人，欢迎回来',
             description: notice[cur],
             duration: 2.5
         });

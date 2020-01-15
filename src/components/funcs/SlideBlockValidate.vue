@@ -68,6 +68,9 @@ export default {
                     this.slideValidateStatus = "success";
                     this.slideValidateIcon = "check-circle";
                     this.slideValidateIconColor = this.slideValidateSuccessColor;
+                } else {
+                    this.slideValidateStatus = "";
+                    this.slideValidateIcon = "double-right";
                 }
                 this.slideBtn.style.left = this.slideMoveX + "px";
                 this.slideArea.style.width = this.slideMoveX + "px";
@@ -77,7 +80,9 @@ export default {
         slideEnd(event) {
             if (!this.slideStartMoving) return;
             this.slideStartMoving = false;
-            if (this.slideMoveX < this.slideSuccessWidth) {
+            if (this.slideMoveX < this.slideSuccessWidth / 2) {
+                this.resetSlideValidate();
+            } else if (this.slideMoveX < this.slideSuccessWidth) {
                 // 验证失败
                 this.slideBtn.style.left = this.slideSuccessWidth + "px";
                 this.slideValidateStatus = "fail";

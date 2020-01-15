@@ -28,10 +28,6 @@
         </div>
         <a-button style="margin-top:15px" @click="validateSmsCode">验证</a-button>
         <a-divider />
-        <!-- TODO:手撕编辑器 -->
-        <div class="title">fans editor v1.0 乞丐版</div>
-        <FansEditor :html="editHtml" />
-        <a-divider />
     </div>
 </template>
 <script>
@@ -39,15 +35,13 @@ import Loading from "@/components/Loading.vue";
 import SlideBlockValidate from "@/components/funcs/SlideBlockValidate.vue";
 import CodeImageValidate from "@/components/funcs/CodeImageValidate.vue";
 import SmsValidate from "@/components/funcs/SmsValidate.vue";
-import FansEditor from "@/components/funcs/FansEditor.vue";
 
 export default {
     components: {
         Loading,
         SlideBlockValidate,
         CodeImageValidate,
-        SmsValidate,
-        FansEditor
+        SmsValidate
     },
     data() {
         return {
@@ -61,8 +55,6 @@ export default {
             phone: '18888888888',
             validateSms: '',
             validateSuccessSms: '133313',
-            // 编辑器
-            editHtml: '1234567890'
         };
     },
     mounted() {

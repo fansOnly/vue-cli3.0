@@ -66,8 +66,32 @@ const funcRoutes = [
                 meta: {
                     key: 'func.others',
                     icon: 'thunderbolt',
-                    // breadcrumbName: '其他',
+                    // breadcrumbName: '网红大杂烩',
                     breadcrumbName: 'MENU.MENU9_5',
+                    depth: 2,
+                },
+            },
+            {
+                path: '/admin/func/editor',
+                name: 'editor',
+                component: () => import('@/views/func/editor.vue'),
+                meta: {
+                    key: 'func.editor',
+                    icon: 'block',
+                    // breadcrumbName: '劣质编辑器',
+                    breadcrumbName: 'MENU.MENU9_6',
+                    depth: 2,
+                },
+            },
+            {
+                path: '/admin/func/colorpicker',
+                name: 'colorpicker',
+                component: () => import('@/views/func/colors.vue'),
+                meta: {
+                    key: 'func.colorpicker',
+                    icon: 'bg-colors',
+                    // breadcrumbName: '颜色选择器',
+                    breadcrumbName: 'MENU.MENU9_7',
                     depth: 2,
                 },
             },

@@ -31,5 +31,7 @@ export default {
     MENU9_2: 'Countdown',
     MENU9_3: 'Calendar',
     MENU9_4: 'Tabs',
-    MENU9_5: 'Others',
+    MENU9_5: 'Net Smorgasbord',
+    MENU9_6: 'Poor Editor',
+    MENU9_7: 'Color Picker',
 }
