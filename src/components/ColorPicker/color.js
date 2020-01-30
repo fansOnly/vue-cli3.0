@@ -16,8 +16,8 @@ const hsl2hsv = function (hue, sat, light) {
 
     return {
         h: hue,
-        s: sv * 100,
-        v: v * 100
+        s: Math.round(sv * 100),
+        v: Math.round(v * 100)
     };
 };
 
