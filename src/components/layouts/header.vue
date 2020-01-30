@@ -184,7 +184,7 @@
 				// console.log(`当前选择语言为: ${item.key} - ${this.languageLabels[item.key][this.locales.indexOf(item.key)]}`);
 				this.currentLocale = item.key;
 			},
-			...mapActions(["switchLocale"])
+			...mapActions(['switchLocale'])
 		}
 	};
 </script>

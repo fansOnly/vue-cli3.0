@@ -16,7 +16,7 @@
 </template>
 <script>
 export default {
-    name: "BreadCrumb",
+    name: 'BreadCrumb',
     props: {
         routes: {
             type: Array,

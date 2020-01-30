@@ -1,35 +1,29 @@
 <template>
-	<div>
-		<!-- <BreadCrumbComponent /> -->
-		<div class="container">
-            <!-- 内容展示区域 -->
-            <a-row :gutter="12">
-                <a-col :span="12">
-                    <a-directory-tree
-                        :treeData="treeData"
-                        defaultExpandAll
-                        @select="selectTreeNode"
-                    >
-                    </a-directory-tree>
-                </a-col>
-                <a-col :span="12">
-                    <Editor v-if="showEditor" :content="permissionDetail.content" @change="change" ></Editor>
-                </a-col>
-            </a-row>
-		</div>
+    <div class="container">
+        <!-- 内容展示区域 -->
+        <a-row :gutter="12">
+            <a-col :span="12">
+                <a-directory-tree
+                    :treeData="treeData"
+                    defaultExpandAll
+                    @select="selectTreeNode"
+                >
+                </a-directory-tree>
+            </a-col>
+            <a-col :span="12">
+                <Editor v-if="showEditor" :content="permissionDetail.content" @change="change" ></Editor>
+            </a-col>
+        </a-row>
 	</div>
 </template>
 
 <script>
-    // import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue';
-
     import { getPermissionTree, getPermissionDetail, updatePermissionDetail } from '@/api/account';
     import Editor from './editor.vue'
 
     export default {
         name: 'Permission',
         components: {
-            // BreadCrumbComponent,
             Editor,
         },
         data () {

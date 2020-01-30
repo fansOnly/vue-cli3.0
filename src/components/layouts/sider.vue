@@ -137,13 +137,13 @@
 		},
 		watch: {
 			defaultOpenKey: {
-				handler(val) {
+				handler() {
 					this.openKeys = [this.openKey]
 				},
 				immediate: true,
 			},
 			openKeys: {
-				handler(val, oldVal) {
+				handler(val) {
 					this.openKeys = val
 				},
 				deep: true

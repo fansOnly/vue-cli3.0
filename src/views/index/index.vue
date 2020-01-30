@@ -25,17 +25,15 @@
 </template>
 
 <script>
-import Sider from "@/components/layouts/Sider.vue"
-import Header from "@/components/layouts/Header.vue"
-import Footer from "@/components/layouts/Footer.vue"
-import Container from "@/components/layouts/Container.vue"
-import SideSetting from "@/components/SideSetting.vue"
-import Breadcrumb from "@/components/layouts/Breadcrumb.vue"
-
-import viewRoutes from '@/router/views'
+import Sider from '@/components/Layouts/sider.vue'
+import Header from '@/components/Layouts/header.vue'
+import Footer from '@/components/Layouts/footer.vue'
+import Container from '@/components/Layouts/container.vue'
+import SideSetting from '@/components/SideSetting.vue'
+import Breadcrumb from '@/components/Layouts/breadcrumb.vue'
 
 export default {
-    name: "Index",
+    name: 'Index',
     components: {
         Header,
         Footer,
@@ -62,7 +60,7 @@ export default {
     computed: {
         clientHeight: function() {
             // return window.screen.availHeight + 'px';
-            return document.documentElement.clientHeight + "px";
+            return document.documentElement.clientHeight + 'px';
         }
     },
     watch: {

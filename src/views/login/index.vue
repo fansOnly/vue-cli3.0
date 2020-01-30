@@ -27,11 +27,11 @@
 </template>
 
 <script>
-import { randString } from "@/utils/util"
-import Footer from '@/components/layouts/Footer.vue'
+import { randString } from '@/utils/util'
+import Footer from '@/components/Layouts/footer.vue'
 
 export default {
-    name: "Login",
+    name: 'Login',
     components: {
         Footer
     },
@@ -43,7 +43,7 @@ export default {
     },
     computed: {
         getWindowHeight: function() {
-            return document.documentElement.clientHeight + "px";
+            return document.documentElement.clientHeight + 'px';
         }
     },
     methods: {
@@ -52,7 +52,7 @@ export default {
             e.preventDefault();
             this.form.validateFields((err, values) => {
                 if (!err) {
-                    console.log("login data: ", values);
+                    console.log('login data: ', values);
                     const { username, password } = values;
                     if (username === 'test' && password === '123456') {
                         setTimeout(() => {
@@ -60,7 +60,7 @@ export default {
                             sessionStorage.setItem('user', JSON.stringify(user));
                             sessionStorage.setItem('token', randString(32));
                             this.logining = false;
-                            this.$message.success("登陆成功", 1, () => {
+                            this.$message.success('登陆成功', 1, () => {
                                 this.$router.push('/admin/index');
                             })
                         }, 2000)

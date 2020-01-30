@@ -1,31 +1,23 @@
 <template>
-    <div>
-        <!-- <BreadCrumbComponent /> -->
-        <div class="container">
-            <div :style="{ marginBottom: '16px' }">
-                <a-button @click="add">ADD</a-button>
-            </div>
-            <a-tabs hideAdd v-model="activeKey" type="editable-card" @edit="onEdit">
-                <a-tab-pane
-                    v-for="pane in panes"
-                    :tab="pane.title"
-                    :key="pane.key"
-                    :closable="pane.closable"
-                >
-                    {{ pane.content }}
-                </a-tab-pane>
-                <a-button slot="tabBarExtraContent">Extra Action</a-button>
-            </a-tabs>
+    <div class="container">
+        <div :style="{ marginBottom: '16px' }">
+            <a-button @click="add">ADD</a-button>
         </div>
+        <a-tabs hideAdd v-model="activeKey" type="editable-card" @edit="onEdit">
+            <a-tab-pane
+                v-for="pane in panes"
+                :tab="pane.title"
+                :key="pane.key"
+                :closable="pane.closable"
+            >
+                {{ pane.content }}
+            </a-tab-pane>
+            <a-button slot="tabBarExtraContent">Extra Action</a-button>
+        </a-tabs>
     </div>
 </template>
 <script>
-// import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue'
-
 export default {
-    components: {
-        // BreadCrumbComponent
-    },
     data() {
         const panes = [
             { title: 'Tab 1', content: 'Content of Tab 1', key: '1' },

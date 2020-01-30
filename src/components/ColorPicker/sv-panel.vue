@@ -32,8 +32,11 @@ export default {
         }
     },
     watch: {
-        colorValue() {
-            this.update();
+        colorValue: {
+            handler: function() {
+                this.update();
+            },
+            deep: true
         }
     },
     mounted() {
@@ -48,12 +51,13 @@ export default {
             }
         };
 
+        draggable(this.$el, dragConfig);
         draggable(cursor, dragConfig);
+
         this.update();
     },
     methods: {
         onDragging(event) {
-            const { cursor } = this.$refs;
             const rect = this.$el.getBoundingClientRect();
 
             let left = event.clientX - rect.left;
@@ -83,6 +87,7 @@ export default {
             this.cursorY = (100 - value) * height / 100;
 
             this.background = 'hsl(' + this.color.get('hue') + ', 100%, 50%)';
+            this.color.updateColor();
         }
     },
 }
@@ -91,7 +96,9 @@ export default {
 .color-svpanel {
     position: relative;
     width: 100%;
-    height: 250px;
+    height: 200px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 .color-svpanel-white {
     position: absolute;

@@ -61,14 +61,15 @@ export default {
         },
         getThumbLeft() {
             const { hueBar, hueThumb } = this.$refs;
-            let hue = this.color.get('hue');;
-            if (hue == 0) {
-                hue = -hueThumb.offsetWidth / 2;
+            let hue = this.color.get('hue');
+            if(hue == 0) {
+                return -hueThumb.offsetWidth / 2;
             }
             return Math.round(hue * (hueBar.offsetWidth - hueThumb.offsetWidth / 2) / 360);
         },
         update() {
             this.hueSliderX = this.getThumbLeft();
+            this.color.updateColor();
         }
     },
 }

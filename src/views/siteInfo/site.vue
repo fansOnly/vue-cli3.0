@@ -1,19 +1,15 @@
 <template src="./site.html"> </template>
 
 <script>
-// import BreadCrumbComponent from "@/components/layouts/breadcrumb.vue";
-import { getSiteInfo, updateSiteInfo } from "@/api/setting";
+import { getSiteInfo, updateSiteInfo } from '@/api/setting';
 
 export default {
-    name: "SiteSetting",
-    components: {
-        // BreadCrumbComponent
-    },
+    name: 'SiteSetting',
     data() {
         return {
-            tabActiveKey: "base_info",
+            tabActiveKey: 'base_info',
             inputVisible: false,
-            inputValue: "",
+            inputValue: '',
             base_info: {},
             advance_info: {},
             seo_info: {},
@@ -54,30 +50,30 @@ export default {
             }
             Object.assign(this, {
                 inputVisible: false,
-                inputValue: ""
+                inputValue: ''
             });
         },
         handleInputCancel() {
             Object.assign(this, {
                 inputVisible: false,
-                inputValue: ""
+                inputValue: ''
             });
         },
         handleSubmit(e) {
             e.preventDefault();
             const allfFields = {
-                base_info: ["name", "phone", "email", "copyright", "content"],
+                base_info: ['name', 'phone', 'email', 'copyright', 'content'],
                 advance_info: [],
-                seo_info: ["seo_title", "seo_keyword", "seo_description"],
+                seo_info: ['seo_title', 'seo_keyword', 'seo_description'],
                 hotwords_info: []
             };
-            if (this.tabActiveKey == "hotwords_info") {
+            if (this.tabActiveKey == 'hotwords_info') {
                 return;
             }
             const currentFileds = allfFields[this.tabActiveKey];
             this.form.validateFields(currentFileds, (errors, values) => {
                 if (!errors) {
-                    console.log("Received values of form: ", values);
+                    console.log('Received values of form: ', values);
                     this.updateSiteInfoFn(values);
                 }
             });
@@ -102,7 +98,7 @@ export default {
                 tag: this.tabActiveKey
             };
             const data = await updateSiteInfo(params);
-            if (data.code == "200") {
+            if (data.code == '200') {
                 this.$message.success(data.msg, 1, () => {
                     // this.hotwords_info = hotwords_info;
                 });

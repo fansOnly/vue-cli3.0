@@ -1,6 +1,9 @@
 <template>
     <div class="color-alpha-slider">
-        <div ref="alphaBar" class="color-alpha-slider-bar"></div>
+        <div ref="alphaBar" class="color-alpha-slider-bar">
+            <div class="color-transparent"></div>
+            <div class="color-alpha-slider-bar-background" :style="{background: 'linear-gradient(90deg, transparent, '+backgroundVal+')'}"></div>
+        </div>
         <div ref="alphaThumb" class="color-slider-thumb" :style="{left: alphaSlideX + 'px'}"></div>
     </div>
 </template>
@@ -21,12 +24,15 @@ export default {
         }
     },
     computed: {
-        hueVal() {
-            return this.color.get('hue')
+        backgroundVal() {
+            return this.color.value;
+        },
+        alphaVal() {
+            return this.color.get('alpha')
         },
     },
     watch: {
-        hueVal() {
+        alphaVal() {
             this.update();
         }
     },
@@ -35,10 +41,10 @@ export default {
 
         const dragConfig = {
             drag: event => {
-                this.onDragginf(event);
+                this.onDragging(event);
             },
             end: event => {
-                this.onDragginf(event);
+                this.onDragging(event);
             }
         }
         draggable(alphaBar, dragConfig);
@@ -46,101 +52,60 @@ export default {
         this.update();
     },
     methods: {
+        onDragging(event) {
+            const { alphaBar, alphaThumb } = this.$refs;
+            const rect = alphaBar.getBoundingClientRect();
+            let alpha;
+            let left = event.clientX - rect.left;
+            left = Math.min(left, rect.width - alphaThumb.offsetWidth / 2);
+            left = Math.max(alphaThumb.offsetWidth / 2, left);
+
+            alpha = Math.round((left - alphaThumb.offsetWidth / 2) / (rect.width - alphaThumb.offsetWidth) * 100);
+
+            this.color.set('alpha', alpha);
+        },
         getThumbLeft() {
             const { alphaBar, alphaThumb } = this.$refs;
-            let hue = this.color.get('hue');
-            if (hue == 0) {
-                hue = -alphaThumb.offsetWidth / 2;
+            let alpha = this.color.get('alpha');
+            if (alpha == 0) {
+                return -alphaThumb.offsetWidth / 2;
             }
-            return Math.round(hue * (alphaBar.offsetWidth - alphaThumb.offsetWidth / 2) / 360);
+            return Math.round(alpha * (alphaBar.offsetWidth - alphaThumb.offsetWidth / 2) / 100);
         },
         update() {
-            // this.alphaSlideX = this.getThumbLeft();
+            this.alphaSlideX = this.getThumbLeft();
+            this.color.updateColor();
         }
     },
 }
 </script>
 <style scoped>
-.color-picker-wrap {
-    position: relative;
-    width: 350px;
-    padding: 5px;
-    border-radius: 3px;
-    overflow: hidden;
-}
-.color-svpanel {
-    position: relative;
-    width: 100%;
-    height: 250px;
-}
-.color-svpanel-white {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    background: linear-gradient(90deg,#fff,hsla(0,0%,100%,0));
-}
-.color-svpanel-black {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    background: linear-gradient(0deg,#000,transparent);
-}
-.color-svpanel-cursor {
-    position: absolute;
-}
-.color-svpanel-cursor>div {
-    width: 4px;
-    height: 4px;
-    box-shadow: 0 0 0 1.5px #fff, inset 0 0 1px 1px rgba(0,0,0,.3), 0 0 1px 2px rgba(0,0,0,.4);
-    border-radius: 50%;
-    transform: translate(-2px,-2px);
-    cursor: pointer;
-}
-.color-slider-box {
-    margin-top: 15px;
-    padding: 0 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-.color-show {
-    width: 60px;
-    height: 30px;
-}
-.color-slider {
-    width: calc(100% - 80px);
-    height: 30px;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-}
-.color-hue-slider, .color-alpha-slider {
+.color-alpha-slider {
     position: relative;
     width: 100%;
     height: 10px;
     padding: 0 2px;
     border-radius: 3px;
 }
-.color-hue-slider {
-    background: red;
-}
-.color-alpha-slider {
-    background: #333;
-}
-.color-hue-slider-bar, .color-alpha-slider-bar {
+.color-alpha-slider-bar {
     position: relative;
     height: 100%;
     width: 100%;
 }
-.color-hue-slider-bar {
-    background:linear-gradient(to right,red 0,#ff0 17%,#0f0 33%,#0ff 50%,#00f 67%,#f0f 83%,red 100%);
+.color-transparent {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
 }
-.color-alpha-slider-bar {
-    background: #333;
+.color-alpha-slider-bar-background {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
 }
 .color-slider-thumb {
     box-sizing:border-box;
@@ -155,8 +120,5 @@ export default {
     border: 1px solid #f0f0f0;
     box-shadow: 0 0 2px rgba(0,0,0,.6);
     z-index: 1;
-}
-.color-value-box {
-    margin-top: 15px;
 }
 </style>

@@ -1,30 +1,22 @@
 <template>
-    <div>
-        <!-- <BreadCrumbComponent /> -->
-        <div class="container">
-            <a-calendar>
-                <ul class="events" slot="dateCellRender" slot-scope="value">
-                    <li v-for="item in getListData(value)" :key="item.content">
-                        <a-badge :status="item.type" :text="item.content" />
-                    </li>
-                </ul>
-                <template slot="monthCellRender" slot-scope="value">
-                    <div v-if="getMonthData(value)" class="notes-month">
-                        <section>{{ getMonthData(value) }}</section>
-                        <span>Backlog number</span>
-                    </div>
-                </template>
-            </a-calendar>
-        </div>
+    <div class="container">
+        <a-calendar>
+            <ul class="events" slot="dateCellRender" slot-scope="value">
+                <li v-for="item in getListData(value)" :key="item.content">
+                    <a-badge :status="item.type" :text="item.content" />
+                </li>
+            </ul>
+            <template slot="monthCellRender" slot-scope="value">
+                <div v-if="getMonthData(value)" class="notes-month">
+                    <section>{{ getMonthData(value) }}</section>
+                    <span>Backlog number</span>
+                </div>
+            </template>
+        </a-calendar>
     </div>
 </template>
 <script>
-// import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue'
-
 export default {
-    components: {
-        // BreadCrumbComponent
-    },
     methods: {
         getListData(value) {
             let listData;

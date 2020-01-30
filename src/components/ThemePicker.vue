@@ -1,16 +1,14 @@
 <template>
-    <div>
-        <div class="color-picker-board" @click="colorPicker">
-            <a-tooltip v-for="item in themes" :key="item.id" placement="top" :title="item.title">
-                <span
-                    class="color-picker"
-                    :class="{ cur: theme == item.color }"
-                    :data-color="item.color"
-                    :style="`background: ${item.color};`"
-                    ><a-icon type="check"
-                /></span>
-            </a-tooltip>
-        </div>
+    <div class="color-picker-board" @click="colorPicker">
+        <a-tooltip v-for="item in themes" :key="item.id" placement="top" :title="item.title">
+            <span
+                class="color-picker"
+                :class="{ cur: theme == item.color }"
+                :data-color="item.color"
+                :style="`background: ${item.color};`"
+                ><a-icon type="check"
+            /></span>
+        </a-tooltip>
     </div>
 </template>
 
@@ -29,16 +27,16 @@ const themes = [
     {id: 8, title: '酱紫', color: '#722ed1'},
 ];
 
-const version = require("ant-design-vue/package.json").version; // version
-const ORIGINAL_THEME = "#1890ff"; // default color
+const version = require('ant-design-vue/package.json').version; // version
+const ORIGINAL_THEME = '#1890ff'; // default color
 const ORIGINAL_CLUSTER = ['#1890ff', '#40a9ff', '#096dd9', '#91d5ff', 'rgba(24,144,255,.2)'];
 
 export default {
     data() {
         return {
             themes,
-            chalk: "",
-            theme: "",
+            chalk: '',
+            theme: '',
         };
     },
     computed: {
@@ -57,10 +55,10 @@ export default {
         theme: {
             handler: async function(val, oldValx) {
                 const oldVal = this.chalk ? oldValx : ORIGINAL_THEME
-                if (typeof val !== "string") return;
+                if (typeof val !== 'string') return;
                 const originalCluster = this.chalk ? JSON.parse(localStorage.getItem('themeCluster')) : ORIGINAL_CLUSTER;
-                const originRGB = this.Hex2RGB(oldVal.replace("#", ""));
-                const themeRGB = this.Hex2RGB(val.replace("#", ""));
+                const originRGB = this.Hex2RGB(oldVal.replace('#', ''));
+                const themeRGB = this.Hex2RGB(val.replace('#', ''));
                 let themeCluster = [];
                 let last = originalCluster.pop();
                 last = last.replace(new RegExp(originRGB), themeRGB);
@@ -83,9 +81,9 @@ export default {
                         );
                         let styleTag = document.getElementById(id);
                         if (!styleTag) {
-                            styleTag = document.createElement("style");
-                            styleTag.setAttribute("type", "text/css");
-                            styleTag.setAttribute("id", id);
+                            styleTag = document.createElement('style');
+                            styleTag.setAttribute('type', 'text/css');
+                            styleTag.setAttribute('id', id);
                             document.head.appendChild(styleTag);
                         }
                         // 处理加载进度条样式
@@ -97,10 +95,10 @@ export default {
                 };
                 if (!this.chalk) {
                     const url = `https://unpkg.com/ant-design-vue@${version}/dist/antd.min.css`;
-                    await this.getCSSString(url, "chalk");
+                    await this.getCSSString(url, 'chalk');
                 }
                 // var res = this.chalk.match(/#[0-9A-Fa-f]{6}/g);
-                const chalkHandler = getHandler("chalk", "chalk-style");
+                const chalkHandler = getHandler('chalk', 'chalk-style');
                 chalkHandler();
             },
             immediate: true
@@ -146,7 +144,7 @@ export default {
             let newStyle = style;
             oldCluster.forEach((color, index) => {
                 newStyle = newStyle.replace(
-                    new RegExp(color, "ig"),
+                    new RegExp(color, 'ig'),
                     newCluster[index]
                 );
             });
@@ -157,11 +155,11 @@ export default {
                 const xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = () => {
                     if (xhr.readyState === 4 && xhr.status === 200) {
-                        this[variable] = xhr.responseText.replace(/@font-face{[^}]+}/, "");
+                        this[variable] = xhr.responseText.replace(/@font-face{[^}]+}/, '');
                         resolve();
                     }
                 };
-                xhr.open("GET", url);
+                xhr.open('GET', url);
                 xhr.send();
             });
         },

@@ -1,32 +1,24 @@
 <template>
-    <div>
-        <!-- <BreadCrumbComponent /> -->
-        <div class="container">
-            <a-steps :current="current" :status="status">
-                <a-step
-                    v-for="item in steps"
-                    :key="item.title"
-                    :title="item.title"
-                    :description="item.description"
-                />
-            </a-steps>
-            <div class="steps-content">{{ steps[current].content }}</div>
-            <div class="steps-action">
-                <a-button v-if="current < steps.length - 1" type="primary" @click="next">下一步</a-button>
-                <a-button v-if="current == steps.length - 1" type="primary" @click="done">完成</a-button>
-                <a-button v-if="current > 0 && !isDone" style="margin-left: 8px" @click="prev">上一步</a-button>
-            </div>
+    <div class="container">
+        <a-steps :current="current" :status="status">
+            <a-step
+                v-for="item in steps"
+                :key="item.title"
+                :title="item.title"
+                :description="item.description"
+            />
+        </a-steps>
+        <div class="steps-content">{{ steps[current].content }}</div>
+        <div class="steps-action">
+            <a-button v-if="current < steps.length - 1" type="primary" @click="next">下一步</a-button>
+            <a-button v-if="current == steps.length - 1" type="primary" @click="done">完成</a-button>
+            <a-button v-if="current > 0 && !isDone" style="margin-left: 8px" @click="prev">上一步</a-button>
         </div>
     </div>
 </template>
 <script>
-// import BreadCrumbComponent from '@/components/layouts/breadcrumb.vue'
-
 export default {
     name: 'Process',
-    components: {
-        // BreadCrumbComponent
-    },
     data() {
         return {
             current: 0,

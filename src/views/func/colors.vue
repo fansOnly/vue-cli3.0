@@ -5,7 +5,7 @@
     </div>
 </template>
 <script>
-import ColorPicker from "@/components/ColorPicker/index.vue";
+import ColorPicker from '@/components/ColorPicker/index.vue';
 
 export default {
     components: {
@@ -13,7 +13,7 @@ export default {
     },
     data() {
         return {
-            color: '#000'
+            color: '#f60'
         };
     },
     mounted() {
