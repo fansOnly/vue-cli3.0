@@ -1,4 +1,7 @@
-# vue-cli3.0
+# fans-platform
+```
+powered by vue-cli3.0 ant-design-vue
+```
 
 ## Project setup
 ```
